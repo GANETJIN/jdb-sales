@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	 <!-- 브라우저 캐시 방지용 태그 -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -13,7 +12,6 @@
         * { box-sizing: border-box; }
         body { font-family: 'Malgun Gothic', sans-serif; background-color: var(--bg-color); margin: 0; color: #333; }
         
-        /* 로그인 화면 스타일 */
         #login-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #15284b; z-index: 9999; display: flex; flex-direction: column;
@@ -36,7 +34,6 @@
         .login-btn { width: 100%; padding: 16px; background-color: #15284b; color: #d4af37; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .login-btn:hover { background-color: #0f1c35; }
 
-        /* 메인 앱 디자인 */
         .header { background-color: var(--primary-color); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { margin: 0; font-size: 1.2em; word-break: keep-all; color: var(--accent-color); }
         .user-badge { background-color: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
@@ -61,7 +58,6 @@
 
         .result-section { display: none; }
         
-        /* 📋 공식 제안서 문서 스타일 */
         .proposal-doc { background: #ffffff; border: 2px solid #1e293b; padding: 25px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9em; }
         .proposal-header { text-align: center; border-bottom: 2px solid #1e293b; padding-bottom: 15px; margin-bottom: 20px; }
         .proposal-title { font-size: 1.3em; font-weight: 900; color: #1e293b; margin-bottom: 5px; word-break: keep-all; }
@@ -98,9 +94,15 @@
         .btn-pdf { background-color: #0284c7; grid-column: span 2; }
         .action-btn:hover { opacity: 0.9; }
 
-        .history-list { font-size: 0.85em; max-height: 150px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 5px; background: #f8fafc; margin-top: 10px; }
-        .history-item { padding: 6px 8px; border-bottom: 1px solid #e2e8f0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .history-list { font-size: 0.85em; max-height: 180px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 5px; background: #f8fafc; margin-top: 10px; }
+        .history-item { padding: 8px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 5px; }
         .history-item:hover { background-color: #e2e8f0; }
+        .history-info { flex: 1; cursor: pointer; }
+        .history-btns { display: flex; gap: 4px; }
+        .btn-hist-edit { background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 0.8em; cursor: pointer; }
+        .btn-hist-del { background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 0.8em; cursor: pointer; }
+        .btn-hist-edit:hover { background: #2563eb; }
+        .btn-hist-del:hover { background: #dc2626; }
 
         @media screen and (max-width: 768px) {
             .container { grid-template-columns: 1fr; padding: 10px; margin: 10px auto; gap: 15px; }
@@ -125,7 +127,7 @@
 </head>
 <body>
 
-    <!-- 🔑 스플래시 및 로그인 폼 -->
+    <!-- 로그인 화면 -->
     <div id="login-overlay">
         <div class="logo-container">
             <div class="logo-main">JDB</div>
@@ -133,14 +135,14 @@
         </div>
         
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V2.6</div>
+            <div class="login-title">JDB컨설팅 영업관리 V3.2</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <button class="login-btn" onclick="startApp()">영업관리 로그인</button>
         </div>
     </div>
 
-    <!-- 📱 메인 앱 화면 -->
+    <!-- 메인 앱 화면 -->
     <div id="main-app" style="display: none;">
         <div class="header">
             <h1>JDB컨설팅 영업관리</h1>
@@ -148,7 +150,7 @@
         </div>
 
         <div class="container">
-            <!-- 왼쪽: 데이터 입력 -->
+            <!-- 왼쪽: 데이터 입력 (12대 경우의 수 확장 항목 반영) -->
             <div class="card">
                 <h2>📝 환급액 산출 데이터 입력</h2>
                 <div class="form-grid">
@@ -170,6 +172,43 @@
                         </select>
                     </div>
 
+                    <div class="form-group">
+                        <label>체육시설업 등록 형태</label>
+                        <select id="facility_type">
+                            <option value="대중제" selected>대중제 (퍼블릭) 골프장</option>
+                            <option value="회원제">회원제 골프장 / 대형리조트</option>
+                            <option value="일반상업">일반 상업용 건축물</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>취득세 중과세 적용 여부</label>
+                        <select id="acq_heavy">
+                            <option value="N" selected>일반세율 적용</option>
+                            <option value="Y">중과세(오락장/과밀억제 등) 적용됨</option>
+                        </select>
+                    </div>
+
+                    <!-- 12대 경우의 수 연계 입력 항목들 -->
+                    <div class="form-group">
+                        <label>원형보전지/임야 분리과세 대상 (원)</label>
+                        <input type="text" id="green_land_tax" class="num-input" value="0" inputmode="numeric" oninput="formatComma(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>부당 감면 추징세액 납부 내역</label>
+                        <select id="penalty_tax_yn">
+                            <option value="N" selected>없음</option>
+                            <option value="Y">있음 (추징금 환급 검토)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>미신청 R&D/인력개발 비용 (원)</label>
+                        <input type="text" id="rnd_cost" class="num-input" value="0" inputmode="numeric" oninput="formatComma(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>기부채납/사도 무상제공 부지 (원)</label>
+                        <input type="text" id="donated_land_tax" class="num-input" value="0" inputmode="numeric" oninput="formatComma(this)">
+                    </div>
+
                     <div class="form-group"><label>상가/건축물 층수 (층)</label><input type="text" id="floor" class="num-input" value="1" inputmode="numeric" oninput="formatComma(this)"></div>
                     <div class="form-group"><label>지역자원시설세 과세</label><select id="surcharge"><option value="1">1배 (일반)</option><option value="3" selected>3배 (중과세)</option></select></div>
                     <div class="form-group"><label>지역자원 기납부액 (원)</label><input type="text" id="regional_tax" class="num-input" value="15,000,000" inputmode="numeric" oninput="formatComma(this)"></div>
@@ -181,6 +220,18 @@
                     <div class="form-group"><label>특례구역(기업도시) 소재</label><select id="special_zone"><option value="N">아니오</option><option value="Y">예</option></select></div>
                     <div class="form-group"><label>취득세 납부액 (원)</label><input type="text" id="acq_tax" class="num-input" value="0" inputmode="numeric" oninput="formatComma(this)"></div>
                     
+                    <div class="form-group">
+                        <label>친환경/에너지절감 시설 투자 (원)</label>
+                        <input type="text" id="green_investment" class="num-input" value="0" inputmode="numeric" oninput="formatComma(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>과거 경정청구 진행 이력</label>
+                        <select id="past_claim">
+                            <option value="N" selected>없음 (최초 청구)</option>
+                            <option value="Y">일부 진행 이력 있음 (추가 검토 필요)</option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label>다음 후속 미팅/연락일 (Follow-up)</label>
                         <input type="date" id="follow_date">
@@ -210,7 +261,7 @@
 
             <!-- 오른쪽: 공식 제안서 출력 영역 -->
             <div class="card">
-                <h2>📊 지방세 경정청구 및 국세 환급 컨설팅 제안서</h2>
+                <h2>📊 지방세·국세 환급(경정청구) 컨설팅 제안서</h2>
 
                 <div class="search-panel">
                     <div class="search-row">
@@ -223,20 +274,17 @@
                     </div>
                 </div>
 
-                <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">공식 제안서 작성 중...</strong><div class="log-text" id="logText">세법 조항 및 환급 데이터를 구성하고 있습니다.</div></div>
+                <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">공식 제안서 작성 중...</strong><div class="log-text" id="logText">12대 환급 경우의 및 세법 조항을 정밀 분석 중입니다.</div></div>
                 
                 <div class="result-section" id="resultArea">
-                    <!-- 📋 정식 제안서 양식 문서 서식 -->
                     <div class="proposal-doc">
                         <div class="proposal-header">
-                            <!-- 타이틀 변경 반영 -->
-                            <div class="proposal-title">지방세 경정청구 및 국세 환급 컨설팅 제안서</div>
+                            <div class="proposal-title">지방세·국세 환급(경정청구) 컨설팅 제안서</div>
                             <div class="proposal-subtitle">TAX REFUND & REVISION CONSULTING PROPOSAL</div>
                         </div>
 
                         <div class="proposal-meta">
                             <div>수신: <span id="prop_client">OO 컨트리클럽 귀중</span></div>
-                            <!-- 발신자 로그인 이메일 자동 연동 반영 -->
                             <div>발신: JDB컨설팅 (<span id="prop_sender">admin@jdb.com</span>)</div>
                         </div>
 
@@ -305,7 +353,7 @@
     </div>
 
     <script>
-        let loggedInEmail = ""; // 로그인한 이메일 저장 변수
+        let loggedInEmail = "";
         let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "", stage: "", memo: "", followDate: "", yearly: [] };
         let historyData = [];
 
@@ -316,7 +364,7 @@
                 document.getElementById('userEmailInput').focus();
                 return;
             }
-            loggedInEmail = userEmail; // 이메일 보관
+            loggedInEmail = userEmail;
             const userName = userEmail.split('@')[0];
             
             document.getElementById('login-overlay').style.display = 'none';
@@ -361,9 +409,9 @@
             document.getElementById('resultArea').style.display = 'none';
             document.getElementById('loader').style.display = 'block';
             let logText = document.getElementById('logText');
-            logText.innerText = "조세법령 및 제안서 양식 데이터를 구성 중입니다...";
+            logText.innerText = "12대 환급 경우의 수 및 세법 조항을 정밀 분석 중입니다...";
 
-            setTimeout(() => { logText.innerText = "성공보수 분할 및 공식 제안서 렌더링 중..."; }, 1000);
+            setTimeout(() => { logText.innerText = "원형보전지, R&D 공제 및 추징세액 정산 산출 중..."; }, 1000);
             
             setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
@@ -381,6 +429,15 @@
             const followDate = document.getElementById('follow_date').value || "미정";
             const feeType = document.getElementById('fee_type').value;
             
+            const facilityType = document.getElementById('facility_type').value;
+            const acqHeavy = document.getElementById('acq_heavy').value;
+            const greenLandTax = parseNumber(document.getElementById('green_land_tax').value);
+            const penaltyTaxYn = document.getElementById('penalty_tax_yn').value;
+            const rndCost = parseNumber(document.getElementById('rnd_cost').value);
+            const donatedLandTax = parseNumber(document.getElementById('donated_land_tax').value);
+            const greenInvestment = parseNumber(document.getElementById('green_investment').value);
+            const pastClaim = document.getElementById('past_claim').value;
+
             const floor = parseNumber(document.getElementById('floor').value);
             const surcharge = document.getElementById('surcharge').value;
             const regionalTax = parseNumber(document.getElementById('regional_tax').value);
@@ -397,20 +454,80 @@
             let reasons = [];
             let defenseTip = "";
 
+            // 1. 원형보전지 분리과세 적용
+            if (greenLandTax > 0) {
+                totalRefund += greenLandTax * 0.3 * years;
+                reasons.push("✔️ <b>[원형보전지 분리과세]</b> 골프장·임야 원형보전지 과세오류 정산에 따른 재산세 환급.");
+            }
+            // 2. 대중제 감면 특례
+            if (facilityType === "대중제") {
+                totalRefund += regionalTax * 0.2 * years;
+                reasons.push("✔️ <b>[대중제 골프장 감면 특례]</b> 체육시설업 등록 형태에 따른 지방세 감면 조례 적용 누락분 추가 산정.");
+            }
+            // 3. 지역자원시설세 위법 중과
             if (floor < 11 && surcharge === "3") {
                 const overpaid = regionalTax - (regionalTax / 3);
                 totalRefund += overpaid * years;
-                reasons.push("[지역자원시설세 위법] 11층 미만 상가 3배 중과 위법 (조심 2021지2787). 과다 납부액 환급.");
-                defenseTip = "지자체 담당자가 '당초 부과 처분 후 제소 기간이 지났다'고 주장할 경우, <b>지방세기본법 제50조에 따른 경정청구</b>는 납부 기한 경과 후 5년 이내에 언제든 청구할 수 있는 법적 권리임을 명시하고 조심 2021지2787 인용례를 제시하십시오.";
-            } else if (totalArea > 0 && exemptArea > 0) {
+                reasons.push("✔️ <b>[지역자원시설세 위법]</b> 11층 미만 상가 3배 중과 위법 (조심 2021지2787). 과다 납부액 환급.");
+            }
+            // 4. 비과세 면적 안분 오류
+            if (totalArea > 0 && exemptArea > 0) {
                 const ratio = exemptArea / totalArea;
                 totalRefund += (propertyTax + regionalTax) * ratio * years;
-                reasons.push("[비과세 면적 안분 오류] 복합건축물 내 비과세 면적 비율 안분 누락. (지방세법 제146조).");
-                defenseTip = "기장 세무사가 '자체적으로 반영되어 있다'고 할 경우, 최근 5개년 과세표준 산출 내역서상 비과세 면적 감면율이 실제 건축물 현황과 일치하는지 ㎡ 단위로 재검증이 필요함을 어필하십시오.";
-            } else {
-                reasons.push("즉각적인 환급 사유 미발견. 사도 비과세 및 감면 누락 여부 추가 정밀 분석 필요.");
-                defenseTip = "추가적인 건축물 현황 도면 및 납부 고지서 원본을 확보하여 누락된 비과세·감면 항목을 정밀 스크리닝해야 합니다.";
+                reasons.push("✔️ <b>[비과세 면적 안분 오류]</b> 복합건축물 내 비과세 면적 비율 안분 누락 (지방세법 제146조).");
             }
+            // 5. 가설건축물 토지 과세유형 오분류 (기본 로직 반영)
+            if (tempBuilding === "Y") {
+                totalRefund += propertyTax * 0.15 * years;
+                reasons.push("✔️ <b>[가설건축물 부속토지]</b> 종합합산 ➔ 별도합산 전환에 따른 재산세 정산 환급.");
+            }
+            // 6. 창업/지방이전 감면 (특례구역 연계)
+            if (specialZone === "Y") {
+                totalRefund += acqTax + (propertyTax * 0.5 * years);
+                reasons.push("✔️ <b>[지방이전/창업 감면]</b> 지방세특례제한법에 따른 취득세·재산세 감면 요건 누락분 환급.");
+            }
+            // 7. 감면 추징세액 적정성 검토
+            if (penaltyTaxYn === "Y") {
+                totalRefund += 5000000;
+                reasons.push("✔️ <b>[감면 추징세액 취소]</b> 유예기간 내 목적 외 사용 부과에 대한 부당 추징세액 취소 및 환급.");
+            }
+            // 8. 기부채납 및 무상제공 사도 비과세
+            if (donatedLandTax > 0) {
+                totalRefund += donatedLandTax * years;
+                reasons.push("✔️ <b>[기부채납/사도 비과세]</b> 공공용 무상 제공 부지 과오납 재산세 환급 (지방세법 제109조).");
+            }
+            // 9. 합병/분할 과점주주 간주취득세 정산 (기본 취득세 연계)
+            if (acqHeavy === "Y" && acqTax > 0) {
+                totalRefund += acqTax * 0.4;
+                reasons.push("✔️ <b>[취득세 중과/간주취득세 오류]</b> 과밀억제권역 또는 조직변경 시 과다 산정된 세액 환급.");
+            }
+            // 10. 국세 R&D 세액공제
+            if (rndCost > 0) {
+                const rndCredit = rndCost * 0.25;
+                totalRefund += rndCredit;
+                reasons.push(`✔️ <b>[국세 R&D 세액공제]</b> 미신청 연구인력개발비(금액: ${rndCost.toLocaleString()}원) 법인세 경정청구.`);
+            }
+            // 11. 국세 에너지절감 시설 투자세액공제
+            if (greenInvestment > 0) {
+                const taxCredit = greenInvestment * 0.05;
+                totalRefund += taxCredit;
+                reasons.push(`✔️ <b>[국세 법인세 공제]</b> 친환경·에너지절감 시설 투자(금액: ${greenInvestment.toLocaleString()}원) 공제 환급.`);
+            }
+            // 12. 개별소비세 과다 납부 정산 (간이 반영)
+            if (facilityType === "회원제") {
+                totalRefund += 3000000;
+                reasons.push("✔️ <b>[개별소비세/교육세 정산]</b> 체육시설업 입장행위 관련 국세 신고 오류 정산.");
+            }
+
+            if (reasons.length === 0) {
+                reasons.push("⚠️ 즉각적인 환급 사유 미발견. 건축물 현황 도면 및 고지서 원본 정밀 스크리닝 필요.");
+            }
+
+            if (pastClaim === "Y") {
+                reasons.push("ℹ️ <i>(참고) 과거 경정청구 이력이 존재하므로, 기 청구 연도를 제외한 누락 연차 및 신규 판례 적용 가능 연도 위주로 정밀 재검토가 필요합니다.</i>");
+            }
+
+            defenseTip = "지자체 담당자나 과세관청이 '기존 부과처분에 하자가 없다'고 주장할 경우, <b>지방세기본법 제50조 경정청구권</b> 및 관련 조심 판례의 위법성 인용 결정을 근거로 대응하십시오.";
 
             const refVal = Math.floor(totalRefund);
             const feeVal = Math.floor(totalRefund * 0.3);
@@ -418,7 +535,6 @@
             const refStr = refVal.toLocaleString() + " 원";
             const feeStr = feeVal.toLocaleString() + " 원";
 
-            // 제안서 메타 정보 반영 (로그인 이메일 자동 주입)
             document.getElementById('prop_client').innerText = `${clientName} (${managerName} 귀중)`;
             document.getElementById('prop_sender').innerText = loggedInEmail || "admin@jdb.com";
             
@@ -459,22 +575,95 @@
                 followDate: followDate, refund: refStr, fee: feeStr, reasons: reasons, yearly: yearlyArr 
             };
 
-            addToHistory(clientName, refStr, followDate);
+            const formData = {
+                client_name: clientName, client_manager: managerName, sales_stage: salesStage,
+                facility_type: facilityType, acq_heavy: acqHeavy, green_land_tax: document.getElementById('green_land_tax').value,
+                penalty_tax_yn: penaltyTaxYn, rnd_cost: document.getElementById('rnd_cost').value,
+                donated_land_tax: document.getElementById('donated_land_tax').value, floor: document.getElementById('floor').value,
+                surcharge: surcharge, regional_tax: document.getElementById('regional_tax').value,
+                temp_building: tempBuilding, total_area: document.getElementById('total_area').value,
+                exempt_area: document.getElementById('exempt_area').value, property_tax_type: propertyTaxType,
+                property_tax: document.getElementById('property_tax').value, special_zone: specialZone,
+                acq_tax: document.getElementById('acq_tax').value, green_investment: document.getElementById('green_investment').value,
+                past_claim: pastClaim, follow_date: followDate, fee_type: feeType, sales_memo: salesMemo,
+                years: document.getElementById('years').value
+            };
+
+            addToHistory(clientName, refStr, followDate, formData);
         }
 
-        function addToHistory(client, refund, followDate) {
+        function addToHistory(client, refund, followDate, formData) {
             historyData = historyData.filter(item => item.client !== client);
-            historyData.unshift({ client: client, refund: refund, followDate: followDate, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+            historyData.unshift({ 
+                client: client, refund: refund, followDate: followDate, formData: formData,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
+            });
             if(historyData.length > 5) historyData.pop();
+            renderHistoryList();
+        }
 
+        function renderHistoryList() {
             let listHTML = "";
-            historyData.forEach((item) => {
-                listHTML += `<div class="history-item" onclick="alert('고객사: ${item.client}\\n예상환급: ${item.refund}\\n후속일정: ${item.followDate}')">
-                    <span><b>${item.client}</b> (후속: ${item.followDate})</span>
-                    <span style="color: #10b981; font-weight: bold;">${item.refund}</span>
+            if (historyData.length === 0) {
+                document.getElementById('historyList').innerHTML = '<div style="color: #94a3b8; text-align: center; padding: 10px;">저장된 계산 내역이 없습니다.</div>';
+                return;
+            }
+
+            historyData.forEach((item, index) => {
+                listHTML += `<div class="history-item">
+                    <div class="history-info" onclick="loadHistoryItem(${index})" title="클릭하여 데이터 불러오기">
+                        <div><b>${item.client}</b> <span style="color:#10b981; font-weight:bold;">${item.refund}</span></div>
+                        <div style="font-size:0.75em; color:#64748b;">후속: ${item.followDate} (${item.time})</div>
+                    </div>
+                    <div class="history-btns">
+                        <button class="btn-hist-edit" onclick="loadHistoryItem(${index})">수정</button>
+                        <button class="btn-hist-del" onclick="deleteHistoryItem(event, ${index})">X</button>
+                    </div>
                 </div>`;
             });
             document.getElementById('historyList').innerHTML = listHTML;
+        }
+
+        function deleteHistoryItem(event, index) {
+            event.stopPropagation();
+            if(confirm("해당 히스토리 기록을 삭제하시겠습니까?")) {
+                historyData.splice(index, 1);
+                renderHistoryList();
+            }
+        }
+
+        function loadHistoryItem(index) {
+            const data = historyData[index].formData;
+            if (!data) return;
+
+            document.getElementById('client_name').value = data.client_name || "";
+            document.getElementById('client_manager').value = data.client_manager || "";
+            document.getElementById('sales_stage').value = data.sales_stage || "방문 미팅 성사";
+            document.getElementById('facility_type').value = data.facility_type || "대중제";
+            document.getElementById('acq_heavy').value = data.acq_heavy || "N";
+            document.getElementById('green_land_tax').value = data.green_land_tax || "0";
+            document.getElementById('penalty_tax_yn').value = data.penalty_tax_yn || "N";
+            document.getElementById('rnd_cost').value = data.rnd_cost || "0";
+            document.getElementById('donated_land_tax').value = data.donated_land_tax || "0";
+            document.getElementById('floor').value = data.floor || "1";
+            document.getElementById('surcharge').value = data.surcharge || "3";
+            document.getElementById('regional_tax').value = data.regional_tax || "";
+            document.getElementById('temp_building').value = data.temp_building || "N";
+            document.getElementById('total_area').value = data.total_area || "";
+            document.getElementById('exempt_area').value = data.exempt_area || "";
+            document.getElementById('property_tax_type').value = data.property_tax_type || "종합합산";
+            document.getElementById('property_tax').value = data.property_tax || "";
+            document.getElementById('special_zone').value = data.special_zone || "N";
+            document.getElementById('acq_tax').value = data.acq_tax || "";
+            document.getElementById('green_investment').value = data.green_investment || "0";
+            document.getElementById('past_claim').value = data.past_claim || "N";
+            document.getElementById('follow_date').value = data.follow_date || "";
+            document.getElementById('fee_type').value = data.fee_type || "2회분할";
+            document.getElementById('sales_memo').value = data.sales_memo || "";
+            document.getElementById('years').value = data.years || "5";
+
+            alert(`[ ${data.client_name} ]의 저장된 입력 데이터가 왼쪽 폼에 로드되었습니다.\n필요한 항목을 수정한 뒤 [공식 제안서 생성 및 분석]을 다시 실행해 주세요.`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function copyResultText() {
