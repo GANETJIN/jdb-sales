@@ -64,10 +64,10 @@
         /* 📋 공식 제안서 문서 스타일 */
         .proposal-doc { background: #ffffff; border: 2px solid #1e293b; padding: 25px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9em; }
         .proposal-header { text-align: center; border-bottom: 2px solid #1e293b; padding-bottom: 15px; margin-bottom: 20px; }
-        .proposal-title { font-size: 1.4em; font-weight: 900; color: #1e293b; margin-bottom: 5px; }
-        .proposal-subtitle { font-size: 0.95em; color: #64748b; }
+        .proposal-title { font-size: 1.3em; font-weight: 900; color: #1e293b; margin-bottom: 5px; word-break: keep-all; }
+        .proposal-subtitle { font-size: 0.9em; color: #64748b; }
         
-        .proposal-meta { display: flex; justify-content: space-between; background: #f8fafc; padding: 10px 15px; border-radius: 4px; margin-bottom: 20px; font-weight: bold; font-size: 0.85em; }
+        .proposal-meta { display: flex; justify-content: space-between; background: #f8fafc; padding: 10px 15px; border-radius: 4px; margin-bottom: 20px; font-weight: bold; font-size: 0.85em; flex-wrap: wrap; gap: 5px; }
         
         .summary-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 6px; text-align: center; margin-bottom: 15px; }
         .amount-value { font-size: 1.8em; color: var(--success-color); font-weight: 900; margin: 8px 0; word-break: keep-all; }
@@ -113,7 +113,6 @@
             .search-row { flex-direction: column; align-items: stretch; }
         }
 
-        /* 인쇄(PDF 저장) 시 제안서 양식만 깔끔하게 출력 */
         @media print {
             body { background: white; }
             .header, .card:first-child, .action-btns, .search-panel, #login-overlay, .history-list, h2 { display: none !important; }
@@ -134,7 +133,7 @@
         </div>
         
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V2.5</div>
+            <div class="login-title">JDB컨설팅 영업관리 V2.6</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <button class="login-btn" onclick="startApp()">영업관리 로그인</button>
@@ -211,7 +210,7 @@
 
             <!-- 오른쪽: 공식 제안서 출력 영역 -->
             <div class="card">
-                <h2>📊 지방세 환급 컨설팅 공식 제안서</h2>
+                <h2>📊 지방세 경정청구 및 국세 환급 컨설팅 제안서</h2>
 
                 <div class="search-panel">
                     <div class="search-row">
@@ -230,13 +229,15 @@
                     <!-- 📋 정식 제안서 양식 문서 서식 -->
                     <div class="proposal-doc">
                         <div class="proposal-header">
-                            <div class="proposal-title">지방세 경정청구 및 환급 컨설팅 제안서</div>
-                            <div class="proposal-subtitle">TAX REFUND CONSULTING PROPOSAL</div>
+                            <!-- 타이틀 변경 반영 -->
+                            <div class="proposal-title">지방세 경정청구 및 국세 환급 컨설팅 제안서</div>
+                            <div class="proposal-subtitle">TAX REFUND & REVISION CONSULTING PROPOSAL</div>
                         </div>
 
                         <div class="proposal-meta">
                             <div>수신: <span id="prop_client">OO 컨트리클럽 귀중</span></div>
-                            <div>발신: JDB컨설팅 (대표 컨설턴트)</div>
+                            <!-- 발신자 로그인 이메일 자동 연동 반영 -->
+                            <div>발신: JDB컨설팅 (<span id="prop_sender">admin@jdb.com</span>)</div>
                         </div>
 
                         <div class="summary-box">
@@ -273,14 +274,14 @@
                         <div class="match-log" id="reason_text"></div>
 
                         <div class="section-box" style="border-left: 4px solid #ef4444;">
-                            <h4>4. 지자체 소명 및 방어 논리 가이드</h4>
+                            <h4>4. 지자체/과세관청 소명 및 방어 논리 가이드</h4>
                             <p style="margin: 0; color: #334155; line-height: 1.4;" id="defense_text"></p>
                         </div>
 
                         <div class="section-box" style="border-left: 4px solid #3b82f6;">
                             <h4>5. 위임 및 환급 청구 필요 서류 안내</h4>
                             <div class="checklist-item"><input type="checkbox"> 법인 등기부등본 및 사업자등록증 사본</div>
-                            <div class="checklist-item"><input type="checkbox"> 최근 5개년 재산세·지역자원시설세 과세표준증명 (또는 납부고지서)</div>
+                            <div class="checklist-item"><input type="checkbox"> 최근 5개년 세목별 과세증명서 및 납부고지서</div>
                             <div class="checklist-item"><input type="checkbox"> 건축물대장 (총괄/일반) 및 도면 사본</div>
                             <div class="checklist-item"><input type="checkbox"> JDB컨설팅 위임장 (법인인감 날인)</div>
                         </div>
@@ -304,6 +305,7 @@
     </div>
 
     <script>
+        let loggedInEmail = ""; // 로그인한 이메일 저장 변수
         let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "", stage: "", memo: "", followDate: "", yearly: [] };
         let historyData = [];
 
@@ -314,7 +316,9 @@
                 document.getElementById('userEmailInput').focus();
                 return;
             }
+            loggedInEmail = userEmail; // 이메일 보관
             const userName = userEmail.split('@')[0];
+            
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('welcomeMsg').innerHTML = `👤 ${userName} 님 환영합니다`;
@@ -414,8 +418,10 @@
             const refStr = refVal.toLocaleString() + " 원";
             const feeStr = feeVal.toLocaleString() + " 원";
 
-            // 제안서 메타 정보 반영
+            // 제안서 메타 정보 반영 (로그인 이메일 자동 주입)
             document.getElementById('prop_client').innerText = `${clientName} (${managerName} 귀중)`;
+            document.getElementById('prop_sender').innerText = loggedInEmail || "admin@jdb.com";
+            
             document.getElementById('total_refund').innerText = refStr;
             document.getElementById('success_fee').innerText = feeStr;
             document.getElementById('reason_text').innerHTML = reasons.join("<br><br>");
@@ -472,7 +478,7 @@
         }
 
         function copyResultText() {
-            const textToCopy = `[JDB컨설팅 공식 제안서 요약]\n- 수신: ${currentResultData.client} (${currentResultData.manager})\n- 발신: JDB컨설팅\n- 예상 환급 총액: ${currentResultData.refund}\n- 성공보수(30%): ${currentResultData.fee}\n\n[주요 매칭 사유]\n${currentResultData.reasons.join('\n')}`;
+            const textToCopy = `[JDB컨설팅 공식 제안서 요약]\n- 수신: ${currentResultData.client} (${currentResultData.manager})\n- 발신: JDB컨설팅 (${loggedInEmail})\n- 예상 환급 총액: ${currentResultData.refund}\n- 성공보수(30%): ${currentResultData.fee}\n\n[주요 매칭 사유]\n${currentResultData.reasons.join('\n')}`;
             
             navigator.clipboard.writeText(textToCopy).then(() => {
                 alert("제안서 요약 내용이 복사되었습니다! 카카오톡이나 메모장에 붙여넣기 하세요.");
