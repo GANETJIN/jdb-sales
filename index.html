@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	 <!-- 👇 브라우저 캐시 방지용 태그 (항상 최신 버전 불러오기) -->
+	 <!-- 브라우저 캐시 방지용 태그 -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <!-- 탭 이름 변경 -->
     <title>JDB컨설팅 영업관리</title>
     <style>
         :root { --primary-color: #1e293b; --accent-color: #d4af37; --button-blue: #3b82f6; --success-color: #10b981; --danger-color: #ef4444; --bg-color: #f1f5f9; }
@@ -44,13 +43,13 @@
         
         .container { max-width: 1200px; margin: 20px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 20px; }
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .card h2 { margin-top: 0; font-size: 1.2em; color: var(--primary-color); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        .card h2 { margin-top: 0; font-size: 1.2em; color: var(--primary-color); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .form-group { margin-bottom: 12px; }
         .form-group.full { grid-column: span 2; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85em; color: #475569; }
-        input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 16px; background-color: #fff; }
+        input[type="text"], select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 16px; background-color: #fff; font-family: inherit; }
         .num-input { text-align: right; }
 
         .run-btn { width: 100%; padding: 16px; background-color: var(--button-blue); color: white; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 15px; }
@@ -65,14 +64,26 @@
         .client-title { font-size: 1.1em; color: var(--primary-color); font-weight: bold; margin-bottom: 10px; }
         .amount-value { font-size: 2em; color: var(--success-color); font-weight: 900; margin: 10px 0; word-break: keep-all; }
         .fee-value { font-size: 1.2em; color: var(--danger-color); font-weight: bold; }
-        .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 15px; font-size: 0.9em; line-height: 1.6; word-break: keep-all; }
+        
+        /* 연도별 상세 분할 테이블 스타일 */
+        .yearly-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.85em; background: #fff; }
+        .yearly-table th, .yearly-table td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        .yearly-table th { background-color: #f1f5f9; color: #1e293b; }
+
+        .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 15px; font-size: 0.9em; line-height: 1.6; word-break: keep-all; margin-bottom: 15px; }
 
         /* 결과 제어 버튼 그룹 */
-        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .action-btn { padding: 12px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.95em; cursor: pointer; color: white; }
+        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .action-btn { padding: 12px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.9em; cursor: pointer; color: white; text-align: center; text-decoration: none; display: flex; justify-content: center; align-items: center; }
         .btn-copy { background-color: #475569; }
-        .btn-pdf { background-color: #0284c7; }
+        .btn-kakao { background-color: #fee500; color: #3c1e1e; }
+        .btn-pdf { background-color: #0284c7; grid-column: span 2; }
         .action-btn:hover { opacity: 0.9; }
+
+        /* 히스토리 목록 스타일 */
+        .history-list { font-size: 0.85em; max-height: 150px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 5px; background: #f8fafc; margin-top: 10px; }
+        .history-item { padding: 6px 8px; border-bottom: 1px solid #e2e8f0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .history-item:hover { background-color: #e2e8f0; }
 
         @media screen and (max-width: 768px) {
             .container { grid-template-columns: 1fr; padding: 10px; margin: 10px auto; gap: 15px; }
@@ -81,9 +92,10 @@
             .header { flex-direction: column; text-align: center; }
             .card { padding: 15px; }
             .amount-value { font-size: 1.8em; }
+            .action-btns { grid-template-columns: 1fr; }
+            .btn-pdf { grid-column: span 1; }
         }
 
-        /* 인쇄(PDF 저장) 시 불필요한 요소 숨기기 */
         @media print {
             body { background: white; }
             .header, .card:first-child, .action-btns, #login-overlay { display: none !important; }
@@ -103,7 +115,7 @@
         </div>
         
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V1.2</div>
+            <div class="login-title">JDB컨설팅 영업관리 V1.5</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <button class="login-btn" onclick="startApp()">영업관리 로그인</button>
@@ -122,14 +134,24 @@
             <div class="card">
                 <h2>📝 환급액 산출 데이터 입력</h2>
                 <div class="form-grid">
-                    <!-- 신규 기능: 고객사 및 담당자 정보 -->
+                    <!-- 고객사 및 담당자 정보 -->
                     <div class="form-group full">
                         <label>고객사명 (골프장/리조트 등)</label>
                         <input type="text" id="client_name" placeholder="예: OO 컨트리클럽" value="OO 컨트리클럽">
                     </div>
-                    <div class="form-group full">
+                    <div class="form-group">
                         <label>현장 담당자 성함 / 직급</label>
                         <input type="text" id="client_manager" placeholder="예: 김재무 이사님" value="김재무 이사님">
+                    </div>
+                    <!-- 기능 2: 영업 파이프라인 단계 선택 -->
+                    <div class="form-group">
+                        <label>영업 진행 단계 (Pipeline)</label>
+                        <select id="sales_stage">
+                            <option value="1차 콜 완료">1차 콜 완료</option>
+                            <option value="방문 미팅 성사" selected>방문 미팅 성사</option>
+                            <option value="위임장 접수 대기">위임장 접수 대기</option>
+                            <option value="계약 완료">계약 완료</option>
+                        </select>
                     </div>
 
                     <div class="form-group"><label>상가/건축물 층수 (층)</label><input type="text" id="floor" class="num-input" value="1" inputmode="numeric" oninput="formatComma(this)"></div>
@@ -142,6 +164,12 @@
                     <div class="form-group"><label>재산세 기납부액 (원)</label><input type="text" id="property_tax" class="num-input" value="40,000,000" inputmode="numeric" oninput="formatComma(this)"></div>
                     <div class="form-group"><label>특례구역(기업도시) 소재</label><select id="special_zone"><option value="N">아니오</option><option value="Y">예</option></select></div>
                     <div class="form-group"><label>취득세 납부액 (원)</label><input type="text" id="acq_tax" class="num-input" value="0" inputmode="numeric" oninput="formatComma(this)"></div>
+                    
+                    <!-- 기능 2: 영업 현장 메모 -->
+                    <div class="form-group full">
+                        <label>영업 특이사항 및 미팅 메모</label>
+                        <textarea id="sales_memo" rows="2" placeholder="예: 재무팀장이 법적 근거 자료를 추가로 요청함. 다음 주 재방문 예정."></textarea>
+                    </div>
                 </div>
                 
                 <div class="form-group" style="margin-top: 10px;">
@@ -152,24 +180,50 @@
                 <button class="run-btn" onclick="startAnalysis()">대조 및 분석 실행</button>
             </div>
 
-            <!-- 오른쪽: 분석 결과 -->
+            <!-- 오른쪽: 분석 결과 및 히스토리 -->
             <div class="card">
                 <h2>📊 환급액 산출 결과</h2>
                 <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">AI 시스템 교차 검증 중...</strong><div class="log-text" id="logText">데이터를 파싱하고 있습니다.</div></div>
                 <div class="result-section" id="resultArea">
                     <div class="summary-box">
                         <div class="client-title" id="res_client_title">🏢 OO 컨트리클럽 산출 결과</div>
+                        <div style="font-size: 0.85em; color: #475569; margin-bottom: 5px;" id="res_stage_badge">상태: 방문 미팅 성사</div>
                         <div style="font-weight:bold; color:#166534;">고객사 예상 환급 총액</div>
                         <div class="amount-value" id="total_refund">0 원</div>
                         <div>당사 예상 매출 (성공보수 30%)<br><span class="fee-value" id="success_fee">0 원</span></div>
                     </div>
+
+                    <!-- 기능 3: 연도별 상세 분할 표 -->
+                    <h3>📅 연도별 환급액 상세 분할</h3>
+                    <table class="yearly-table">
+                        <thead>
+                            <tr>
+                                <th>소급 연차</th>
+                                <th>예상 환급액</th>
+                                <th>성공보수(30%)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="yearlyTableBody">
+                            <!-- 자바스크립트로 동적 생성 -->
+                        </tbody>
+                    </table>
+
                     <h3>🔍 환급 로직 매칭 사유</h3>
                     <div class="match-log" id="reason_text"></div>
 
-                    <!-- 신규 기능: 결과 공유 및 저장 버튼 -->
+                    <!-- 기능 4: 카카오톡/문자 즉시 전송 버튼 포함 컨트롤 그룹 -->
                     <div class="action-btns">
-                        <button class="action-btn btn-copy" onclick="copyResultText()">📋 결과 텍스트 복사</button>
-                        <button class="action-btn btn-pdf" onclick="saveAsPDF()">🖨️ PDF 저장 / 인쇄</button>
+                        <button class="action-btn btn-copy" onclick="copyResultText()">📋 결과 복사</button>
+                        <button class="action-btn btn-kakao" onclick="sendKakaoMessage()">💬 요약 문자/카톡 전송</button>
+                        <button class="action-btn btn-pdf" onclick="saveAsPDF()">🖨️ PDF 보고서 저장 / 인쇄</button>
+                    </div>
+                </div>
+
+                <!-- 기능 1: 최근 계산 히스토리 섹션 -->
+                <div style="margin-top: 30px; border-top: 2px solid #e2e8f0; padding-top: 15px;">
+                    <h2>📂 최근 계산 히스토리 (최대 5개)</h2>
+                    <div class="history-list" id="historyList">
+                        <div style="color: #94a3b8; text-align: center; padding: 10px;">저장된 계산 내역이 없습니다.</div>
                     </div>
                 </div>
             </div>
@@ -177,7 +231,8 @@
     </div>
 
     <script>
-        let currentResultData = { refund: "", fee: "", reasons: [], client: "" };
+        let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "", stage: "", memo: "", yearly: [] };
+        let historyData = [];
 
         function startApp() {
             const userEmail = document.getElementById('userEmailInput').value.trim();
@@ -213,7 +268,7 @@
             let logText = document.getElementById('logText');
             logText.innerText = "입력된 데이터를 조세법령과 대조 중입니다...";
 
-            setTimeout(() => { logText.innerText = "예상 환급액 및 성공보수를 산출하고 있습니다..."; }, 1000);
+            setTimeout(() => { logText.innerText = "예상 환급액 및 연도별 분할 산출 중입니다..."; }, 1000);
             
             setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
@@ -226,6 +281,8 @@
         function calculateRefund() {
             const clientName = document.getElementById('client_name').value || "고객사";
             const managerName = document.getElementById('client_manager').value || "";
+            const salesStage = document.getElementById('sales_stage').value;
+            const salesMemo = document.getElementById('sales_memo').value;
             const floor = parseNumber(document.getElementById('floor').value);
             const surcharge = document.getElementById('surcharge').value;
             const regionalTax = parseNumber(document.getElementById('regional_tax').value);
@@ -269,26 +326,70 @@
 
             // 화면 반영
             document.getElementById('res_client_title').innerText = `🏢 ${clientName} (${managerName}) 산출 결과`;
+            document.getElementById('res_stage_badge').innerText = `영업 단계: [ ${salesStage} ]`;
             document.getElementById('total_refund').innerText = refStr;
             document.getElementById('success_fee').innerText = feeStr;
             document.getElementById('reason_text').innerHTML = reasons.join("<br><br>");
 
-            // 데이터 보관 (클립보드 복사 용도)
-            currentResultData = { client: clientName, manager: managerName, refund: refStr, fee: feeStr, reasons: reasons };
+            // 연도별 분할 표 생성 (기능 3)
+            let yearlyHTML = "";
+            let yearlyArr = [];
+            let perYearRefund = totalRefund / years;
+            for(let i = 1; i <= years; i++) {
+                let yRef = Math.floor(perYearRefund).toLocaleString() + " 원";
+                let yFee = Math.floor(perYearRefund * 0.3).toLocaleString() + " 원";
+                yearlyHTML += `<tr><td>최근 ${i}년 차</td><td>${yRef}</td><td>${yFee}</td></tr>`;
+                yearlyArr.push({ year: i, refund: yRef });
+            }
+            document.getElementById('yearlyTableBody').innerHTML = yearlyHTML;
+
+            // 데이터 보관
+            currentResultData = { 
+                client: clientName, manager: managerName, stage: salesStage, memo: salesMemo, 
+                refund: refStr, fee: feeStr, reasons: reasons, yearly: yearlyArr 
+            };
+
+            // 히스토리 추가 (기능 1)
+            addToHistory(clientName, refStr);
         }
 
-        // 신규 기능 1: 결과 텍스트 원터치 복사
+        // 기능 1: 히스토리 저장 및 렌더링 함수
+        function addToHistory(client, refund) {
+            // 중복 제거 후 최신 항목을 맨 위에 추가
+            historyData = historyData.filter(item => item.client !== client);
+            historyData.unshift({ client: client, refund: refund, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+            if(historyData.length > 5) historyData.pop(); // 최대 5개 유지
+
+            let listHTML = "";
+            historyData.forEach((item, index) => {
+                listHTML += `<div class="history-item" onclick="alert('선택하신 [${item.client}]의 최근 산출 총액은 ${item.refund} 입니다.')">
+                    <span><b>${item.client}</b> (${item.time})</span>
+                    <span style="color: #10b981; font-weight: bold;">${item.refund}</span>
+                </div>`;
+            });
+            document.getElementById('historyList').innerHTML = listHTML;
+        }
+
+        // 기능 2 & 4: 결과 텍스트 복사
         function copyResultText() {
-            const textToCopy = `[JDB컨설팅 환급 분석 보고서]\n- 고객사: ${currentResultData.client} (${currentResultData.manager})\n- 예상 환급 총액: ${currentResultData.refund}\n- 예상 성공보수(30%): ${currentResultData.fee}\n\n[매칭 사유]\n${currentResultData.reasons.join('\n')}`;
+            const textToCopy = `[JDB컨설팅 환급 분석 보고서]\n- 고객사: ${currentResultData.client} (${currentResultData.manager})\n- 영업단계: ${currentResultData.stage}\n- 예상 환급 총액: ${currentResultData.refund}\n- 예상 성공보수(30%): ${currentResultData.fee}\n- 특이사항: ${currentResultData.memo || '없음'}\n\n[매칭 사유]\n${currentResultData.reasons.join('\n')}`;
             
             navigator.clipboard.writeText(textToCopy).then(() => {
-                alert("분석 결과가 클립보드에 복사되었습니다!\n카카오톡이나 메모장에 바로 붙여넣기 하세요.");
+                alert("분석 결과가 복사되었습니다! 카카오톡이나 메모장에 붙여넣기 하세요.");
             }).catch(err => {
-                alert("복사에 실패했습니다. 수동으로 복사해 주세요.");
+                alert("복사에 실패했습니다.");
             });
         }
 
-        // 신규 기능 2: PDF 저장 및 인쇄 실행
+        // 기능 4: 원클릭 요약 문자/카톡 전송
+        function sendKakaoMessage() {
+            const message = `[JDB컨설팅 환급 분석 요약]\n고객사: ${currentResultData.client}\n예상환급액: ${currentResultData.refund}\n성공보수(30%): ${currentResultData.fee}\n자세한 상담을 요청드립니다.`;
+            const encodedMessage = encodeURIComponent(message);
+            // 스마트폰 기본 문자(SMS) 앱 연동 호출
+            window.location.href = `sms:?body=${encodedMessage}`;
+        }
+
+        // PDF 저장 및 인쇄
         function saveAsPDF() {
             window.print();
         }
