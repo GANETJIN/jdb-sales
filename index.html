@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- 👇 스마트폰 바탕화면 및 브라우저 탭 아이콘 지정 태그 -->
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <!-- 👆 여기까지 -->
+
+    <!-- 브라우저 캐시 방지용 태그 -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -135,7 +142,7 @@
         </div>
         
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V3.2</div>
+            <div class="login-title">JDB컨설팅 영업관리 V3.3</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <button class="login-btn" onclick="startApp()">영업관리 로그인</button>
@@ -150,7 +157,7 @@
         </div>
 
         <div class="container">
-            <!-- 왼쪽: 데이터 입력 (12대 경우의 수 확장 항목 반영) -->
+            <!-- 왼쪽: 데이터 입력 -->
             <div class="card">
                 <h2>📝 환급액 산출 데이터 입력</h2>
                 <div class="form-grid">
@@ -188,7 +195,6 @@
                         </select>
                     </div>
 
-                    <!-- 12대 경우의 수 연계 입력 항목들 -->
                     <div class="form-group">
                         <label>원형보전지/임야 분리과세 대상 (원)</label>
                         <input type="text" id="green_land_tax" class="num-input" value="0" inputmode="numeric" oninput="formatComma(this)">
@@ -274,7 +280,7 @@
                     </div>
                 </div>
 
-                <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">공식 제안서 작성 중...</strong><div class="log-text" id="logText">12대 환급 경우의 및 세법 조항을 정밀 분석 중입니다.</div></div>
+                <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">공식 제안서 작성 중...</strong><div class="log-text" id="logText">12대 환급 경우의 수 및 세법 조항을 정밀 분석 중입니다.</div></div>
                 
                 <div class="result-section" id="resultArea">
                     <div class="proposal-doc">
@@ -454,66 +460,54 @@
             let reasons = [];
             let defenseTip = "";
 
-            // 1. 원형보전지 분리과세 적용
             if (greenLandTax > 0) {
                 totalRefund += greenLandTax * 0.3 * years;
                 reasons.push("✔️ <b>[원형보전지 분리과세]</b> 골프장·임야 원형보전지 과세오류 정산에 따른 재산세 환급.");
             }
-            // 2. 대중제 감면 특례
             if (facilityType === "대중제") {
                 totalRefund += regionalTax * 0.2 * years;
                 reasons.push("✔️ <b>[대중제 골프장 감면 특례]</b> 체육시설업 등록 형태에 따른 지방세 감면 조례 적용 누락분 추가 산정.");
             }
-            // 3. 지역자원시설세 위법 중과
             if (floor < 11 && surcharge === "3") {
                 const overpaid = regionalTax - (regionalTax / 3);
                 totalRefund += overpaid * years;
                 reasons.push("✔️ <b>[지역자원시설세 위법]</b> 11층 미만 상가 3배 중과 위법 (조심 2021지2787). 과다 납부액 환급.");
             }
-            // 4. 비과세 면적 안분 오류
             if (totalArea > 0 && exemptArea > 0) {
                 const ratio = exemptArea / totalArea;
                 totalRefund += (propertyTax + regionalTax) * ratio * years;
                 reasons.push("✔️ <b>[비과세 면적 안분 오류]</b> 복합건축물 내 비과세 면적 비율 안분 누락 (지방세법 제146조).");
             }
-            // 5. 가설건축물 토지 과세유형 오분류 (기본 로직 반영)
             if (tempBuilding === "Y") {
                 totalRefund += propertyTax * 0.15 * years;
                 reasons.push("✔️ <b>[가설건축물 부속토지]</b> 종합합산 ➔ 별도합산 전환에 따른 재산세 정산 환급.");
             }
-            // 6. 창업/지방이전 감면 (특례구역 연계)
             if (specialZone === "Y") {
                 totalRefund += acqTax + (propertyTax * 0.5 * years);
                 reasons.push("✔️ <b>[지방이전/창업 감면]</b> 지방세특례제한법에 따른 취득세·재산세 감면 요건 누락분 환급.");
             }
-            // 7. 감면 추징세액 적정성 검토
             if (penaltyTaxYn === "Y") {
                 totalRefund += 5000000;
                 reasons.push("✔️ <b>[감면 추징세액 취소]</b> 유예기간 내 목적 외 사용 부과에 대한 부당 추징세액 취소 및 환급.");
             }
-            // 8. 기부채납 및 무상제공 사도 비과세
             if (donatedLandTax > 0) {
                 totalRefund += donatedLandTax * years;
                 reasons.push("✔️ <b>[기부채납/사도 비과세]</b> 공공용 무상 제공 부지 과오납 재산세 환급 (지방세법 제109조).");
             }
-            // 9. 합병/분할 과점주주 간주취득세 정산 (기본 취득세 연계)
             if (acqHeavy === "Y" && acqTax > 0) {
                 totalRefund += acqTax * 0.4;
                 reasons.push("✔️ <b>[취득세 중과/간주취득세 오류]</b> 과밀억제권역 또는 조직변경 시 과다 산정된 세액 환급.");
             }
-            // 10. 국세 R&D 세액공제
             if (rndCost > 0) {
                 const rndCredit = rndCost * 0.25;
                 totalRefund += rndCredit;
                 reasons.push(`✔️ <b>[국세 R&D 세액공제]</b> 미신청 연구인력개발비(금액: ${rndCost.toLocaleString()}원) 법인세 경정청구.`);
             }
-            // 11. 국세 에너지절감 시설 투자세액공제
             if (greenInvestment > 0) {
                 const taxCredit = greenInvestment * 0.05;
                 totalRefund += taxCredit;
                 reasons.push(`✔️ <b>[국세 법인세 공제]</b> 친환경·에너지절감 시설 투자(금액: ${greenInvestment.toLocaleString()}원) 공제 환급.`);
             }
-            // 12. 개별소비세 과다 납부 정산 (간이 반영)
             if (facilityType === "회원제") {
                 totalRefund += 3000000;
                 reasons.push("✔️ <b>[개별소비세/교육세 정산]</b> 체육시설업 입장행위 관련 국세 신고 오류 정산.");
