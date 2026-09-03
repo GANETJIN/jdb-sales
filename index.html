@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JDB 컨설팅 영업관리</title>
+	    <!-- 👇 브라우저 캐시 방지용 태그 (항상 최신 버전 불러오기) -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <!-- 👆 여기까지 -->
+    <style>
+        :root {
+            --primary-color: #1e293b; /* 네이비 */
+            --accent-color: #d4af37; /* 골드 */
+            --button-blue: #3b82f6;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --bg-color: #f1f5f9;
+        }
+        
+        * { box-sizing: border-box; }
+        body { font-family: 'Malgun Gothic', sans-serif; background-color: var(--bg-color); margin: 0; color: #333; }
+        
+        /* 📱 1. 로그인 (스플래시) 화면 CSS */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: var(--primary-color);
+            z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+        .logo-circle {
+            width: 120px; height: 120px; border-radius: 50%;
+            background-color: var(--primary-color); border: 2px solid #cbd5e1;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .logo-text { color: var(--accent-color); font-size: 40px; font-weight: 900; line-height: 1; letter-spacing: -2px; }
+        .logo-sub { color: white; font-size: 10px; font-weight: bold; margin-top: 5px; letter-spacing: 1px;}
+        
+        .login-card {
+            background: white; padding: 30px 20px; border-radius: 12px;
+            text-align: center; width: 85%; max-width: 320px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .login-title { font-size: 1.2em; color: var(--primary-color); font-weight: bold; margin: 0 0 10px 0; }
+        .login-desc { font-size: 0.85em; color: #64748b; margin-bottom: 20px; word-break: keep-all; }
+        .login-input {
+            width: 100%; padding: 14px; margin-bottom: 15px;
+            border: 1px solid #cbd5e1; border-radius: 6px; font-size: 16px;
+            text-align: center; background-color: #f8fafc; outline: none;
+        }
+        .login-input:focus { border-color: var(--button-blue); background-color: white; }
+        .login-btn {
+            width: 100%; padding: 15px; background-color: var(--primary-color);
+            color: white; border: none; border-radius: 6px;
+            font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .login-btn:hover { background-color: #0f172a; }
+
+        /* 📱 2. 메인 앱 화면 CSS (초기에는 숨김 처리) */
+        #main-app { display: none; }
+        
+        .header { background-color: var(--primary-color); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .header h1 { margin: 0; font-size: 1.2em; word-break: keep-all; color: var(--accent-color); }
+        .user-badge { background-color: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        
+        .container { max-width: 1200px; margin: 20px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .card h2 { margin-top: 0; font-size: 1.2em; color: var(--primary-color); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        
+        .upload-section { margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .upload-box { border: 2px dashed #cbd5e1; padding: 15px; text-align: center; border-radius: 6px; background-color: #f8fafc; }
+        .upload-box input[type="file"] { display: none; }
+        .upload-btn { display: inline-block; background-color: white; border: 1px solid #cbd5e1; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 0.95em; width: 100%; font-weight: bold; color: #475569; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85em; color: #475569; }
+        input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 16px; background-color: #fff; }
+        .num-input { text-align: right; }
+
+        .run-btn { width: 100%; padding: 16px; background-color: var(--button-blue); color: white; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        
+        .loader-container { display: none; text-align: center; padding: 30px 10px; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--button-blue); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .log-text { font-size: 0.9em; color: #64748b; margin-top: 10px; line-height: 1.4; }
+
+        .result-section { display: none; }
+        .summary-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 20px; border-radius: 6px; text-align: center; margin-bottom: 20px; }
+        .amount-value { font-size: 2em; color: var(--success-color); font-weight: 900; margin: 10px 0; word-break: keep-all; }
+        .fee-value { font-size: 1.2em; color: var(--danger-color); font-weight: bold; }
+        .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 15px; font-size: 0.9em; line-height: 1.6; word-break: keep-all; }
+
+        @media screen and (max-width: 768px) {
+            .container { grid-template-columns: 1fr; padding: 10px; margin: 10px auto; gap: 15px; }
+            .form-grid { grid-template-columns: 1fr; gap: 5px; }
+            .header { flex-direction: column; text-align: center; }
+            .card { padding: 15px; }
+            .amount-value { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🔑 1. 로그인 (스플래시) 화면 -->
+    <div id="login-overlay">
+        <!-- 로고 이미지 대체 CSS -->
+        <div class="logo-circle">
+            <div class="logo-text">JDB</div>
+            <div class="logo-sub">CONSULTING</div>
+        </div>
+        
+        <div class="login-card">
+            <p class="login-title">영업관리 앱 시작하기</p>
+            <p class="login-desc">영업 담당자 확인을 위해<br>본인 이름을 입력해 주세요.</p>
+            <!-- 이름 입력 폼 -->
+            <input type="text" id="userNameInput" class="login-input" placeholder="이름 입력 (예: 홍길동)" onkeypress="handleEnter(event)">
+            <button class="login-btn" onclick="startApp()">앱 실행하기</button>
+        </div>
+    </div>
+
+    <!-- 📱 2. 메인 애플리케이션 (로그인 후 표시) -->
+    <div id="main-app">
+        <div class="header">
+            <h1>JDB 컨설팅 내부 시스템</h1>
+            <!-- 로그인한 사용자 이름이 표시되는 곳 -->
+            <span class="user-badge" id="welcomeMsg">로그인 대기중</span>
+        </div>
+
+        <div class="container">
+            <!-- 왼쪽: 데이터 입력 -->
+            <div class="card">
+                <h2>📝 환급액 산출 데이터 입력</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>상가/건축물 층수 (층)</label>
+                        <input type="text" id="floor" class="num-input" value="1" inputmode="numeric" oninput="formatComma(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>지역자원시설세 과세</label>
+                        <select id="surcharge">
+                            <option value="1">1배 (일반)</option>
+                            <option value="3" selected>3배 (중과세)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>지역자원 기납부액 (원)</label>
+                        <input type="text" id="regional_tax" class="num-input" value="15,000,000" inputmode="numeric" oninput="formatComma(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>가설건축물 존치 유무</label>
+                        <select id="temp_building">
+                            <option value="N">해당없음</option>
+                            <option value="Y">존치기한 내 유효</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>전체 연면적 (㎡)</label>
+                        <input type="text" id="total_area" class="num-input" value="10,000" inputmode="numeric" oninput="formatComma(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>비과세 대상 면적 (㎡)</label>
+                        <input type="text" id="exempt_area" class="num-input" value="0" inputmode="numeric" oninput="formatComma(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>재산세 과세유형</label>
+                        <select id="property_tax_type">
+                            <option value="별도합산">별도합산</option>
+                            <option value="종합합산" selected>종합합산과세</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>재산세 기납부액 (원)</label>
+                        <input type="text" id="property_tax" class="num-input" value="40,000,000" inputmode="numeric" oninput="formatComma(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>특례구역(기업도시) 소재</label>
+                        <select id="special_zone">
+                            <option value="N">아니오</option>
+                            <option value="Y">예</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>취득세 납부액 (원)</label>
+                        <input type="text" id="acq_tax" class="num-input" value="0" inputmode="numeric" oninput="formatComma(this)">
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 10px;">
+                    <label>소급 청구 연수 (지방세기본법 제50조)</label>
+                    <select id="years">
+                        <option value="5" selected>최대 5년 소급 적용</option>
+                        <option value="4">4년</option>
+                        <option value="3">3년</option>
+                    </select>
+                </div>
+
+                <button class="run-btn" onclick="startAnalysis()">대조 및 분석 실행</button>
+            </div>
+
+            <!-- 오른쪽: 분석 결과 -->
+            <div class="card">
+                <h2>📊 3. 환급액 산출 결과</h2>
+                <div class="loader-container" id="loader">
+                    <div class="spinner"></div>
+                    <strong style="color:var(--primary-color);">AI 시스템 교차 검증 중...</strong>
+                    <div class="log-text" id="logText">데이터를 파싱하고 있습니다.</div>
+                </div>
+
+                <div class="result-section" id="resultArea">
+                    <div class="summary-box">
+                        <div style="font-weight:bold; color:#166534;">고객사 예상 환급 총액</div>
+                        <div class="amount-value" id="total_refund">0 원</div>
+                        <div>당사 예상 매출 (성공보수 30%)<br><span class="fee-value" id="success_fee">0 원</span></div>
+                    </div>
+                    <h3>🔍 환급 로직 매칭 사유</h3>
+                    <div class="match-log" id="reason_text"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🔑 로그인 처리 함수
+        function startApp() {
+            const userName = document.getElementById('userNameInput').value.trim();
+            
+            if(userName === "") {
+                alert("영업 담당자의 이름을 정확히 입력해 주세요.");
+                document.getElementById('userNameInput').focus();
+                return;
+            }
+
+            // 로그인 오버레이 숨기기 및 메인 앱 보이기
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+
+            // 메인 화면 헤더에 환영 메시지 삽입
+            document.getElementById('welcomeMsg').innerHTML = `👤 ${userName} 매니저님 환영합니다`;
+        }
+
+        // 엔터키 입력 시 로그인 버튼 클릭 효과
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                startApp();
+            }
+        }
+
+        // 🔹 콤마 자동 적용 함수
+        function formatComma(input) {
+            let value = input.value.replace(/[^0-9]/g, '');
+            if(value) { input.value = Number(value).toLocaleString('ko-KR'); } 
+            else { input.value = ''; }
+        }
+
+        // 🔹 콤마 제거 후 계산용 숫자 변환 함수
+        function parseNumber(str) {
+            if (!str) return 0;
+            return parseInt(str.replace(/,/g, '')) || 0;
+        }
+
+        // 분석 실행 시뮬레이션
+        function startAnalysis() {
+            document.getElementById('resultArea').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+            let logText = document.getElementById('logText');
+            logText.innerText = "입력된 데이터를 조세법령과 대조 중입니다...";
+
+            setTimeout(() => { logText.innerText = "예상 환급액 및 성공보수를 산출하고 있습니다..."; }, 1000);
+            
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                calculateRefund();
+                document.getElementById('resultArea').style.display = 'block';
+                document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        }
+
+        // 실제 계산 로직
+        function calculateRefund() {
+            const floor = parseNumber(document.getElementById('floor').value);
+            const surcharge = document.getElementById('surcharge').value;
+            const regionalTax = parseNumber(document.getElementById('regional_tax').value);
+            const totalArea = parseNumber(document.getElementById('total_area').value);
+            const exemptArea = parseNumber(document.getElementById('exempt_area').value);
+            const tempBuilding = document.getElementById('temp_building').value;
+            const propertyTaxType = document.getElementById('property_tax_type').value;
+            const propertyTax = parseNumber(document.getElementById('property_tax').value);
+            const specialZone = document.getElementById('special_zone').value;
+            const acqTax = parseNumber(document.getElementById('acq_tax').value);
+            const years = parseInt(document.getElementById('years').value) || 5;
+
+            let totalRefund = 0;
+            let reasons = [];
+
+            if (floor < 11 && surcharge === "3") {
+                const overpaid = regionalTax - (regionalTax / 3);
+                totalRefund += overpaid * years;
+                reasons.push("✔️ <b>[지역자원시설세 위법]</b> 11층 미만 상가 3배 중과 위법 (조심 2021지2787). 과다 납부액 환급.");
+            }
+            if (totalArea > 0 && exemptArea > 0) {
+                const ratio = exemptArea / totalArea;
+                totalRefund += (propertyTax + regionalTax) * ratio * years;
+                reasons.push("✔️ <b>[비과세 면적 안분 오류]</b> 복합건축물 내 비과세 면적 비율 안분 누락. (지방세법 제146조).");
+            }
+            if (tempBuilding === "Y" && propertyTaxType === "종합합산") {
+                const diffTax = propertyTax * 0.3; 
+                totalRefund += diffTax * years;
+                reasons.push("✔️ <b>[과세유형 오분류]</b> 가설건축물 부속토지 종합합산 과세 오류. 별도합산 전환 정산.");
+            }
+            if (specialZone === "Y") {
+                totalRefund += acqTax + (propertyTax * 0.5 * years);
+                reasons.push("✔️ <b>[특례 감면 누락]</b> 지방세특례제한법에 따른 취득세/재산세 감면 요건 누락.");
+            }
+            if (reasons.length === 0) {
+                reasons.push("⚠️ 즉각적인 환급 사유 미발견. 사도 비과세 등 추가 정밀 분석 필요.");
+            }
+
+            document.getElementById('total_refund').innerText = Math.floor(totalRefund).toLocaleString() + " 원";
+            document.getElementById('success_fee').innerText = Math.floor(totalRefund * 0.3).toLocaleString() + " 원";
+            document.getElementById('reason_text').innerHTML = reasons.join("<br><br>");
+        }
+    </script>
+</body>
+</html>
