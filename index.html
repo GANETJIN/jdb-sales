@@ -49,7 +49,7 @@
         .form-group { margin-bottom: 12px; }
         .form-group.full { grid-column: span 2; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85em; color: #475569; }
-        input[type="text"], select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 16px; background-color: #fff; font-family: inherit; }
+        input[type="text"], input[type="date"], select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 16px; background-color: #fff; font-family: inherit; }
         .num-input { text-align: right; }
 
         .run-btn { width: 100%; padding: 16px; background-color: var(--button-blue); color: white; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 15px; }
@@ -61,26 +61,36 @@
 
         .result-section { display: none; }
         .summary-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 20px; border-radius: 6px; text-align: center; margin-bottom: 20px; }
-        .client-title { font-size: 1.1em; color: var(--primary-color); font-weight: bold; margin-bottom: 10px; }
+        .client-title { font-size: 1.1em; color: var(--primary-color); font-weight: bold; margin-bottom: 5px; }
         .amount-value { font-size: 2em; color: var(--success-color); font-weight: 900; margin: 10px 0; word-break: keep-all; }
         .fee-value { font-size: 1.2em; color: var(--danger-color); font-weight: bold; }
         
-        /* 연도별 상세 분할 테이블 스타일 */
-        .yearly-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.85em; background: #fff; }
-        .yearly-table th, .yearly-table td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
-        .yearly-table th { background-color: #f1f5f9; color: #1e293b; }
+        .data-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.85em; background: #fff; }
+        .data-table th, .data-table td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        .data-table th { background-color: #f1f5f9; color: #1e293b; }
 
-        .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 15px; font-size: 0.9em; line-height: 1.6; word-break: keep-all; margin-bottom: 15px; }
+        .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 12px; font-size: 0.9em; line-height: 1.5; word-break: keep-all; margin-bottom: 15px; }
+        
+        .section-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 15px; font-size: 0.85em; }
+        .section-box h4 { margin: 0 0 8px 0; color: #1e293b; font-size: 0.95em; }
+        .checklist-item { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
 
-        /* 결과 제어 버튼 그룹 */
-        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        /* 법령 및 판례 빠른 검색 바 스타일 (통합) */
+        .search-panel { background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 6px; padding: 12px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; }
+        .search-row { display: flex; gap: 8px; align-items: center; }
+        .search-input { flex: 1; padding: 8px 12px; border: 1px solid #7dd3fc; border-radius: 4px; font-size: 0.9em; outline: none; background: #fff; }
+        .btn-law { background: #0284c7; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; font-size: 0.85em; cursor: pointer; white-space: nowrap; }
+        .btn-prec { background: #0d9488; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; font-size: 0.85em; cursor: pointer; white-space: nowrap; }
+        .btn-law:hover { background: #0369a1; }
+        .btn-prec:hover { background: #0f766e; }
+
+        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
         .action-btn { padding: 12px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.9em; cursor: pointer; color: white; text-align: center; text-decoration: none; display: flex; justify-content: center; align-items: center; }
         .btn-copy { background-color: #475569; }
         .btn-kakao { background-color: #fee500; color: #3c1e1e; }
         .btn-pdf { background-color: #0284c7; grid-column: span 2; }
         .action-btn:hover { opacity: 0.9; }
 
-        /* 히스토리 목록 스타일 */
         .history-list { font-size: 0.85em; max-height: 150px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 5px; background: #f8fafc; margin-top: 10px; }
         .history-item { padding: 6px 8px; border-bottom: 1px solid #e2e8f0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .history-item:hover { background-color: #e2e8f0; }
@@ -94,11 +104,12 @@
             .amount-value { font-size: 1.8em; }
             .action-btns { grid-template-columns: 1fr; }
             .btn-pdf { grid-column: span 1; }
+            .search-row { flex-direction: column; align-items: stretch; }
         }
 
         @media print {
             body { background: white; }
-            .header, .card:first-child, .action-btns, #login-overlay { display: none !important; }
+            .header, .card:first-child, .action-btns, .search-panel, #login-overlay { display: none !important; }
             .container { display: block; margin: 0; padding: 0; }
             .card { box-shadow: none; border: none; padding: 0; }
             .result-section { display: block !important; }
@@ -115,7 +126,7 @@
         </div>
         
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V1.5</div>
+            <div class="login-title">JDB컨설팅 영업관리 V2.2</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <button class="login-btn" onclick="startApp()">영업관리 로그인</button>
@@ -134,7 +145,6 @@
             <div class="card">
                 <h2>📝 환급액 산출 데이터 입력</h2>
                 <div class="form-grid">
-                    <!-- 고객사 및 담당자 정보 -->
                     <div class="form-group full">
                         <label>고객사명 (골프장/리조트 등)</label>
                         <input type="text" id="client_name" placeholder="예: OO 컨트리클럽" value="OO 컨트리클럽">
@@ -143,9 +153,8 @@
                         <label>현장 담당자 성함 / 직급</label>
                         <input type="text" id="client_manager" placeholder="예: 김재무 이사님" value="김재무 이사님">
                     </div>
-                    <!-- 기능 2: 영업 파이프라인 단계 선택 -->
                     <div class="form-group">
-                        <label>영업 진행 단계 (Pipeline)</label>
+                        <label>영업 진행 단계</label>
                         <select id="sales_stage">
                             <option value="1차 콜 완료">1차 콜 완료</option>
                             <option value="방문 미팅 성사" selected>방문 미팅 성사</option>
@@ -165,10 +174,22 @@
                     <div class="form-group"><label>특례구역(기업도시) 소재</label><select id="special_zone"><option value="N">아니오</option><option value="Y">예</option></select></div>
                     <div class="form-group"><label>취득세 납부액 (원)</label><input type="text" id="acq_tax" class="num-input" value="0" inputmode="numeric" oninput="formatComma(this)"></div>
                     
-                    <!-- 기능 2: 영업 현장 메모 -->
+                    <div class="form-group">
+                        <label>다음 후속 미팅/연락일 (Follow-up)</label>
+                        <input type="date" id="follow_date">
+                    </div>
+                    <div class="form-group">
+                        <label>성공보수 약정 방식</label>
+                        <select id="fee_type">
+                            <option value="일시지급">환급 즉시 일시 지급 (30%)</option>
+                            <option value="2회분할" selected>2회 분할 납부 (각 15%)</option>
+                            <option value="3회분할">3회 분할 납부 (각 10%)</option>
+                        </select>
+                    </div>
+
                     <div class="form-group full">
                         <label>영업 특이사항 및 미팅 메모</label>
-                        <textarea id="sales_memo" rows="2" placeholder="예: 재무팀장이 법적 근거 자료를 추가로 요청함. 다음 주 재방문 예정."></textarea>
+                        <textarea id="sales_memo" rows="2" placeholder="예: 재무팀장이 법적 유권해석 자료를 추가 요청함."></textarea>
                     </div>
                 </div>
                 
@@ -180,38 +201,72 @@
                 <button class="run-btn" onclick="startAnalysis()">대조 및 분석 실행</button>
             </div>
 
-            <!-- 오른쪽: 분석 결과 및 히스토리 -->
+            <!-- 오른쪽: 분석 결과 및 법령/판례 빠른검색 -->
             <div class="card">
-                <h2>📊 환급액 산출 결과</h2>
-                <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">AI 시스템 교차 검증 중...</strong><div class="log-text" id="logText">데이터를 파싱하고 있습니다.</div></div>
+                <h2>📊 환급액 산출 및 실무 솔루션</h2>
+
+                <!-- ⚖️ 통합 법령 및 판례 빠른 검색 패널 -->
+                <div class="search-panel">
+                    <div class="search-row">
+                        <input type="text" id="lawQuery" class="search-input" placeholder="법령 검색 (예: 지방세기본법 제50조)" onkeypress="handleLawEnter(event)">
+                        <button class="btn-law" onclick="searchLawCenter()">⚖️ 법령 검색</button>
+                    </div>
+                    <div class="search-row">
+                        <input type="text" id="precQuery" class="search-input" placeholder="판례/심판례 검색 (예: 조심 2021지2787)" onkeypress="handlePrecEnter(event)">
+                        <button class="btn-prec" onclick="searchPrecCenter()">📜 판례 검색</button>
+                    </div>
+                </div>
+
+                <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">세법 조항 교차 검증 중...</strong><div class="log-text" id="logText">데이터를 파싱하고 있습니다.</div></div>
                 <div class="result-section" id="resultArea">
                     <div class="summary-box">
                         <div class="client-title" id="res_client_title">🏢 OO 컨트리클럽 산출 결과</div>
                         <div style="font-size: 0.85em; color: #475569; margin-bottom: 5px;" id="res_stage_badge">상태: 방문 미팅 성사</div>
                         <div style="font-weight:bold; color:#166534;">고객사 예상 환급 총액</div>
                         <div class="amount-value" id="total_refund">0 원</div>
-                        <div>당사 예상 매출 (성공보수 30%)<br><span class="fee-value" id="success_fee">0 원</span></div>
+                        <div>당사 총 성공보수 (30% 중)<br><span class="fee-value" id="success_fee">0 원</span></div>
                     </div>
 
-                    <!-- 기능 3: 연도별 상세 분할 표 -->
+                    <h3>🤝 성공보수 약정 및 분할 시뮬레이션</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>지급 회차</th>
+                                <th>청구 비율</th>
+                                <th>회차별 청구 금액</th>
+                            </tr>
+                        </thead>
+                        <tbody id="feeTableBody"></tbody>
+                    </table>
+
                     <h3>📅 연도별 환급액 상세 분할</h3>
-                    <table class="yearly-table">
+                    <table class="data-table">
                         <thead>
                             <tr>
                                 <th>소급 연차</th>
                                 <th>예상 환급액</th>
-                                <th>성공보수(30%)</th>
+                                <th>성공보수</th>
                             </tr>
                         </thead>
-                        <tbody id="yearlyTableBody">
-                            <!-- 자바스크립트로 동적 생성 -->
-                        </tbody>
+                        <tbody id="yearlyTableBody"></tbody>
                     </table>
 
                     <h3>🔍 환급 로직 매칭 사유</h3>
                     <div class="match-log" id="reason_text"></div>
 
-                    <!-- 기능 4: 카카오톡/문자 즉시 전송 버튼 포함 컨트롤 그룹 -->
+                    <div class="section-box" style="border-left: 4px solid #ef4444;">
+                        <h4>🛡️ 지자체/기장세무사 방어 논리 대응 팁</h4>
+                        <p style="margin: 0; color: #334155; line-height: 1.4;" id="defense_text"></p>
+                    </div>
+
+                    <div class="section-box" style="border-left: 4px solid #3b82f6;">
+                        <h4>📂 현장 접수 필수 서류 체크리스트</h4>
+                        <div class="checklist-item"><input type="checkbox"> 법인 등기부등본 및 사업자등록증 사본</div>
+                        <div class="checklist-item"><input type="checkbox"> 최근 5개년 재산세·지역자원시설세 과세표준증명 (또는 납부고지서)</div>
+                        <div class="checklist-item"><input type="checkbox"> 건축물대장 (총괄/일반) 및 도면 사본</div>
+                        <div class="checklist-item"><input type="checkbox"> JDB컨설팅 위임장 (법인인감 날인)</div>
+                    </div>
+
                     <div class="action-btns">
                         <button class="action-btn btn-copy" onclick="copyResultText()">📋 결과 복사</button>
                         <button class="action-btn btn-kakao" onclick="sendKakaoMessage()">💬 요약 문자/카톡 전송</button>
@@ -219,9 +274,8 @@
                     </div>
                 </div>
 
-                <!-- 기능 1: 최근 계산 히스토리 섹션 -->
                 <div style="margin-top: 30px; border-top: 2px solid #e2e8f0; padding-top: 15px;">
-                    <h2>📂 최근 계산 히스토리 (최대 5개)</h2>
+                    <h2>📂 최근 계산 히스토리 및 후속 일정</h2>
                     <div class="history-list" id="historyList">
                         <div style="color: #94a3b8; text-align: center; padding: 10px;">저장된 계산 내역이 없습니다.</div>
                     </div>
@@ -231,7 +285,7 @@
     </div>
 
     <script>
-        let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "", stage: "", memo: "", yearly: [] };
+        let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "", stage: "", memo: "", followDate: "", yearly: [] };
         let historyData = [];
 
         function startApp() {
@@ -251,6 +305,26 @@
             if (event.key === 'Enter') startApp();
         }
 
+        // 1. 법령 검색 함수 (law.go.kr)
+        function searchLawCenter() {
+            let query = document.getElementById('lawQuery').value.trim() || "지방세기본법";
+            const targetUrl = `https://www.law.go.kr/lsSc.do?menuId=1&query=${encodeURIComponent(query)}`;
+            window.open(targetUrl, '_blank');
+        }
+        function handleLawEnter(event) {
+            if (event.key === 'Enter') searchLawCenter();
+        }
+
+        // 2. 판례/심판례 검색 함수 (law.go.kr/precSc.do)
+        function searchPrecCenter() {
+            let query = document.getElementById('precQuery').value.trim() || "지역자원시설세";
+            const targetUrl = `https://www.law.go.kr/precSc.do?menuId=7&query=${encodeURIComponent(query)}`;
+            window.open(targetUrl, '_blank');
+        }
+        function handlePrecEnter(event) {
+            if (event.key === 'Enter') searchPrecCenter();
+        }
+
         function formatComma(input) {
             let value = input.value.replace(/[^0-9]/g, '');
             if(value) { input.value = Number(value).toLocaleString('ko-KR'); } 
@@ -266,9 +340,9 @@
             document.getElementById('resultArea').style.display = 'none';
             document.getElementById('loader').style.display = 'block';
             let logText = document.getElementById('logText');
-            logText.innerText = "입력된 데이터를 조세법령과 대조 중입니다...";
+            logText.innerText = "조세법령 및 판례 데이터와 대조 중입니다...";
 
-            setTimeout(() => { logText.innerText = "예상 환급액 및 연도별 분할 산출 중입니다..."; }, 1000);
+            setTimeout(() => { logText.innerText = "성공보수 분할 및 방어 논리를 구성하고 있습니다..."; }, 1000);
             
             setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
@@ -283,6 +357,9 @@
             const managerName = document.getElementById('client_manager').value || "";
             const salesStage = document.getElementById('sales_stage').value;
             const salesMemo = document.getElementById('sales_memo').value;
+            const followDate = document.getElementById('follow_date').value || "미정";
+            const feeType = document.getElementById('fee_type').value;
+            
             const floor = parseNumber(document.getElementById('floor').value);
             const surcharge = document.getElementById('surcharge').value;
             const regionalTax = parseNumber(document.getElementById('regional_tax').value);
@@ -297,82 +374,88 @@
 
             let totalRefund = 0;
             let reasons = [];
+            let defenseTip = "";
 
             if (floor < 11 && surcharge === "3") {
                 const overpaid = regionalTax - (regionalTax / 3);
                 totalRefund += overpaid * years;
                 reasons.push("[지역자원시설세 위법] 11층 미만 상가 3배 중과 위법 (조심 2021지2787). 과다 납부액 환급.");
-            }
-            if (totalArea > 0 && exemptArea > 0) {
+                defenseTip = "지자체 담당자가 '당초 부과 처분 후 제소 기간이 지났다'고 주장할 경우, <b>지방세기본법 제50조에 따른 경정청구</b>는 납부 기한 경과 후 5년 이내에 언제든 청구할 수 있는 법적 권리임을 명시하고 조심 2021지2787 인용례를 제시하십시오.";
+            } else if (totalArea > 0 && exemptArea > 0) {
                 const ratio = exemptArea / totalArea;
                 totalRefund += (propertyTax + regionalTax) * ratio * years;
                 reasons.push("[비과세 면적 안분 오류] 복합건축물 내 비과세 면적 비율 안분 누락. (지방세법 제146조).");
-            }
-            if (tempBuilding === "Y" && propertyTaxType === "종합합산") {
-                const diffTax = propertyTax * 0.3; 
-                totalRefund += diffTax * years;
-                reasons.push("[과세유형 오분류] 가설건축물 부속토지 종합합산 과세 오류. 별도합산 전환 정산.");
-            }
-            if (specialZone === "Y") {
-                totalRefund += acqTax + (propertyTax * 0.5 * years);
-                reasons.push("[특례 감면 누락] 지방세특례제한법에 따른 취득세/재산세 감면 요건 누락.");
-            }
-            if (reasons.length === 0) {
-                reasons.push("즉각적인 환급 사유 미발견. 사도 비과세 등 추가 정밀 분석 필요.");
+                defenseTip = "기장 세무사가 '자체적으로 반영되어 있다'고 할 경우, 최근 5개년 과세표준 산출 내역서상 비과세 면적 감면율이 실제 건축물 현황과 일치하는지 ㎡ 단위로 재검증이 필요함을 어필하십시오.";
+            } else {
+                reasons.push("즉각적인 환급 사유 미발견. 사도 비과세 및 감면 누락 여부 추가 정밀 분석 필요.");
+                defenseTip = "추가적인 건축물 현황 도면 및 납부 고지서 원본을 확보하여 누락된 비과세·감면 항목을 정밀 스크리닝해야 합니다.";
             }
 
-            const refStr = Math.floor(totalRefund).toLocaleString() + " 원";
-            const feeStr = Math.floor(totalRefund * 0.3).toLocaleString() + " 원";
+            const refVal = Math.floor(totalRefund);
+            const feeVal = Math.floor(totalRefund * 0.3);
+            
+            const refStr = refVal.toLocaleString() + " 원";
+            const feeStr = feeVal.toLocaleString() + " 원";
 
-            // 화면 반영
             document.getElementById('res_client_title').innerText = `🏢 ${clientName} (${managerName}) 산출 결과`;
-            document.getElementById('res_stage_badge').innerText = `영업 단계: [ ${salesStage} ]`;
+            document.getElementById('res_stage_badge').innerText = `영업 단계: [ ${salesStage} ] | 후속일정: ${followDate}`;
             document.getElementById('total_refund').innerText = refStr;
             document.getElementById('success_fee').innerText = feeStr;
             document.getElementById('reason_text').innerHTML = reasons.join("<br><br>");
+            document.getElementById('defense_text').innerHTML = defenseTip;
 
-            // 연도별 분할 표 생성 (기능 3)
+            let feeHTML = "";
+            if (feeType === "일시지급") {
+                feeHTML = `<tr><td>환급 수령 즉시 일시 납부</td><td>30%</td><td>${feeStr}</td></tr>`;
+            } else if (feeType === "2회분할") {
+                let halfFee = Math.floor(feeVal / 2).toLocaleString() + " 원";
+                feeHTML = `<tr><td>1차 (위임 및 청구 접수 시)</td><td>15%</td><td>${halfFee}</td></tr>` +
+                          `<tr><td>2차 (환급금 수령 즉시)</td><td>15%</td><td>${halfFee}</td></tr>`;
+            } else {
+                let thirdFee = Math.floor(feeVal / 3).toLocaleString() + " 원";
+                feeHTML = `<tr><td>1차 계약금</td><td>10%</td><td>${thirdFee}</td></tr>` +
+                          `<tr><td>2차 중간금</td><td>10%</td><td>${thirdFee}</td></tr>` +
+                          `<tr><td>3차 잔금 (환급 완료 시)</td><td>10%</td><td>${thirdFee}</td></tr>`;
+            }
+            document.getElementById('feeTableBody').innerHTML = feeHTML;
+
             let yearlyHTML = "";
             let yearlyArr = [];
             let perYearRefund = totalRefund / years;
+            let perYearFee = feeVal / years;
             for(let i = 1; i <= years; i++) {
                 let yRef = Math.floor(perYearRefund).toLocaleString() + " 원";
-                let yFee = Math.floor(perYearRefund * 0.3).toLocaleString() + " 원";
+                let yFee = Math.floor(perYearFee).toLocaleString() + " 원";
                 yearlyHTML += `<tr><td>최근 ${i}년 차</td><td>${yRef}</td><td>${yFee}</td></tr>`;
                 yearlyArr.push({ year: i, refund: yRef });
             }
             document.getElementById('yearlyTableBody').innerHTML = yearlyHTML;
 
-            // 데이터 보관
             currentResultData = { 
                 client: clientName, manager: managerName, stage: salesStage, memo: salesMemo, 
-                refund: refStr, fee: feeStr, reasons: reasons, yearly: yearlyArr 
+                followDate: followDate, refund: refStr, fee: feeStr, reasons: reasons, yearly: yearlyArr 
             };
 
-            // 히스토리 추가 (기능 1)
-            addToHistory(clientName, refStr);
+            addToHistory(clientName, refStr, followDate);
         }
 
-        // 기능 1: 히스토리 저장 및 렌더링 함수
-        function addToHistory(client, refund) {
-            // 중복 제거 후 최신 항목을 맨 위에 추가
+        function addToHistory(client, refund, followDate) {
             historyData = historyData.filter(item => item.client !== client);
-            historyData.unshift({ client: client, refund: refund, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
-            if(historyData.length > 5) historyData.pop(); // 최대 5개 유지
+            historyData.unshift({ client: client, refund: refund, followDate: followDate, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+            if(historyData.length > 5) historyData.pop();
 
             let listHTML = "";
-            historyData.forEach((item, index) => {
-                listHTML += `<div class="history-item" onclick="alert('선택하신 [${item.client}]의 최근 산출 총액은 ${item.refund} 입니다.')">
-                    <span><b>${item.client}</b> (${item.time})</span>
+            historyData.forEach((item) => {
+                listHTML += `<div class="history-item" onclick="alert('고객사: ${item.client}\\n예상환급: ${item.refund}\\n후속일정: ${item.followDate}')">
+                    <span><b>${item.client}</b> (후속: ${item.followDate})</span>
                     <span style="color: #10b981; font-weight: bold;">${item.refund}</span>
                 </div>`;
             });
             document.getElementById('historyList').innerHTML = listHTML;
         }
 
-        // 기능 2 & 4: 결과 텍스트 복사
         function copyResultText() {
-            const textToCopy = `[JDB컨설팅 환급 분석 보고서]\n- 고객사: ${currentResultData.client} (${currentResultData.manager})\n- 영업단계: ${currentResultData.stage}\n- 예상 환급 총액: ${currentResultData.refund}\n- 예상 성공보수(30%): ${currentResultData.fee}\n- 특이사항: ${currentResultData.memo || '없음'}\n\n[매칭 사유]\n${currentResultData.reasons.join('\n')}`;
+            const textToCopy = `[JDB컨설팅 환급 분석 및 제안서]\n- 고객사: ${currentResultData.client} (${currentResultData.manager})\n- 영업단계: ${currentResultData.stage}\n- 후속일정: ${currentResultData.followDate}\n- 예상 환급 총액: ${currentResultData.refund}\n- 성공보수(30%): ${currentResultData.fee}\n- 특이사항: ${currentResultData.memo || '없음'}\n\n[핵심 매칭 사유]\n${currentResultData.reasons.join('\n')}`;
             
             navigator.clipboard.writeText(textToCopy).then(() => {
                 alert("분석 결과가 복사되었습니다! 카카오톡이나 메모장에 붙여넣기 하세요.");
@@ -381,15 +464,12 @@
             });
         }
 
-        // 기능 4: 원클릭 요약 문자/카톡 전송
         function sendKakaoMessage() {
-            const message = `[JDB컨설팅 환급 분석 요약]\n고객사: ${currentResultData.client}\n예상환급액: ${currentResultData.refund}\n성공보수(30%): ${currentResultData.fee}\n자세한 상담을 요청드립니다.`;
+            const message = `[JDB컨설팅 환급 분석 요약]\n고객사: ${currentResultData.client}\n예상환급액: ${currentResultData.refund}\n성공보수(30%): ${currentResultData.fee}\n상세 제안서를 송부해 드립니다.`;
             const encodedMessage = encodeURIComponent(message);
-            // 스마트폰 기본 문자(SMS) 앱 연동 호출
             window.location.href = `sms:?body=${encodedMessage}`;
         }
 
-        // PDF 저장 및 인쇄
         function saveAsPDF() {
             window.print();
         }
