@@ -7,11 +7,14 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <!-- 👆 여기까지 -->
     <!-- 탭 이름 변경 -->
-    <title>JDB 영업관리</title>
+    <title>JDB컨설팅 영업관리</title>
     <style>
-        /* 📱 로그인 화면 UI CSS (이미지 완벽 반영) */
+        :root { --primary-color: #1e293b; --accent-color: #d4af37; --button-blue: #3b82f6; --success-color: #10b981; --danger-color: #ef4444; --bg-color: #f1f5f9; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Malgun Gothic', sans-serif; background-color: var(--bg-color); margin: 0; color: #333; }
+        
+        /* 로그인 화면 스타일 */
         #login-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #15284b; z-index: 9999; display: flex; flex-direction: column;
@@ -34,11 +37,7 @@
         .login-btn { width: 100%; padding: 16px; background-color: #15284b; color: #d4af37; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .login-btn:hover { background-color: #0f1c35; }
 
-        /* 메인 앱 디자인 유지 */
-        :root { --primary-color: #1e293b; --accent-color: #d4af37; --button-blue: #3b82f6; --success-color: #10b981; --danger-color: #ef4444; --bg-color: #f1f5f9; }
-        * { box-sizing: border-box; }
-        body { font-family: 'Malgun Gothic', sans-serif; background-color: var(--bg-color); margin: 0; color: #333; }
-        
+        /* 메인 앱 디자인 */
         .header { background-color: var(--primary-color); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { margin: 0; font-size: 1.2em; word-break: keep-all; color: var(--accent-color); }
         .user-badge { background-color: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
@@ -49,6 +48,7 @@
         
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .form-group { margin-bottom: 12px; }
+        .form-group.full { grid-column: span 2; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85em; color: #475569; }
         input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 16px; background-color: #fff; }
         .num-input { text-align: right; }
@@ -62,16 +62,34 @@
 
         .result-section { display: none; }
         .summary-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 20px; border-radius: 6px; text-align: center; margin-bottom: 20px; }
+        .client-title { font-size: 1.1em; color: var(--primary-color); font-weight: bold; margin-bottom: 10px; }
         .amount-value { font-size: 2em; color: var(--success-color); font-weight: 900; margin: 10px 0; word-break: keep-all; }
         .fee-value { font-size: 1.2em; color: var(--danger-color); font-weight: bold; }
         .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 15px; font-size: 0.9em; line-height: 1.6; word-break: keep-all; }
 
+        /* 결과 제어 버튼 그룹 */
+        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .action-btn { padding: 12px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.95em; cursor: pointer; color: white; }
+        .btn-copy { background-color: #475569; }
+        .btn-pdf { background-color: #0284c7; }
+        .action-btn:hover { opacity: 0.9; }
+
         @media screen and (max-width: 768px) {
             .container { grid-template-columns: 1fr; padding: 10px; margin: 10px auto; gap: 15px; }
             .form-grid { grid-template-columns: 1fr; gap: 5px; }
+            .form-group.full { grid-column: span 1; }
             .header { flex-direction: column; text-align: center; }
             .card { padding: 15px; }
             .amount-value { font-size: 1.8em; }
+        }
+
+        /* 인쇄(PDF 저장) 시 불필요한 요소 숨기기 */
+        @media print {
+            body { background: white; }
+            .header, .card:first-child, .action-btns, #login-overlay { display: none !important; }
+            .container { display: block; margin: 0; padding: 0; }
+            .card { box-shadow: none; border: none; padding: 0; }
+            .result-section { display: block !important; }
         }
     </style>
 </head>
@@ -85,18 +103,16 @@
         </div>
         
         <div class="login-card">
-            <!-- 로그인 버튼 및 버전 정보 -->
-            <div class="login-title">JDB컨설팅 영업관리 V1.1</div>
+            <div class="login-title">JDB컨설팅 영업관리 V1.2</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <button class="login-btn" onclick="startApp()">영업관리 로그인</button>
         </div>
     </div>
 
-    <!-- 📱 기존 메인 앱 화면 -->
+    <!-- 📱 메인 앱 화면 -->
     <div id="main-app" style="display: none;">
         <div class="header">
-            <!-- 명칭 변경 -->
             <h1>JDB컨설팅 영업관리</h1>
             <span class="user-badge" id="welcomeMsg">로그인 대기중</span>
         </div>
@@ -106,6 +122,16 @@
             <div class="card">
                 <h2>📝 환급액 산출 데이터 입력</h2>
                 <div class="form-grid">
+                    <!-- 신규 기능: 고객사 및 담당자 정보 -->
+                    <div class="form-group full">
+                        <label>고객사명 (골프장/리조트 등)</label>
+                        <input type="text" id="client_name" placeholder="예: OO 컨트리클럽" value="OO 컨트리클럽">
+                    </div>
+                    <div class="form-group full">
+                        <label>현장 담당자 성함 / 직급</label>
+                        <input type="text" id="client_manager" placeholder="예: 김재무 이사님" value="김재무 이사님">
+                    </div>
+
                     <div class="form-group"><label>상가/건축물 층수 (층)</label><input type="text" id="floor" class="num-input" value="1" inputmode="numeric" oninput="formatComma(this)"></div>
                     <div class="form-group"><label>지역자원시설세 과세</label><select id="surcharge"><option value="1">1배 (일반)</option><option value="3" selected>3배 (중과세)</option></select></div>
                     <div class="form-group"><label>지역자원 기납부액 (원)</label><input type="text" id="regional_tax" class="num-input" value="15,000,000" inputmode="numeric" oninput="formatComma(this)"></div>
@@ -132,18 +158,27 @@
                 <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">AI 시스템 교차 검증 중...</strong><div class="log-text" id="logText">데이터를 파싱하고 있습니다.</div></div>
                 <div class="result-section" id="resultArea">
                     <div class="summary-box">
+                        <div class="client-title" id="res_client_title">🏢 OO 컨트리클럽 산출 결과</div>
                         <div style="font-weight:bold; color:#166534;">고객사 예상 환급 총액</div>
                         <div class="amount-value" id="total_refund">0 원</div>
                         <div>당사 예상 매출 (성공보수 30%)<br><span class="fee-value" id="success_fee">0 원</span></div>
                     </div>
                     <h3>🔍 환급 로직 매칭 사유</h3>
                     <div class="match-log" id="reason_text"></div>
+
+                    <!-- 신규 기능: 결과 공유 및 저장 버튼 -->
+                    <div class="action-btns">
+                        <button class="action-btn btn-copy" onclick="copyResultText()">📋 결과 텍스트 복사</button>
+                        <button class="action-btn btn-pdf" onclick="saveAsPDF()">🖨️ PDF 저장 / 인쇄</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        let currentResultData = { refund: "", fee: "", reasons: [], client: "" };
+
         function startApp() {
             const userEmail = document.getElementById('userEmailInput').value.trim();
             if(!userEmail.includes('@')) {
@@ -151,10 +186,7 @@
                 document.getElementById('userEmailInput').focus();
                 return;
             }
-            
-            // 로그인 아이디(이메일 앞부분) 추출하여 환영 메시지에 표시
             const userName = userEmail.split('@')[0];
-            
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('welcomeMsg').innerHTML = `👤 ${userName} 님 환영합니다`;
@@ -192,6 +224,8 @@
         }
 
         function calculateRefund() {
+            const clientName = document.getElementById('client_name').value || "고객사";
+            const managerName = document.getElementById('client_manager').value || "";
             const floor = parseNumber(document.getElementById('floor').value);
             const surcharge = document.getElementById('surcharge').value;
             const regionalTax = parseNumber(document.getElementById('regional_tax').value);
@@ -210,29 +244,53 @@
             if (floor < 11 && surcharge === "3") {
                 const overpaid = regionalTax - (regionalTax / 3);
                 totalRefund += overpaid * years;
-                reasons.push("✔️ <b>[지역자원시설세 위법]</b> 11층 미만 상가 3배 중과 위법 (조심 2021지2787). 과다 납부액 환급.");
+                reasons.push("[지역자원시설세 위법] 11층 미만 상가 3배 중과 위법 (조심 2021지2787). 과다 납부액 환급.");
             }
             if (totalArea > 0 && exemptArea > 0) {
                 const ratio = exemptArea / totalArea;
                 totalRefund += (propertyTax + regionalTax) * ratio * years;
-                reasons.push("✔️ <b>[비과세 면적 안분 오류]</b> 복합건축물 내 비과세 면적 비율 안분 누락. (지방세법 제146조).");
+                reasons.push("[비과세 면적 안분 오류] 복합건축물 내 비과세 면적 비율 안분 누락. (지방세법 제146조).");
             }
             if (tempBuilding === "Y" && propertyTaxType === "종합합산") {
                 const diffTax = propertyTax * 0.3; 
                 totalRefund += diffTax * years;
-                reasons.push("✔️ <b>[과세유형 오분류]</b> 가설건축물 부속토지 종합합산 과세 오류. 별도합산 전환 정산.");
+                reasons.push("[과세유형 오분류] 가설건축물 부속토지 종합합산 과세 오류. 별도합산 전환 정산.");
             }
             if (specialZone === "Y") {
                 totalRefund += acqTax + (propertyTax * 0.5 * years);
-                reasons.push("✔️ <b>[특례 감면 누락]</b> 지방세특례제한법에 따른 취득세/재산세 감면 요건 누락.");
+                reasons.push("[특례 감면 누락] 지방세특례제한법에 따른 취득세/재산세 감면 요건 누락.");
             }
             if (reasons.length === 0) {
-                reasons.push("⚠️ 즉각적인 환급 사유 미발견. 사도 비과세 등 추가 정밀 분석 필요.");
+                reasons.push("즉각적인 환급 사유 미발견. 사도 비과세 등 추가 정밀 분석 필요.");
             }
 
-            document.getElementById('total_refund').innerText = Math.floor(totalRefund).toLocaleString() + " 원";
-            document.getElementById('success_fee').innerText = Math.floor(totalRefund * 0.3).toLocaleString() + " 원";
+            const refStr = Math.floor(totalRefund).toLocaleString() + " 원";
+            const feeStr = Math.floor(totalRefund * 0.3).toLocaleString() + " 원";
+
+            // 화면 반영
+            document.getElementById('res_client_title').innerText = `🏢 ${clientName} (${managerName}) 산출 결과`;
+            document.getElementById('total_refund').innerText = refStr;
+            document.getElementById('success_fee').innerText = feeStr;
             document.getElementById('reason_text').innerHTML = reasons.join("<br><br>");
+
+            // 데이터 보관 (클립보드 복사 용도)
+            currentResultData = { client: clientName, manager: managerName, refund: refStr, fee: feeStr, reasons: reasons };
+        }
+
+        // 신규 기능 1: 결과 텍스트 원터치 복사
+        function copyResultText() {
+            const textToCopy = `[JDB컨설팅 환급 분석 보고서]\n- 고객사: ${currentResultData.client} (${currentResultData.manager})\n- 예상 환급 총액: ${currentResultData.refund}\n- 예상 성공보수(30%): ${currentResultData.fee}\n\n[매칭 사유]\n${currentResultData.reasons.join('\n')}`;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert("분석 결과가 클립보드에 복사되었습니다!\n카카오톡이나 메모장에 바로 붙여넣기 하세요.");
+            }).catch(err => {
+                alert("복사에 실패했습니다. 수동으로 복사해 주세요.");
+            });
+        }
+
+        // 신규 기능 2: PDF 저장 및 인쇄 실행
+        function saveAsPDF() {
+            window.print();
         }
     </script>
 </body>
