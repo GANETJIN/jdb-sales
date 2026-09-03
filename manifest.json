@@ -1,6 +1,6 @@
 {
   "name": "JDB컨설팅 영업관리",
-  "short_name": "JDB영업관리",
+  "short_name": "영업관리",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#15284b",
