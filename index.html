@@ -44,11 +44,34 @@
         .login-btn { width: 100%; padding: 15px; background-color: #15284b; color: #d4af37; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .login-btn:hover { background-color: #0f1c35; }
 
-        .header { background-color: var(--primary-color); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .header { background-color: var(--primary-color); color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { margin: 0; font-size: 1.2em; color: var(--accent-color); }
-        .header-right { display: flex; align-items: center; gap: 10px; }
-        .user-badge { background-color: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        
+        /* 상단 고객관리 바로가기 버튼 */
+        .header-app-btn {
+            background-color: rgba(212, 175, 55, 0.18);
+            color: #facc15;
+            border: 1px solid #facc15;
+            padding: 6px 11px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .header-app-btn:hover {
+            background-color: #facc15;
+            color: #1e293b;
+        }
+
+        .user-badge { background-color: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.82em; font-weight: bold; }
         .logout-btn { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8em; font-weight: bold; cursor: pointer; }
+        .logout-btn:hover { background: #dc2626; }
 
         .container { max-width: 1280px; margin: 15px auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; padding: 0 15px; }
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -146,14 +169,6 @@
         .history-list { font-size: 0.82em; max-height: 160px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 5px; background: #f8fafc; }
         .history-item { padding: 6px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
 
-        @media screen and (max-width: 768px) {
-            .container { grid-template-columns: 1fr; padding: 10px; gap: 12px; }
-            .form-grid { grid-template-columns: 1fr; gap: 4px; }
-            .form-group.full { grid-column: span 1; }
-            .action-btns { grid-template-columns: 1fr; }
-            .btn-pdf { grid-column: span 1; }
-        }
-
         /* A4 규격 관공서 제출용 공문서 인쇄 스타일 */
         @media print {
             @page {
@@ -233,6 +248,10 @@
         <div class="header">
             <h1>JDB컨설팅 영업관리 (37대 환급 체계)</h1>
             <div class="header-right">
+                <!-- 상단 고객관리 모바일/PC 이동 버튼 -->
+                <button type="button" class="header-app-btn" onclick="openAppMobile()">📱 고객관리(모바일)</button>
+                <button type="button" class="header-app-btn" onclick="openAppPc()">💻 고객관리(PC)</button>
+                
                 <span class="user-badge" id="welcomeMsg">로그인 대기중</span>
                 <button class="logout-btn" onclick="logoutApp()">로그아웃</button>
             </div>
@@ -475,7 +494,7 @@
 
                 <!-- 최근 계산 히스토리 및 후속일정 섹션 -->
                 <div style="margin-top: 20px; border-top: 2px solid #e2e8f0; padding-top: 14px;">
-                    <!-- 고객관리(영업DB) 버튼 -->
+                    <!-- 고객관리(영업DB) 시트 바로가기 버튼 -->
                     <button type="button" class="btn-crm-full" onclick="openCrmDoc()">
                         👥 고객관리(영업DB) 바로가기
                     </button>
@@ -492,6 +511,10 @@
         const GOOGLE_SHEET_VIEW_URL = 'https://docs.google.com/spreadsheets/d/1JDw4q8CWXjVsPSkWj3FDomTpQ8V8R2LMv8vsURyex2I/edit?usp=sharing';
         const LOGIC_DOC_URL = 'https://docs.google.com/spreadsheets/d/1Oof6dimEZIb1oWAONrfGtXPaTjR8KxcTGOAsQd2fZB8/edit?usp=sharing';
         const CRM_DOC_URL = 'https://docs.google.com/spreadsheets/d/1oNGEqNacVkFEOchRFBCUkP2A3m3BJ34qkGmd_WKrP_c/edit?usp=sharing';
+
+        // 앱시트(AppSheet) 모바일 및 PC 데스크톱 바로가기 URL
+        const APPSHEET_MOBILE_URL = 'https://www.appsheet.com/newshortcut/8de35faa-1e57-4803-8cc1-25a2a761b882';
+        const APPSHEET_PC_URL = 'https://www.appsheet.com/start/8de35faa-1e57-4803-8cc1-25a2a761b882?platform=desktop';
 
         let loggedInEmail = "";
         let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "" };
@@ -539,8 +562,13 @@
         function handleEnter(event) { if (event.key === 'Enter') startApp(); }
         function searchLawCenter() { window.open(`https://www.law.go.kr/lsSc.do?menuId=1&query=${encodeURIComponent(document.getElementById('lawQuery').value || '지방세기본법')}`, '_blank'); }
         function searchPrecCenter() { window.open(`https://www.law.go.kr/precSc.do?menuId=7&query=${encodeURIComponent(document.getElementById('precQuery').value || '지역자원시설세')}`, '_blank'); }
+        
         function openLogicDoc() { window.open(LOGIC_DOC_URL, '_blank'); }
         function openCrmDoc() { window.open(CRM_DOC_URL, '_blank'); }
+        
+        // 앱시트 모바일 / PC 링크 오픈 함수
+        function openAppMobile() { window.open(APPSHEET_MOBILE_URL, '_blank'); }
+        function openAppPc() { window.open(APPSHEET_PC_URL, '_blank'); }
 
         function formatComma(input) {
             let val = input.value.replace(/[^0-9]/g, '');
@@ -668,6 +696,7 @@
             document.getElementById('reason_text').innerHTML = reasons.join("<br><br>");
             document.getElementById('defense_text').innerHTML = "지방세기본법 제50조 및 국세기본법 제45조의2에 규정된 법정 경정청구권과 조세심판원 합동회의 인용 결정 및 대법원 판례를 근거로 과세관청(지자체 세무과 및 관할 세무서)에 소명하십시오.";
 
+            // 보수 테이블
             let feeHTML = "";
             if (feeType === "일시지급") feeHTML = `<tr><td>환급 수령 즉시 일시 납부</td><td>30%</td><td>${feeStr}</td><td>지자체/세무서 입금 확인 즉시</td></tr>`;
             else if (feeType === "2회분할") {
@@ -679,6 +708,7 @@
             }
             document.getElementById('feeTableBody').innerHTML = feeHTML;
 
+            // 소급연차 테이블
             let yearlyHTML = "";
             for(let i = 1; i <= years; i++) {
                 yearlyHTML += `<tr><td>최근 ${i}년 차 소급분</td><td>${Math.floor(refVal / years).toLocaleString()} 원</td><td>${Math.floor(feeVal / years).toLocaleString()} 원</td><td>정상 산정</td></tr>`;
