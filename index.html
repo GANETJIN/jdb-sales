@@ -142,6 +142,30 @@
         .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 12px; font-size: 0.86em; line-height: 1.5; margin-bottom: 14px; max-height: 280px; overflow-y: auto; }
         .section-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px; font-size: 0.85em; }
 
+        /* 서명 직인 날인 박스 (웹 화면 기본 스타일) */
+        .official-stamp-box {
+            margin-top: 25px;
+            text-align: right;
+            font-size: 1.05em;
+            font-weight: bold;
+            padding-right: 10px;
+            color: #1e293b;
+        }
+        .seal-mark {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 2px dashed #b91c1c;
+            border-radius: 50%;
+            color: #b91c1c;
+            text-align: center;
+            line-height: 48px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
         .search-panel { background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 6px; padding: 10px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
         .search-row { display: flex; gap: 6px; }
         .search-input { flex: 1; padding: 6px 10px; border: 1px solid #7dd3fc; border-radius: 4px; font-size: 0.85em; }
@@ -245,7 +269,7 @@
             <div class="logo-sub">CONSULTING</div>
         </div>
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V3.6</div>
+            <div class="login-title">JDB컨설팅 영업관리 V3.7</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <div class="login-options">
@@ -259,7 +283,6 @@
     <!-- 메인 대시보드 -->
     <div id="main-app" style="display: none;">
         <div class="header">
-            <!-- 상단 헤더: 숫자 없이 깔끔한 공식 명칭으로 정돈 -->
             <h1>JDB컨설팅 영업관리</h1>
             <div class="header-right">
                 <button type="button" class="header-app-btn" onclick="openAppMobile()">📱 고객관리(모바일)</button>
@@ -274,7 +297,6 @@
             <!-- 왼쪽: 환급 산출 데이터 입력 아코디언 -->
             <div class="card">
                 <h2>
-                    <!-- 입력 카드 타이틀: 숫자 제거 -->
                     <span>📝 환급 산출 데이터 입력</span>
                     <button type="button" class="btn-logic-doc" onclick="openLogicDoc()">📑 환급 로직</button>
                 </h2>
@@ -413,7 +435,6 @@
                     </div>
                 </details>
 
-                <!-- 분석 실행 버튼: 표준 명칭으로 변경 -->
                 <button class="run-btn" onclick="startAnalysis()">세금 환급 제안서 생성</button>
             </div>
 
@@ -464,37 +485,32 @@
                             <div>당사 성공보수 약정액 (30% 기준, VAT별도): <span class="fee-value" id="success_fee">0 원</span></div>
                         </div>
 
-                        <h4 style="margin:12px 0 6px 0; font-size:10.5pt;">1. 약정보수 지급 시뮬레이션</h4>
-                        <table class="data-table">
-                            <thead><tr><th>지급 구분</th><th>청구 비율</th><th>지급 금액</th><th>청구 시점</th></tr></thead>
-                            <tbody id="feeTableBody"></tbody>
-                        </table>
-
-                        <h4 style="margin:12px 0 6px 0; font-size:10.5pt;">2. 연도별 소급 환급 산출 명세 (법정 5개년)</h4>
+                        <!-- 1. 연도별 소급 환급 산출 명세로 바로 시작 (보수 시뮬레이션 중복 제거 완료) -->
+                        <h4 style="margin:12px 0 6px 0; font-size:10.5pt;">1. 연도별 소급 환급 산출 명세 (법정 5개년)</h4>
                         <table class="data-table">
                             <thead><tr><th>소급 연차</th><th>예상 환급 세액</th><th>성공보수액</th><th>비고</th></tr></thead>
                             <tbody id="yearlyTableBody"></tbody>
                         </table>
 
-                        <h4 style="margin:12px 0 6px 0; font-size:10.5pt;">3. 환급 청구 법적 근거 및 세목별 인용 사유</h4>
+                        <h4 style="margin:12px 0 6px 0; font-size:10.5pt;">2. 환급 청구 법적 근거 및 세목별 인용 사유</h4>
                         <div class="match-log" id="reason_text"></div>
 
                         <div class="section-box">
-                            <h5 style="margin:0 0 5px 0; font-size:10pt;">4. 과세관청(시·군·구 세무과 및 관할 세무서) 소명 및 방어 논리</h5>
+                            <h5 style="margin:0 0 5px 0; font-size:10pt;">3. 과세관청(시·군·구 세무과 및 관할 세무서) 소명 및 방어 논리</h5>
                             <p style="margin:0; line-height:1.4;" id="defense_text"></p>
                         </div>
 
                         <div class="section-box">
-                            <h5 style="margin:0 0 5px 0; font-size:10pt;">5. 위임 및 환급 청구 접수 첨부 서류 안내</h5>
+                            <h5 style="margin:0 0 5px 0; font-size:10pt;">4. 위임 및 환급 청구 접수 첨부 서류 안내</h5>
                             <div>• 법인등기부등본 및 사업자등록증 사본 각 1부</div>
                             <div>• 최근 5개년 세목별 과세증명서 및 영수증 원본 각 1부</div>
                             <div>• 건축물대장 총괄/일반 및 층별 도면 사본</div>
                             <div>• JDB컨설팅 위임장(법인인감증명서 첨부 및 법인인감 날인)</div>
                         </div>
 
-                        <!-- 공문서 직인 날인란 -->
+                        <!-- 공문서 직인 날인란 (요청하신 'JDB컨설팅 주식회사 대표이사' 반영) -->
                         <div class="official-stamp-box">
-                            JDB컨설팅 대표컨설턴트 <span class="seal-mark">(인)</span>
+                            JDB컨설팅 주식회사 대표이사 <span class="seal-mark">(인)</span>
                         </div>
                     </div>
 
@@ -509,7 +525,6 @@
 
                 <!-- 최근 계산 히스토리 및 후속일정 섹션 (인쇄 시 자동 숨김) -->
                 <div class="history-section" style="margin-top: 20px; border-top: 2px solid #e2e8f0; padding-top: 14px;">
-                    <!-- 고객관리(영업DB) 시트 바로가기 버튼 -->
                     <button type="button" class="btn-crm-full" onclick="openCrmDoc()">
                         👥 고객관리(영업DB) 바로가기
                     </button>
@@ -710,17 +725,7 @@
             document.getElementById('reason_text').innerHTML = reasons.join("<br><br>");
             document.getElementById('defense_text').innerHTML = "지방세기본법 제50조 및 국세기본법 제45조의2에 규정된 법정 경정청구권과 조세심판원 합동회의 인용 결정 및 대법원 판례를 근거로 과세관청(지자체 세무과 및 관할 세무서)에 소명하십시오.";
 
-            let feeHTML = "";
-            if (feeType === "일시지급") feeHTML = `<tr><td>환급 수령 즉시 일시 납부</td><td>30%</td><td>${feeStr}</td><td>지자체/세무서 입금 확인 즉시</td></tr>`;
-            else if (feeType === "2회분할") {
-                let half = Math.floor(feeVal / 2).toLocaleString() + " 원";
-                feeHTML = `<tr><td>1차 (청구 접수 시)</td><td>15%</td><td>${half}</td><td>위임장 및 세무서 접수증 수령 시</td></tr><tr><td>2차 (환급 완료 시)</td><td>15%</td><td>${half}</td><td>환급금 법인계좌 입금 즉시</td></tr>`;
-            } else {
-                let third = Math.floor(feeVal / 3).toLocaleString() + " 원";
-                feeHTML = `<tr><td>1차 계약금</td><td>10%</td><td>${third}</td><td>컨설팅 계약 체결 시</td></tr><tr><td>2차 중간금</td><td>10%</td><td>${third}</td><td>보정요구 소명서 제출 시</td></tr><tr><td>3차 잔금</td><td>10%</td><td>${third}</td><td>환급금 입금 완료 시</td></tr>`;
-            }
-            document.getElementById('feeTableBody').innerHTML = feeHTML;
-
+            // 1. 연도별 소급 환급 산출 명세 테이블 구성 (성공보수액이 함께 표기되므로 단일 테이블로 완결)
             let yearlyHTML = "";
             for(let i = 1; i <= years; i++) {
                 yearlyHTML += `<tr><td>최근 ${i}년 차 소급분</td><td>${Math.floor(refVal / years).toLocaleString()} 원</td><td>${Math.floor(feeVal / years).toLocaleString()} 원</td><td>정상 산정</td></tr>`;
