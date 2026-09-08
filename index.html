@@ -195,7 +195,7 @@
             .btn-pdf { grid-column: span 1; }
         }
 
-        /* A4 규격 관공서 제출용 공문서 인쇄 스타일 (인쇄 시 히스토리 영역 완전 차단) */
+        /* A4 규격 관공서 제출용 공문서 인쇄 스타일 */
         @media print {
             @page {
                 size: A4 portrait;
@@ -295,7 +295,7 @@
                     <button type="button" class="btn-logic-doc" onclick="openLogicDoc()">📑 환급 로직</button>
                 </h2>
 
-                <!-- 1. 기본 고객 정보 (오픈 상태) -->
+                <!-- 1. 기본 고객 정보 (오픈) -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">🏢 1. 기본 고객사 정보 및 계약 조건</summary>
                     <div class="accordion-body">
@@ -328,7 +328,7 @@
                     </div>
                 </details>
 
-                <!-- 2. 골프장 & 체육시설 특화 (오픈 상태) -->
+                <!-- 2. 골프장 & 체육시설 특화 (오픈) -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">⛳ 2. 골프장 및 체육시설업 특화</summary>
                     <div class="accordion-body">
@@ -350,7 +350,7 @@
                     </div>
                 </details>
 
-                <!-- 3. 호텔 & 리조트 특화 (오픈 상태) -->
+                <!-- 3. 호텔 & 리조트 특화 (오픈) -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">🏨 3. 호텔·콘도·리조트 특화</summary>
                     <div class="accordion-body">
@@ -364,7 +364,7 @@
                     </div>
                 </details>
 
-                <!-- 4. 상가, 대형빌딩, 복합시설 (오픈 상태) -->
+                <!-- 4. 상가, 대형빌딩, 복합시설 (오픈) -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">🏬 4. 상가·대형빌딩·복합시설</summary>
                     <div class="accordion-body">
@@ -382,7 +382,7 @@
                     </div>
                 </details>
 
-                <!-- 5. 신축·개발 및 PF 특화 (오픈 상태) -->
+                <!-- 5. 신축·개발 및 PF 특화 (오픈) -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">🏗️ 5. 신축·개발·PF·구축물</summary>
                     <div class="accordion-body">
@@ -394,7 +394,7 @@
                     </div>
                 </details>
 
-                <!-- 6. 대규모 토지 & 개발부담금 (오픈 상태) -->
+                <!-- 6. 대규모 토지 & 개발부담금 (오픈) -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">🏞️ 6. 대규모 토지 및 개발부담금</summary>
                     <div class="accordion-body">
@@ -411,7 +411,7 @@
                     </div>
                 </details>
 
-                <!-- 7. 국세 연계 및 조세특례 (오픈 상태) -->
+                <!-- 7. 국세 연계 및 조세특례 (오픈) -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">⚖️ 7. 국세 연계 및 조세특례 세액공제</summary>
                     <div class="accordion-body">
@@ -429,7 +429,7 @@
                     </div>
                 </details>
 
-                <!-- 법령/판례 검색 패널 (실행 버튼 바로 위) -->
+                <!-- 법령/판례 검색 패널 -->
                 <div class="search-panel">
                     <div class="search-row">
                         <input type="text" id="lawQuery" class="search-input" placeholder="법령 검색 (예: 지방세기본법 제50조)" onkeypress="handleLawEnter(event)">
@@ -441,7 +441,6 @@
                     </div>
                 </div>
 
-                <!-- 분석 및 생성 버튼 ('세금 환급 검증 및 제안서 생성'으로 명칭 변경 완료) -->
                 <button class="run-btn" onclick="startAnalysis()">세금 환급 검증 및 제안서 생성</button>
             </div>
 
@@ -449,11 +448,10 @@
             <div class="card">
                 <h2>📊 지방세·국세 환급(경정청구) 컨설팅 제안서</h2>
 
-                <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">세무 및 조세 법리 정밀 분석 중...</strong><div class="log-text" id="logText">지방세법, 조특법 및 조세심판원 판례를 매칭하고 있습니다.</div></div>
+                <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">세무 및 조세 법리 정밀 분석 중...</strong><div class="log-text" id="logText">100대 환급 로직 및 조세심판원 판례를 매칭하고 있습니다.</div></div>
                 
                 <div class="result-section" id="resultArea">
                     <div class="proposal-doc">
-                        <!-- 관공서 제출용 공문서 메타 헤더 테이블 -->
                         <table class="official-header-table">
                             <tr>
                                 <td class="doc-meta-title">문 서 번 호</td>
@@ -463,10 +461,8 @@
                             </tr>
                             <tr>
                                 <td class="doc-meta-title">수 신 처</td>
-                                <!-- 수신처: '고객사명 귀하' 단독 표기 -->
                                 <td><b id="prop_client">여주 T 컨트리클럽 귀하</b></td>
                                 <td class="doc-meta-title">발 신 처</td>
-                                <!-- 발신처: 'JDB컨설팅(주)' 표기 -->
                                 <td><b>JDB컨설팅(주)</b></td>
                             </tr>
                             <tr>
@@ -483,7 +479,6 @@
                             <div>당사 성공보수 약정액 (30% 기준, VAT별도): <span class="fee-value" id="success_fee">0 원</span></div>
                         </div>
 
-                        <!-- 1. 연도별 소급 환급 산출 명세 테이블 -->
                         <h4 style="margin:12px 0 6px 0; font-size:10.5pt;">1. 연도별 소급 환급 산출 명세 (법정 5개년)</h4>
                         <table class="data-table">
                             <thead><tr><th>소급 연차</th><th>예상 환급 세액</th><th>성공보수액</th><th>비고</th></tr></thead>
@@ -499,14 +494,13 @@
                         </div>
 
                         <div class="section-box">
-                            <h5 style="margin:0 0 5px 0; font-size:10pt;">4. 위임 및 환급 청구 접수 첨부 서류 안내</h5>
+                            <h5 style="margin:0 0 5px 0; font-size:10.5pt;">4. 위임 및 환급 청구 접수 첨부 서류 안내</h5>
                             <div>• 법인등기부등본 및 사업자등록증 사본 각 1부</div>
                             <div>• 최근 5개년 세목별 과세증명서 및 영수증 원본 각 1부</div>
                             <div>• 건축물대장 총괄/일반 및 층별 도면 사본</div>
                             <div>• JDB컨설팅 위임장(법인인감증명서 첨부 및 법인인감 날인)</div>
                         </div>
 
-                        <!-- 공문서 서명란 ('(인)' 제거 및 'JDB컨설팅 주식회사 대표이사' 표기) -->
                         <div class="official-stamp-box">
                             JDB컨설팅 주식회사 대표이사
                         </div>
@@ -521,7 +515,7 @@
                     </div>
                 </div>
 
-                <!-- 최근 계산 히스토리 및 후속일정 섹션 (인쇄 시 자동 숨김) -->
+                <!-- 최근 계산 히스토리 및 후속일정 -->
                 <div class="history-section" style="margin-top: 20px; border-top: 2px solid #e2e8f0; padding-top: 14px;">
                     <button type="button" class="btn-crm-full" onclick="openCrmDoc()">
                         👥 고객관리(영업DB) 바로가기
@@ -740,7 +734,6 @@
             const refStr = refVal.toLocaleString() + " 원";
             const feeStr = feeVal.toLocaleString() + " 원";
 
-            // 수신처: '고객사명 귀하' 단독 표기
             document.getElementById('prop_client').innerText = `${clientName} 귀하`;
             
             const newSerial = generateSerialNo();
@@ -874,7 +867,7 @@
             document.getElementById('acq_tax').value = data.acq_tax || "";
             document.getElementById('sales_memo').value = data.sales_memo || "";
 
-            document.getElementById('facility_type').value = data.facility_type || "대중제";
+            document.getElementById('facility_type').value = data.facility_type || "default";
             document.getElementById('acq_heavy').value = data.acq_heavy || "N";
             document.getElementById('green_land_tax').value = data.green_land_tax || "0";
             document.getElementById('water_hazard_tax').value = data.water_hazard_tax || "0";
