@@ -122,7 +122,7 @@
         input[type="text"], input[type="date"], select, textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; background-color: #fff; font-family: inherit; }
         .num-input { text-align: right; }
 
-        .run-btn { width: 100%; padding: 16px; background-color: var(--button-blue); color: white; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .run-btn { width: 100%; padding: 16px; background-color: var(--button-blue); color: white; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 5px; }
         
         .loader-container { display: none; text-align: center; padding: 25px 10px; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--button-blue); border-radius: 50%; width: 36px; height: 36px; animation: spin 1s linear infinite; margin: 0 auto 12px auto; }
@@ -142,7 +142,6 @@
         .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 12px; font-size: 0.86em; line-height: 1.5; margin-bottom: 14px; max-height: 280px; overflow-y: auto; }
         .section-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px; font-size: 0.85em; }
 
-        /* 서명 직인 날인 박스 (웹 화면 기본 스타일) */
         .official-stamp-box {
             margin-top: 25px;
             text-align: right;
@@ -166,10 +165,23 @@
             vertical-align: middle;
         }
 
-        .search-panel { background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 6px; padding: 10px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
+        /* 왼쪽 실행 버튼 위로 이동한 법령/판례 검색창 스타일 */
+        .search-panel { 
+            background: #e0f2fe; 
+            border: 1px solid #bae6fd; 
+            border-radius: 6px; 
+            padding: 10px; 
+            margin: 15px 0 10px 0; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+        }
         .search-row { display: flex; gap: 6px; }
-        .search-input { flex: 1; padding: 6px 10px; border: 1px solid #7dd3fc; border-radius: 4px; font-size: 0.85em; }
-        .btn-law, .btn-prec { background: #0284c7; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-weight: bold; font-size: 0.8em; cursor: pointer; white-space: nowrap; }
+        .search-input { flex: 1; padding: 7px 10px; border: 1px solid #7dd3fc; border-radius: 4px; font-size: 0.85em; background-color: #fff; }
+        .btn-law, .btn-prec { background: #0284c7; color: white; border: none; padding: 7px 12px; border-radius: 4px; font-weight: bold; font-size: 0.82em; cursor: pointer; white-space: nowrap; }
+        .btn-prec { background: #0d9488; }
+        .btn-law:hover { background: #0369a1; }
+        .btn-prec:hover { background: #0f766e; }
 
         .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 12px; }
         .action-btn { padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.85em; cursor: pointer; color: white; text-align: center; text-decoration: none; }
@@ -197,7 +209,7 @@
             .btn-pdf { grid-column: span 1; }
         }
 
-        /* A4 규격 관공서 제출용 공문서 인쇄 스타일 (인쇄 시 히스토리 영역 완전 차단) */
+        /* A4 규격 관공서 제출용 공문서 인쇄 스타일 */
         @media print {
             @page {
                 size: A4 portrait;
@@ -269,7 +281,7 @@
             <div class="logo-sub">CONSULTING</div>
         </div>
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V3.7</div>
+            <div class="login-title">JDB컨설팅 영업관리 V3.8</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <div class="login-options">
@@ -294,14 +306,14 @@
         </div>
 
         <div class="container">
-            <!-- 왼쪽: 환급 산출 데이터 입력 아코디언 -->
+            <!-- 왼쪽: 환급 산출 검증 데이터 입력 아코디언 -->
             <div class="card">
                 <h2>
-                    <span>📝 환급 산출 데이터 입력</span>
+                    <span>📝 환급 산출 검증 데이터 입력</span>
                     <button type="button" class="btn-logic-doc" onclick="openLogicDoc()">📑 환급 로직</button>
                 </h2>
 
-                <!-- 1. 기본 고객 정보 -->
+                <!-- 1. 기본 고객 정보 (오픈) -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">🏢 1. 기본 고객사 정보 및 계약 조건</summary>
                     <div class="accordion-body">
@@ -334,8 +346,8 @@
                     </div>
                 </details>
 
-                <!-- 2. 골프장 & 체육시설 특화 -->
-                <details class="accordion-group">
+                <!-- 2. 골프장 & 체육시설 특화 (오픈) -->
+                <details class="accordion-group" open>
                     <summary class="accordion-header">⛳ 2. 골프장 및 체육시설업 특화</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
@@ -356,8 +368,8 @@
                     </div>
                 </details>
 
-                <!-- 3. 호텔 & 리조트 특화 -->
-                <details class="accordion-group">
+                <!-- 3. 호텔 & 리조트 특화 (오픈) -->
+                <details class="accordion-group" open>
                     <summary class="accordion-header">🏨 3. 호텔·콘도·리조트 특화</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
@@ -370,8 +382,8 @@
                     </div>
                 </details>
 
-                <!-- 4. 상가, 대형빌딩, 복합시설 -->
-                <details class="accordion-group">
+                <!-- 4. 상가, 대형빌딩, 복합시설 (오픈) -->
+                <details class="accordion-group" open>
                     <summary class="accordion-header">🏬 4. 상가·대형빌딩·복합시설</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
@@ -388,8 +400,8 @@
                     </div>
                 </details>
 
-                <!-- 5. 신축·개발 및 PF 특화 -->
-                <details class="accordion-group">
+                <!-- 5. 신축·개발 및 PF 특화 (오픈) -->
+                <details class="accordion-group" open>
                     <summary class="accordion-header">🏗️ 5. 신축·개발·PF·구축물</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
@@ -400,8 +412,8 @@
                     </div>
                 </details>
 
-                <!-- 6. 대규모 토지 & 개발부담금 -->
-                <details class="accordion-group">
+                <!-- 6. 대규모 토지 & 개발부담금 (오픈) -->
+                <details class="accordion-group" open>
                     <summary class="accordion-header">🏞️ 6. 대규모 토지 및 개발부담금</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
@@ -417,8 +429,8 @@
                     </div>
                 </details>
 
-                <!-- 7. 국세 연계 및 조세특례 -->
-                <details class="accordion-group">
+                <!-- 7. 국세 연계 및 조세특례 (오픈) -->
+                <details class="accordion-group" open>
                     <summary class="accordion-header">⚖️ 7. 국세 연계 및 조세특례 세액공제</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
@@ -435,23 +447,25 @@
                     </div>
                 </details>
 
-                <button class="run-btn" onclick="startAnalysis()">세금 환급 제안서 생성</button>
+                <!-- 1. 법령/판례 검색창을 실행 버튼 바로 위로 재배치 -->
+                <div class="search-panel">
+                    <div class="search-row">
+                        <input type="text" id="lawQuery" class="search-input" placeholder="법령 검색 (예: 지방세기본법 제50조)" onkeypress="handleLawEnter(event)">
+                        <button class="btn-law" onclick="searchLawCenter()">⚖️ 법령 검색</button>
+                    </div>
+                    <div class="search-row">
+                        <input type="text" id="precQuery" class="search-input" placeholder="판례 검색 (예: 조심 2021지2787)" onkeypress="handlePrecEnter(event)">
+                        <button class="btn-prec" onclick="searchPrecCenter()">📜 판례 검색</button>
+                    </div>
+                </div>
+
+                <!-- 2. 버튼 명칭 변경: '세금 환급 검증 및 제안서 생성' -->
+                <button class="run-btn" onclick="startAnalysis()">세금 환급 검증 및 제안서 생성</button>
             </div>
 
             <!-- 오른쪽: 제안서 출력 영역 (A4 공문서 규격) -->
             <div class="card">
                 <h2>📊 지방세·국세 환급(경정청구) 컨설팅 제안서</h2>
-
-                <div class="search-panel">
-                    <div class="search-row">
-                        <input type="text" id="lawQuery" class="search-input" placeholder="법령 검색 (예: 지방세기본법 제50조)">
-                        <button class="btn-law" onclick="searchLawCenter()">⚖️ 법령 검색</button>
-                    </div>
-                    <div class="search-row">
-                        <input type="text" id="precQuery" class="search-input" placeholder="판례 검색 (예: 조심 2021지2787)">
-                        <button class="btn-prec" onclick="searchPrecCenter()">📜 판례 검색</button>
-                    </div>
-                </div>
 
                 <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">세무 및 조세 법리 정밀 분석 중...</strong><div class="log-text" id="logText">지방세법, 조특법 및 조세심판원 판례를 매칭하고 있습니다.</div></div>
                 
@@ -485,7 +499,7 @@
                             <div>당사 성공보수 약정액 (30% 기준, VAT별도): <span class="fee-value" id="success_fee">0 원</span></div>
                         </div>
 
-                        <!-- 1. 연도별 소급 환급 산출 명세로 바로 시작 (보수 시뮬레이션 중복 제거 완료) -->
+                        <!-- 1. 연도별 소급 환급 산출 명세 테이블 -->
                         <h4 style="margin:12px 0 6px 0; font-size:10.5pt;">1. 연도별 소급 환급 산출 명세 (법정 5개년)</h4>
                         <table class="data-table">
                             <thead><tr><th>소급 연차</th><th>예상 환급 세액</th><th>성공보수액</th><th>비고</th></tr></thead>
@@ -508,7 +522,7 @@
                             <div>• JDB컨설팅 위임장(법인인감증명서 첨부 및 법인인감 날인)</div>
                         </div>
 
-                        <!-- 공문서 직인 날인란 (요청하신 'JDB컨설팅 주식회사 대표이사' 반영) -->
+                        <!-- 공문서 직인 날인란 -->
                         <div class="official-stamp-box">
                             JDB컨설팅 주식회사 대표이사 <span class="seal-mark">(인)</span>
                         </div>
@@ -593,6 +607,8 @@
         function handleEnter(event) { if (event.key === 'Enter') startApp(); }
         function searchLawCenter() { window.open(`https://www.law.go.kr/lsSc.do?menuId=1&query=${encodeURIComponent(document.getElementById('lawQuery').value || '지방세기본법')}`, '_blank'); }
         function searchPrecCenter() { window.open(`https://www.law.go.kr/precSc.do?menuId=7&query=${encodeURIComponent(document.getElementById('precQuery').value || '지역자원시설세')}`, '_blank'); }
+        function handleLawEnter(event) { if (event.key === 'Enter') searchLawCenter(); }
+        function handlePrecEnter(event) { if (event.key === 'Enter') searchPrecCenter(); }
         
         function openLogicDoc() { window.open(LOGIC_DOC_URL, '_blank'); }
         function openCrmDoc() { window.open(CRM_DOC_URL, '_blank'); }
@@ -725,7 +741,7 @@
             document.getElementById('reason_text').innerHTML = reasons.join("<br><br>");
             document.getElementById('defense_text').innerHTML = "지방세기본법 제50조 및 국세기본법 제45조의2에 규정된 법정 경정청구권과 조세심판원 합동회의 인용 결정 및 대법원 판례를 근거로 과세관청(지자체 세무과 및 관할 세무서)에 소명하십시오.";
 
-            // 1. 연도별 소급 환급 산출 명세 테이블 구성 (성공보수액이 함께 표기되므로 단일 테이블로 완결)
+            // 1. 연도별 소급 환급 산출 명세 테이블 구성
             let yearlyHTML = "";
             for(let i = 1; i <= years; i++) {
                 yearlyHTML += `<tr><td>최근 ${i}년 차 소급분</td><td>${Math.floor(refVal / years).toLocaleString()} 원</td><td>${Math.floor(feeVal / years).toLocaleString()} 원</td><td>정상 산정</td></tr>`;
@@ -888,7 +904,7 @@
             document.getElementById('green_investment').value = data.green_investment || "0";
             document.getElementById('exempt_corp_tax').value = data.exempt_corp_tax || "0";
 
-            alert(`[ ${data.client_name} ]의 저장된 입력 데이터가 왼쪽 폼에 복원되었습니다.\n수정 후 [세금 환급 제안서 생성] 버튼을 다시 눌러주세요.`);
+            alert(`[ ${data.client_name} ]의 저장된 입력 데이터가 왼쪽 폼에 복원되었습니다.\n수정 후 [세금 환급 검증 및 제안서 생성] 버튼을 다시 눌러주세요.`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
