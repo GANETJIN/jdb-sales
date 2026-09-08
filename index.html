@@ -54,7 +54,7 @@
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .card h2 { margin-top: 0; font-size: 1.15em; color: var(--primary-color); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* 환급 로직 연결 버튼 스타일 */
+        /* 환급 로직 및 고객관리 버튼 스타일 */
         .btn-logic-doc {
             background-color: #15284b;
             color: #d4af37;
@@ -72,6 +72,28 @@
         .btn-logic-doc:hover {
             background-color: #d4af37;
             color: #15284b;
+        }
+
+        .btn-crm-full {
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #047857;
+            color: #ffffff;
+            border: 1px solid #059669;
+            border-radius: 6px;
+            font-size: 0.88em;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+            transition: background-color 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .btn-crm-full:hover {
+            background-color: #065f46;
         }
 
         /* 아코디언 스타일 */
@@ -139,7 +161,7 @@
                 margin: 12mm 10mm 15mm 10mm;
             }
             body { background: white !important; color: #000 !important; font-family: 'Batang', 'Malgun Gothic', serif; }
-            #login-overlay, .header, .search-panel, .action-btns, .history-list, .card:first-child, .loader-container, h2 { display: none !important; }
+            #login-overlay, .header, .search-panel, .action-btns, .history-list, .btn-crm-full, .card:first-child, .loader-container, h2 { display: none !important; }
             .container { display: block !important; margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
             .card { box-shadow: none !important; border: none !important; padding: 0 !important; }
             .result-section { display: block !important; }
@@ -451,8 +473,14 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 20px; border-top: 2px solid #e2e8f0; padding-top: 10px;">
-                    <h3 style="font-size:1em; margin:0 0 8px 0;">📂 최근 계산 히스토리</h3>
+                <!-- 최근 계산 히스토리 및 후속일정 섹션 -->
+                <div style="margin-top: 20px; border-top: 2px solid #e2e8f0; padding-top: 14px;">
+                    <!-- 고객관리(영업DB) 버튼 -->
+                    <button type="button" class="btn-crm-full" onclick="openCrmDoc()">
+                        👥 고객관리(영업DB) 바로가기
+                    </button>
+                    
+                    <h3 style="font-size:1em; margin:0 0 8px 0; color:#1e293b;">📂 최근 계산 히스토리 및 후속일정</h3>
                     <div class="history-list" id="historyList"><div style="color:#94a3b8; text-align:center; padding:10px;">기록 없음</div></div>
                 </div>
             </div>
@@ -463,6 +491,7 @@
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyCJdBENcjFmx9aXU6Dr-e5ncxDNxNT3VGraJVfL1l8jyVL_fIE2_fDE7JH0BeCJi0f/exec';
         const GOOGLE_SHEET_VIEW_URL = 'https://docs.google.com/spreadsheets/d/1JDw4q8CWXjVsPSkWj3FDomTpQ8V8R2LMv8vsURyex2I/edit?usp=sharing';
         const LOGIC_DOC_URL = 'https://docs.google.com/spreadsheets/d/1Oof6dimEZIb1oWAONrfGtXPaTjR8KxcTGOAsQd2fZB8/edit?usp=sharing';
+        const CRM_DOC_URL = 'https://docs.google.com/spreadsheets/d/1oNGEqNacVkFEOchRFBCUkP2A3m3BJ34qkGmd_WKrP_c/edit?usp=sharing';
 
         let loggedInEmail = "";
         let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "" };
@@ -511,6 +540,7 @@
         function searchLawCenter() { window.open(`https://www.law.go.kr/lsSc.do?menuId=1&query=${encodeURIComponent(document.getElementById('lawQuery').value || '지방세기본법')}`, '_blank'); }
         function searchPrecCenter() { window.open(`https://www.law.go.kr/precSc.do?menuId=7&query=${encodeURIComponent(document.getElementById('precQuery').value || '지역자원시설세')}`, '_blank'); }
         function openLogicDoc() { window.open(LOGIC_DOC_URL, '_blank'); }
+        function openCrmDoc() { window.open(CRM_DOC_URL, '_blank'); }
 
         function formatComma(input) {
             let val = input.value.replace(/[^0-9]/g, '');
