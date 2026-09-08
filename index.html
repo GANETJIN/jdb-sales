@@ -3,182 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <meta name="apple-mobile-web-app-title" content="영업관리">
     <meta name="application-name" content="영업관리">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="manifest.json">
-
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>JDB컨설팅 영업관리</title>
     <style>
         :root { --primary-color: #1e293b; --accent-color: #d4af37; --button-blue: #3b82f6; --success-color: #10b981; --danger-color: #ef4444; --bg-color: #f1f5f9; }
         * { box-sizing: border-box; }
         body { font-family: 'Malgun Gothic', sans-serif; background-color: var(--bg-color); margin: 0; color: #333; }
-        
-        #login-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #15284b; z-index: 9999; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-        }
-        .logo-container {
-            width: 140px; height: 140px; border-radius: 50%; background-color: #15284b; 
-            border: 4px solid #c0c0c0; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 25px;
-        }
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #15284b; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .logo-container { width: 140px; height: 140px; border-radius: 50%; background-color: #15284b; border: 4px solid #c0c0c0; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 25px; }
         .logo-main { color: #d4af37; font-size: 46px; font-weight: 900; letter-spacing: -3px; position: relative; line-height: 1; margin-bottom: 5px; }
         .logo-main::after { content: '↗'; font-size: 32px; position: absolute; top: -10px; right: -20px; }
         .logo-sub { color: white; font-size: 10px; font-weight: bold; letter-spacing: 1px; }
-
         .login-card { background: white; padding: 30px 25px; border-radius: 12px; text-align: center; width: 85%; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .login-title { font-size: 1.2em; color: #15284b; font-weight: 900; margin: 0 0 20px 0; }
         .input-label { display: block; text-align: left; font-size: 0.85em; font-weight: bold; color: #333; margin-bottom: 8px; }
         .login-input { width: 100%; padding: 13px; margin-bottom: 15px; border: 2px solid #d4af37; border-radius: 6px; font-size: 15px; outline: none; }
-        
         .login-options { display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; color: #475569; margin-bottom: 20px; }
         .login-options label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
-
         .login-btn { width: 100%; padding: 15px; background-color: #15284b; color: #d4af37; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .login-btn:hover { background-color: #0f1c35; }
-
         .header { background-color: var(--primary-color); color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { margin: 0; font-size: 1.2em; color: var(--accent-color); }
         .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        
-        .header-app-btn {
-            background-color: rgba(212, 175, 55, 0.18);
-            color: #facc15;
-            border: 1px solid #facc15;
-            padding: 6px 11px;
-            border-radius: 5px;
-            font-size: 0.8em;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.2s;
-            text-decoration: none;
-        }
+        .header-app-btn { background-color: rgba(212, 175, 55, 0.18); color: #facc15; border: 1px solid #facc15; padding: 6px 11px; border-radius: 5px; font-size: 0.8em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
         .header-app-btn:hover { background-color: #facc15; color: #1e293b; }
-
         .user-badge { background-color: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.82em; font-weight: bold; }
         .logout-btn { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8em; font-weight: bold; cursor: pointer; }
         .logout-btn:hover { background: #dc2626; }
-
         .container { max-width: 1280px; margin: 15px auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; padding: 0 15px; }
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .card h2 { margin-top: 0; font-size: 1.12em; color: var(--primary-color); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
         .card h2 .btn-toolbar { display: flex; gap: 6px; width: 100%; justify-content: flex-end; }
-
-        .btn-logic-doc {
-            background-color: #15284b;
-            color: #d4af37;
-            border: 1.5px solid #d4af37;
-            padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 0.78em;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
+        .btn-logic-doc { background-color: #15284b; color: #d4af37; border: 1.5px solid #d4af37; padding: 6px 12px; border-radius: 5px; font-size: 0.78em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
         .btn-logic-doc:hover { background-color: #d4af37; color: #15284b; }
-
-        .btn-reset {
-            background-color: #ef4444;
-            color: #ffffff;
-            border: 1.5px solid #dc2626;
-            padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 0.78em;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
+        .btn-reset { background-color: #ef4444; color: #ffffff; border: 1.5px solid #dc2626; padding: 6px 12px; border-radius: 5px; font-size: 0.78em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
         .btn-reset:hover { background-color: #dc2626; }
-
-        .btn-crm-full {
-            width: 100%;
-            padding: 10px 14px;
-            background-color: #047857;
-            color: #ffffff;
-            border: 1px solid #059669;
-            border-radius: 6px;
-            font-size: 0.88em;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 12px;
-        }
+        .btn-crm-full { width: 100%; padding: 10px 14px; background-color: #047857; color: #ffffff; border: 1px solid #059669; border-radius: 6px; font-size: 0.88em; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; margin-bottom: 12px; }
         .btn-crm-full:hover { background-color: #065f46; }
-
         details.accordion-group { margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; overflow: hidden; transition: 0.2s; }
         details.accordion-group[open] { border-color: #3b82f6; box-shadow: 0 2px 8px rgba(59,130,246,0.1); }
         summary.accordion-header { padding: 11px 14px; background: #f8fafc; font-weight: bold; font-size: 0.92em; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
         details[open] summary.accordion-header { background: #eff6ff; color: #1d4ed8; }
         .accordion-body { padding: 12px; background: #fff; }
-
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .form-group { margin-bottom: 8px; }
         .form-group.full { grid-column: span 2; }
         label { display: block; font-weight: bold; margin-bottom: 3px; font-size: 0.81em; color: #475569; }
         input[type="text"], input[type="date"], select, textarea { width: 100%; padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13.5px; background-color: #fff; font-family: inherit; }
         .num-input { text-align: right; }
-
         .run-btn { width: 100%; padding: 15px; background-color: var(--button-blue); color: white; border: none; border-radius: 6px; font-size: 1.08em; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        
         .loader-container { display: none; text-align: center; padding: 25px 10px; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--button-blue); border-radius: 50%; width: 36px; height: 36px; animation: spin 1s linear infinite; margin: 0 auto 12px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         .result-section { display: none; }
         .proposal-doc { background: #ffffff; border: 1px solid #cbd5e1; padding: 25px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9em; }
         .summary-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px; border-radius: 6px; text-align: center; margin-bottom: 14px; }
         .amount-value { font-size: 1.8em; color: var(--success-color); font-weight: 900; margin: 5px 0; }
         .fee-value { font-size: 1.1em; color: var(--danger-color); font-weight: bold; }
-
         .data-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85em; background: #fff; }
         .data-table th, .data-table td { border: 1px solid #cbd5e1; padding: 7px; text-align: center; }
         .data-table th { background-color: #f1f5f9; color: #1e293b; font-weight: bold; }
-
         .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 12px; font-size: 0.86em; line-height: 1.5; margin-bottom: 14px; max-height: 280px; overflow-y: auto; }
         .section-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px; font-size: 0.85em; }
-
-        .official-stamp-box {
-            margin-top: 30px;
-            text-align: right;
-            font-size: 1.1em;
-            font-weight: bold;
-            padding-right: 15px;
-            color: #1e293b;
-            letter-spacing: 0.5px;
-        }
-
-        .search-panel { 
-            background: #e0f2fe; 
-            border: 1px solid #bae6fd; 
-            border-radius: 6px; 
-            padding: 10px; 
-            margin: 15px 0 10px 0; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 6px; 
-        }
+        .official-stamp-box { margin-top: 30px; text-align: right; font-size: 1.1em; font-weight: bold; padding-right: 15px; color: #1e293b; letter-spacing: 0.5px; }
+        .search-panel { background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 6px; padding: 10px; margin: 15px 0 10px 0; display: flex; flex-direction: column; gap: 6px; }
         .search-row { display: flex; gap: 6px; }
         .search-input { flex: 1; padding: 7px 10px; border: 1px solid #7dd3fc; border-radius: 4px; font-size: 0.85em; background-color: #fff; }
         .btn-law, .btn-prec { background: #0284c7; color: white; border: none; padding: 7px 12px; border-radius: 4px; font-weight: bold; font-size: 0.82em; cursor: pointer; white-space: nowrap; }
         .btn-prec { background: #0d9488; }
-
         .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 12px; }
         .action-btn { padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.85em; cursor: pointer; color: white; text-align: center; text-decoration: none; }
         .btn-copy { background-color: #475569; }
@@ -186,7 +83,6 @@
         .btn-sheet { background-color: #10b981; }
         .btn-view-sheet { background-color: #2563eb; }
         .btn-pdf { background-color: #0284c7; grid-column: span 2; }
-
         .history-list { font-size: 0.84em; max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 5px; background: #f8fafc; }
         .history-item { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
         .history-item:hover { background-color: #edf2f7; }
@@ -229,7 +125,7 @@
     <div id="login-overlay" style="display: none;">
         <div class="logo-container"><div class="logo-main">JDB</div><div class="logo-sub">CONSULTING</div></div>
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V5.4</div>
+            <div class="login-title">JDB컨설팅 영업관리 V5.6</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <div class="login-options">
