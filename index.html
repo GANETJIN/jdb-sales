@@ -105,7 +105,8 @@
         .action-btn { padding: 12px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.9em; cursor: pointer; color: white; text-align: center; text-decoration: none; display: flex; justify-content: center; align-items: center; }
         .btn-copy { background-color: #475569; }
         .btn-kakao { background-color: #fee500; color: #3c1e1e; }
-        .btn-sheet { background-color: #10b981; grid-column: span 2; }
+        .btn-sheet { background-color: #10b981; }
+        .btn-view-sheet { background-color: #2563eb; }
         .btn-pdf { background-color: #0284c7; grid-column: span 2; }
         .action-btn:hover { opacity: 0.9; }
 
@@ -126,7 +127,7 @@
             .header { flex-direction: column; text-align: center; }
             .card { padding: 15px; }
             .action-btns { grid-template-columns: 1fr; }
-            .btn-sheet, .btn-pdf { grid-column: span 1; }
+            .btn-pdf { grid-column: span 1; }
             .search-row { flex-direction: column; align-items: stretch; }
         }
 
@@ -362,6 +363,7 @@
                         <button class="action-btn btn-copy" onclick="copyResultText()">📋 제안서 요약 복사</button>
                         <button class="action-btn btn-kakao" onclick="sendKakaoMessage()">💬 요약 문자/카톡 전송</button>
                         <button class="action-btn btn-sheet" onclick="saveToGoogleSheet()">📊 구글시트 저장</button>
+                        <button class="action-btn btn-view-sheet" onclick="openGoogleSheet()">📂 구글시트 보기</button>
                         <button class="action-btn btn-pdf" onclick="saveAsPDF()">🖨️ 공식 제안서 PDF 저장 / 인쇄</button>
                     </div>
                 </div>
@@ -378,12 +380,12 @@
 
     <script>
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbziHlEnkdc7ZYAtbuy48deLwSIkW56497iOfLWccEIuwugU3Yav734cOq4Xn6TV8nx8/exec';
+        const GOOGLE_SHEET_VIEW_URL = 'https://docs.google.com/spreadsheets/d/1JDw4q8CWXjVsPSkWj3FDomTpQ8V8R2LMv8vsURyex2I/edit?usp=sharing';
 
         let loggedInEmail = "";
         let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "", stage: "", memo: "", followDate: "", yearly: [] };
         let historyData = [];
 
-        // 페이지 로드 시 자동 로그인 및 이메일 기억하기 체크 여부 확인
         window.addEventListener('DOMContentLoaded', () => {
             const savedEmail = localStorage.getItem('jdb_saved_email');
             const autoLoginFlag = localStorage.getItem('jdb_auto_login');
@@ -415,14 +417,12 @@
 
             loggedInEmail = userEmail;
 
-            // 이메일 기억하기 처리
             if (rememberEmail) {
                 localStorage.setItem('jdb_saved_email', userEmail);
             } else {
                 localStorage.removeItem('jdb_saved_email');
             }
 
-            // 자동 로그인 처리
             if (autoLogin) {
                 localStorage.setItem('jdb_auto_login', 'true');
             } else {
@@ -792,6 +792,10 @@
                 btn.innerText = "📊 구글시트 저장";
                 btn.disabled = false;
             });
+        }
+
+        function openGoogleSheet() {
+            window.open(GOOGLE_SHEET_VIEW_URL, '_blank');
         }
 
         function copyResultText() {
