@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
     <meta name="apple-mobile-web-app-title" content="영업관리">
     <meta name="application-name" content="영업관리">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="manifest.json">
+
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>JDB컨설팅 영업관리</title>
     <style>
         :root { --primary-color: #1e293b; --accent-color: #d4af37; --button-blue: #3b82f6; --success-color: #10b981; --danger-color: #ef4444; --bg-color: #f1f5f9; }
@@ -199,58 +203,24 @@
             .btn-pdf { grid-column: span 1; }
         }
 
-        /* 완벽한 A4 공문서 전용 인쇄/PDF 출력 스타일 */
         @media print {
-            @page {
-                size: A4 portrait;
-                margin: 10mm;
-            }
-            body * {
-                visibility: hidden !important;
-            }
-            .proposal-doc, .proposal-doc * {
-                visibility: visible !important;
-            }
-            .proposal-doc {
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 100% !important;
-                border: 2px solid #000 !important;
-                padding: 15mm 12mm !important;
-                margin: 0 !important;
-                background: #fff !important;
-                color: #000 !important;
-            }
-            .official-header-table {
-                width: 100%; border-collapse: collapse; margin-bottom: 12px;
-            }
-            .official-header-table td {
-                border: 1px solid #000 !important; padding: 6px 8px !important; font-size: 10pt !important;
-            }
-            .official-header-table .doc-meta-title {
-                background-color: #f0f0f0 !important; font-weight: bold; width: 18%; text-align: center;
-            }
-            .official-doc-title {
-                font-size: 16pt !important; font-weight: 900 !important; text-align: center;
-                letter-spacing: 2px; margin: 15px 0 15px 0; border-bottom: 2px solid #000 !important; padding-bottom: 8px;
-            }
-            .summary-box {
-                background: #f8f9fa !important; border: 2px solid #000 !important; padding: 10px !important; margin: 12px 0 !important;
-            }
+            @page { size: A4 portrait; margin: 10mm; }
+            body * { visibility: hidden !important; }
+            .proposal-doc, .proposal-doc * { visibility: visible !important; }
+            .proposal-doc { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; border: 2px solid #000 !important; padding: 15mm 12mm !important; margin: 0 !important; background: #fff !important; color: #000 !important; }
+            .official-header-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+            .official-header-table td { border: 1px solid #000 !important; padding: 6px 8px !important; font-size: 10pt !important; }
+            .official-header-table .doc-meta-title { background-color: #f0f0f0 !important; font-weight: bold; width: 18%; text-align: center; }
+            .official-doc-title { font-size: 16pt !important; font-weight: 900 !important; text-align: center; letter-spacing: 2px; margin: 15px 0 15px 0; border-bottom: 2px solid #000 !important; padding-bottom: 8px; }
+            .summary-box { background: #f8f9fa !important; border: 2px solid #000 !important; padding: 10px !important; margin: 12px 0 !important; }
             .amount-value { color: #000 !important; font-size: 16pt !important; text-decoration: underline; }
             .fee-value { color: #000 !important; }
             .data-table { border: 1px solid #000 !important; margin: 10px 0 !important; width: 100% !important; }
             .data-table th, .data-table td { border: 1px solid #000 !important; font-size: 9pt !important; padding: 5px !important; }
             .data-table th { background-color: #e5e5e5 !important; color: #000 !important; }
-            .match-log {
-                border: 1px solid #000 !important; background: #fff !important; border-left: 4px solid #000 !important;
-                font-size: 9pt !important; max-height: none !important; overflow: visible !important; padding: 8px !important;
-            }
+            .match-log { border: 1px solid #000 !important; background: #fff !important; border-left: 4px solid #000 !important; font-size: 9pt !important; max-height: none !important; overflow: visible !important; padding: 8px !important; }
             .section-box { border: 1px solid #000 !important; background: #fff !important; font-size: 9pt !important; margin-bottom: 10px !important; }
-            .official-stamp-box {
-                margin-top: 30px !important; text-align: right !important; font-size: 11pt !important; font-weight: bold !important; padding-right: 15px !important;
-            }
+            .official-stamp-box { margin-top: 30px !important; text-align: right !important; font-size: 11pt !important; font-weight: bold !important; padding-right: 15px !important; }
         }
     </style>
 </head>
@@ -259,7 +229,7 @@
     <div id="login-overlay" style="display: none;">
         <div class="logo-container"><div class="logo-main">JDB</div><div class="logo-sub">CONSULTING</div></div>
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V5.2</div>
+            <div class="login-title">JDB컨설팅 영업관리 V5.4</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <div class="login-options">
@@ -301,10 +271,12 @@
                             <div class="form-group"><label>영업 진행 단계</label>
                                 <select id="sales_stage">
                                     <option value="" disabled>(선택해 주세요)</option>
-                                    <option value="1차 콜 완료">1차 콜 완료</option>
-                                    <option value="방문 미팅 성사" selected>방문 미팅 성사</option>
-                                    <option value="위임장 접수 대기">위임장 접수 대기</option>
-                                    <option value="계약 완료">계약 완료</option>
+                                    <option value="콜드콜">콜드콜</option>
+                                    <option value="미팅대기" selected>미팅대기</option>
+                                    <option value="진단중">진단중</option>
+                                    <option value="계약완료">계약완료</option>
+                                    <option value="환급진행">환급진행</option>
+                                    <option value="정산완료">정산완료</option>
                                 </select>
                             </div>
                             <div class="form-group"><label>소급 연수 (법정 5년)</label>
@@ -656,7 +628,7 @@
         const APPSHEET_PC_URL = 'https://www.appsheet.com/start/8de35faa-1e57-4803-8cc1-25a2a761b882?platform=desktop';
 
         let loggedInEmail = "";
-        let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "" };
+        let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "", serial: "" };
         let historyData = [];
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -929,6 +901,146 @@
             document.getElementById('yearlyTableBody').innerHTML = yearlyHTML;
 
             currentResultData = { client: clientName, manager: clientManager, refund: refStr, fee: feeStr, reasons: reasons, serial: newSerial };
+            
+            const capturedFormData = {
+                client_name: document.getElementById('client_name').value,
+                client_manager: document.getElementById('client_manager').value,
+                sales_stage: document.getElementById('sales_stage').value,
+                years: document.getElementById('years').value,
+                fee_type: document.getElementById('fee_type').value,
+                follow_date: document.getElementById('follow_date').value,
+                property_tax: document.getElementById('property_tax').value,
+                acq_tax: document.getElementById('acq_tax').value,
+                sales_memo: document.getElementById('sales_memo').value
+            };
+
+            historyData = historyData.filter(item => item.client !== clientName);
+            historyData.unshift({
+                client: clientName,
+                refund: refStr,
+                followDate: document.getElementById('follow_date').value || "미정",
+                formData: capturedFormData,
+                serial: newSerial,
+                time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+            });
+            if(historyData.length > 5) historyData.pop();
+            renderHistory();
+        }
+
+        function renderHistory() {
+            let html = "";
+            if (historyData.length === 0) {
+                document.getElementById('historyList').innerHTML = '<div style="color:#94a3b8; text-align:center; padding:10px;">저장된 계산 내역이 없습니다.</div>';
+                return;
+            }
+
+            historyData.forEach((item, index) => {
+                html += `<div class="history-item">
+                    <div class="history-info" onclick="loadHistoryItem(${index})" title="클릭하여 데이터 불러오기">
+                        <div><b>${item.client}</b> <span style="color:#10b981; font-weight:bold;">${item.refund}</span></div>
+                        <div style="font-size:0.75em; color:#64748b;">번호: ${item.serial || '-'} | 후속: ${item.followDate} (${item.time})</div>
+                    </div>
+                    <div class="history-btns">
+                        <button type="button" class="btn-hist-edit" onclick="loadHistoryItem(${index})">수정</button>
+                        <button type="button" class="btn-hist-del" onclick="deleteHistoryItem(event, ${index})">X</button>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('historyList').innerHTML = html;
+        }
+
+        function deleteHistoryItem(event, index) {
+            event.stopPropagation();
+            if (confirm("해당 히스토리 기록을 삭제하시겠습니까?")) {
+                historyData.splice(index, 1);
+                renderHistory();
+            }
+        }
+
+        function loadHistoryItem(index) {
+            const data = historyData[index].formData;
+            if (!data) return;
+
+            document.getElementById('client_name').value = data.client_name || "";
+            document.getElementById('client_manager').value = data.client_manager || "";
+            document.getElementById('sales_stage').value = data.sales_stage || "";
+            document.getElementById('years').value = data.years || "";
+            document.getElementById('fee_type').value = data.fee_type || "";
+            document.getElementById('follow_date').value = data.follow_date || "";
+            document.getElementById('property_tax').value = data.property_tax || "0";
+            document.getElementById('acq_tax').value = data.acq_tax || "0";
+            document.getElementById('sales_memo').value = data.sales_memo || "";
+
+            alert(`[ ${data.client_name} ]의 저장된 입력 데이터가 왼쪽 폼에 복원되었습니다.\n수정 후 [세금 환급 검증 및 제안서 생성] 버튼을 다시 눌러주세요.`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // [수정 완료] 제안서 요약 복사 버튼 핸들러
+        function copyResultText() {
+            if (!currentResultData.client || !currentResultData.refund) {
+                alert("먼저 [세금 환급 검증 및 제안서 생성]을 실행해 주세요.");
+                return;
+            }
+            const txt = `[JDB컨설팅 공문서 요약]\n- 문서번호: ${currentResultData.serial}\n- 수신처: ${currentResultData.client} 귀하\n- 예상 환급액: ${currentResultData.refund}\n- 성공보수: ${currentResultData.fee}\n\n[적용 사유]\n${currentResultData.reasons.join('\n')}`;
+            navigator.clipboard.writeText(txt).then(() => {
+                alert("제안서 요약 내용이 클립보드에 복사되었습니다!");
+            }).catch(err => {
+                alert("복사 실패: " + err);
+            });
+        }
+
+        // [수정 완료] 요약 문자 전송 버튼 핸들러
+        function sendKakaoMessage() {
+            if (!currentResultData.client || !currentResultData.refund) {
+                alert("먼저 [세금 환급 검증 및 제안서 생성]을 실행해 주세요.");
+                return;
+            }
+            const bodyText = `[JDB컨설팅 사전검토]\n수신: ${currentResultData.client} 귀하\n문서번호: ${currentResultData.serial}\n예상환급액: ${currentResultData.refund}\n성공보수: ${currentResultData.fee}\n상세 공문서를 송부해 드립니다.`;
+            window.location.href = `sms:?body=${encodeURIComponent(bodyText)}`;
+        }
+
+        // [수정 완료] 구글시트 저장 버튼 핸들러
+        function saveToGoogleSheet() {
+            if (!GOOGLE_SCRIPT_URL) { alert("구글 시트 연동 URL이 없습니다."); return; }
+
+            const payload = {
+                manager_email: loggedInEmail || "admin@jdb.com",
+                client_name: document.getElementById('client_name').value,
+                client_manager: document.getElementById('client_manager').value,
+                sales_stage: document.getElementById('sales_stage').value,
+                follow_date: document.getElementById('follow_date').value || "미정",
+                fee_type: document.getElementById('fee_type').value,
+                years: document.getElementById('years').value,
+                sales_memo: document.getElementById('sales_memo').value,
+                total_refund: document.getElementById('total_refund').innerText,
+                success_fee: document.getElementById('success_fee').innerText,
+                property_tax: document.getElementById('property_tax').value,
+                acq_tax: document.getElementById('acq_tax').value
+            };
+
+            const btn = document.querySelector('.btn-sheet');
+            btn.innerText = "⏳ 저장 중...";
+            btn.disabled = true;
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                alert(`[ ${payload.client_name} ]의 환급 분석 데이터가 구글시트에 완벽히 저장되었습니다!`);
+                btn.innerText = "📊 저장 완료!";
+                setTimeout(() => { btn.innerText = "📊 구글시트 저장"; btn.disabled = false; }, 3000);
+            }).catch(err => {
+                alert("저장 오류: " + err);
+                btn.innerText = "📊 구글시트 저장";
+                btn.disabled = false;
+            });
+        }
+
+        // [수정 완료] 구글시트 보기 버튼 핸들러
+        function openGoogleSheet() {
+            window.open(GOOGLE_SHEET_VIEW_URL, '_blank');
         }
     </script>
 </body>
