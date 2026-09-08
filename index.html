@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- 👇 스마트폰 바탕화면 및 브라우저 탭 아이콘 지정 태그 -->
     <meta name="apple-mobile-web-app-title" content="영업관리">
     <meta name="application-name" content="영업관리">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="manifest.json">
-    <!-- 👆 여기까지 -->
 
-    <!-- 브라우저 캐시 방지용 태그 -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -101,6 +98,7 @@
         .action-btn { padding: 12px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.9em; cursor: pointer; color: white; text-align: center; text-decoration: none; display: flex; justify-content: center; align-items: center; }
         .btn-copy { background-color: #475569; }
         .btn-kakao { background-color: #fee500; color: #3c1e1e; }
+        .btn-sheet { background-color: #10b981; grid-column: span 2; }
         .btn-pdf { background-color: #0284c7; grid-column: span 2; }
         .action-btn:hover { opacity: 0.9; }
 
@@ -121,7 +119,7 @@
             .header { flex-direction: column; text-align: center; }
             .card { padding: 15px; }
             .action-btns { grid-template-columns: 1fr; }
-            .btn-pdf { grid-column: span 1; }
+            .btn-sheet, .btn-pdf { grid-column: span 1; }
             .search-row { flex-direction: column; align-items: stretch; }
         }
 
@@ -347,6 +345,7 @@
                     <div class="action-btns">
                         <button class="action-btn btn-copy" onclick="copyResultText()">📋 제안서 요약 복사</button>
                         <button class="action-btn btn-kakao" onclick="sendKakaoMessage()">💬 요약 문자/카톡 전송</button>
+                        <button class="action-btn btn-sheet" onclick="saveToGoogleSheet()">📊 구글시트 저장</button>
                         <button class="action-btn btn-pdf" onclick="saveAsPDF()">🖨️ 공식 제안서 PDF 저장 / 인쇄</button>
                     </div>
                 </div>
@@ -362,8 +361,8 @@
     </div>
 
     <script>
-        // 구글 Apps Script 웹 앱 URL 반영 완료
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrE95UrNCG8BlQOwVJPDqnI6g5cPd4UzYE_DhwIumcqIuyNcsvHetsBO-THR54RS5HvA/exec';
+        // 새로 발급된 구글 Apps Script 웹 앱 URL 반영 완료
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbziHlEnkdc7ZYAtbuy48deLwSIkW56497iOfLWccEIuwugU3Yav734cOq4Xn6TV8nx8/exec';
 
         let loggedInEmail = "";
         let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "", stage: "", memo: "", followDate: "", yearly: [] };
@@ -382,9 +381,6 @@
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('welcomeMsg').innerHTML = `👤 ${userName} 님 환영합니다`;
-            
-            // 로그인 완료 시 구글 시트에서 최신 히스토리 불러오기
-            loadHistoryFromServer();
         }
 
         function handleEnter(event) {
@@ -595,14 +591,13 @@
             addToHistory(clientName, refStr, followDate, formData);
         }
 
-        // 서버(구글 시트)로 히스토리 저장 전송
+        // 로컬 히스토리 관리 (화면 표시용)
         function addToHistory(client, refund, followDate, formData) {
             const historyItem = {
                 client: client,
                 refund: refund,
                 followDate: followDate,
                 formData: formData,
-                managerEmail: loggedInEmail,
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
@@ -610,37 +605,6 @@
             historyData.unshift(historyItem);
             if(historyData.length > 5) historyData.pop();
             renderHistoryList();
-
-            // 구글 시트에 데이터 비동기 저장 요청
-            if (GOOGLE_SCRIPT_URL) {
-                fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'save', client_name: client, refund: refund, follow_date: followDate, manager_email: loggedInEmail })
-                }).catch(err => console.log('Sync error:', err));
-            }
-        }
-
-        // 구글 시트에서 최신 히스토리 불러오기
-        function loadHistoryFromServer() {
-            if (!GOOGLE_SCRIPT_URL) return;
-
-            fetch(GOOGLE_SCRIPT_URL + '?action=load')
-                .then(res => res.json())
-                .then(data => {
-                    if (Array.isArray(data) && data.length > 0) {
-                        historyData = data.map(item => ({
-                            client: item.client,
-                            refund: item.refund,
-                            followDate: item.followDate,
-                            time: item.time,
-                            formData: null // 서버 로드 시 상세 폼 데이터는 텍스트 위주 공유
-                        }));
-                        renderHistoryList();
-                    }
-                })
-                .catch(err => console.log('Load error:', err));
         }
 
         function renderHistoryList() {
@@ -652,11 +616,12 @@
 
             historyData.forEach((item, index) => {
                 listHTML += `<div class="history-item">
-                    <div class="history-info" onclick="loadHistoryItem(${index})" title="클릭하여 데이터 확인">
+                    <div class="history-info" onclick="loadHistoryItem(${index})" title="클릭하여 데이터 불러오기">
                         <div><b>${item.client}</b> <span style="color:#10b981; font-weight:bold;">${item.refund}</span></div>
                         <div style="font-size:0.75em; color:#64748b;">후속: ${item.followDate} (${item.time})</div>
                     </div>
                     <div class="history-btns">
+                        <button class="btn-hist-edit" onclick="loadHistoryItem(${index})">수정</button>
                         <button class="btn-hist-del" onclick="deleteHistoryItem(event, ${index})">X</button>
                     </div>
                 </div>`;
@@ -674,10 +639,7 @@
 
         function loadHistoryItem(index) {
             const data = historyData[index].formData;
-            if (!data) {
-                alert(`[ ${historyData[index].client} ] 항목은 다른 팀원이 등록한 공유 내역입니다.`);
-                return;
-            }
+            if (!data) return;
 
             document.getElementById('client_name').value = data.client_name || "";
             document.getElementById('client_manager').value = data.client_manager || "";
@@ -707,6 +669,67 @@
 
             alert(`[ ${data.client_name} ]의 저장된 입력 데이터가 왼쪽 폼에 로드되었습니다.`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 구글시트 저장 버튼 동작 함수 (전체 입력 옵션 반영)
+        function saveToGoogleSheet() {
+            if (!GOOGLE_SCRIPT_URL) {
+                alert("구글 시트 연동 URL이 설정되지 않았습니다.");
+                return;
+            }
+
+            const payload = {
+                manager_email: loggedInEmail || "admin@jdb.com",
+                client_name: document.getElementById('client_name').value || "고객사",
+                client_manager: document.getElementById('client_manager').value || "",
+                sales_stage: document.getElementById('sales_stage').value,
+                facility_type: document.getElementById('facility_type').value,
+                acq_heavy: document.getElementById('acq_heavy').value,
+                green_land_tax: document.getElementById('green_land_tax').value,
+                penalty_tax_yn: document.getElementById('penalty_tax_yn').value,
+                rnd_cost: document.getElementById('rnd_cost').value,
+                donated_land_tax: document.getElementById('donated_land_tax').value,
+                floor: document.getElementById('floor').value,
+                surcharge: document.getElementById('surcharge').value,
+                regional_tax: document.getElementById('regional_tax').value,
+                temp_building: document.getElementById('temp_building').value,
+                total_area: document.getElementById('total_area').value,
+                exempt_area: document.getElementById('exempt_area').value,
+                property_tax_type: document.getElementById('property_tax_type').value,
+                property_tax: document.getElementById('property_tax').value,
+                special_zone: document.getElementById('special_zone').value,
+                acq_tax: document.getElementById('acq_tax').value,
+                green_investment: document.getElementById('green_investment').value,
+                past_claim: document.getElementById('past_claim').value,
+                follow_date: document.getElementById('follow_date').value || "미정",
+                fee_type: document.getElementById('fee_type').value,
+                years: document.getElementById('years').value,
+                sales_memo: document.getElementById('sales_memo').value || "",
+                total_refund: document.getElementById('total_refund').innerText,
+                success_fee: document.getElementById('success_fee').innerText
+            };
+
+            const btn = document.querySelector('.btn-sheet');
+            btn.innerText = "⏳ 구글시트 저장 중...";
+            btn.disabled = true;
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                alert(`[ ${payload.client_name} ]의 모든 산출 데이터가 구글시트에 성공적으로 저장되었습니다!`);
+                btn.innerText = "📊 구글시트 저장 완료!";
+                setTimeout(() => {
+                    btn.innerText = "📊 구글시트 저장";
+                    btn.disabled = false;
+                }, 3000);
+            }).catch(err => {
+                alert("저장 중 오류가 발생했습니다: " + err);
+                btn.innerText = "📊 구글시트 저장";
+                btn.disabled = false;
+            });
         }
 
         function copyResultText() {
