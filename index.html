@@ -142,30 +142,17 @@
         .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 12px; font-size: 0.86em; line-height: 1.5; margin-bottom: 14px; max-height: 280px; overflow-y: auto; }
         .section-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px; font-size: 0.85em; }
 
+        /* 공문서 하단 대표이사 단독 텍스트 서명란 */
         .official-stamp-box {
-            margin-top: 25px;
+            margin-top: 30px;
             text-align: right;
-            font-size: 1.05em;
+            font-size: 1.1em;
             font-weight: bold;
-            padding-right: 10px;
+            padding-right: 15px;
             color: #1e293b;
-        }
-        .seal-mark {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 2px dashed #b91c1c;
-            border-radius: 50%;
-            color: #b91c1c;
-            text-align: center;
-            line-height: 48px;
-            font-size: 0.85em;
-            font-weight: bold;
-            margin-left: 8px;
-            vertical-align: middle;
+            letter-spacing: 0.5px;
         }
 
-        /* 왼쪽 실행 버튼 위로 이동한 법령/판례 검색창 스타일 */
         .search-panel { 
             background: #e0f2fe; 
             border: 1px solid #bae6fd; 
@@ -209,7 +196,7 @@
             .btn-pdf { grid-column: span 1; }
         }
 
-        /* A4 규격 관공서 제출용 공문서 인쇄 스타일 */
+        /* A4 규격 관공서 제출용 공문서 인쇄 스타일 (인쇄 시 히스토리 영역 완전 격리) */
         @media print {
             @page {
                 size: A4 portrait;
@@ -263,11 +250,7 @@
             }
             .section-box { border: 1px solid #000 !important; background: #fff !important; font-size: 9pt !important; }
             .official-stamp-box {
-                margin-top: 25px; text-align: right; font-size: 12pt; font-weight: bold; padding-right: 15px;
-            }
-            .seal-mark {
-                display: inline-block; width: 60px; height: 60px; border: 2px dashed #b91c1c; border-radius: 50%;
-                color: #b91c1c; text-align: center; line-height: 60px; font-size: 9pt; font-weight: bold; margin-left: 8px; vertical-align: middle;
+                margin-top: 35px; text-align: right; font-size: 12pt; font-weight: bold; padding-right: 20px; letter-spacing: 1px;
             }
         }
     </style>
@@ -447,7 +430,7 @@
                     </div>
                 </details>
 
-                <!-- 1. 법령/판례 검색창을 실행 버튼 바로 위로 재배치 -->
+                <!-- 법령/판례 검색 패널 (실행 버튼 바로 위) -->
                 <div class="search-panel">
                     <div class="search-row">
                         <input type="text" id="lawQuery" class="search-input" placeholder="법령 검색 (예: 지방세기본법 제50조)" onkeypress="handleLawEnter(event)">
@@ -459,7 +442,7 @@
                     </div>
                 </div>
 
-                <!-- 2. 버튼 명칭 변경: '세금 환급 검증 및 제안서 생성' -->
+                <!-- 분석 및 생성 버튼 -->
                 <button class="run-btn" onclick="startAnalysis()">세금 환급 검증 및 제안서 생성</button>
             </div>
 
@@ -475,15 +458,18 @@
                         <table class="official-header-table">
                             <tr>
                                 <td class="doc-meta-title">문 서 번 호</td>
-                                <td id="doc_serial_no">JDB-2026-0908</td>
+                                <!-- 순차 일련번호 자동 생성 영역 -->
+                                <td id="doc_serial_no" style="font-weight:bold; font-family:monospace;">JDB-260908-01</td>
                                 <td class="doc-meta-title">시 행 일 자</td>
                                 <td id="doc_issue_date">2026. 09. 08.</td>
                             </tr>
                             <tr>
                                 <td class="doc-meta-title">수 신 처</td>
+                                <!-- 수신처: 직급 괄호 제거, 고객사명 귀하 표기 -->
                                 <td><b id="prop_client">여주 T 컨트리클럽 귀하</b></td>
                                 <td class="doc-meta-title">발 신 처</td>
-                                <td>JDB컨설팅 조세전략본부</td>
+                                <!-- 발신처: JDB컨설팅(주) 심플 표기 -->
+                                <td><b>JDB컨설팅(주)</b></td>
                             </tr>
                             <tr>
                                 <td class="doc-meta-title">검 토 세 목</td>
@@ -522,9 +508,9 @@
                             <div>• JDB컨설팅 위임장(법인인감증명서 첨부 및 법인인감 날인)</div>
                         </div>
 
-                        <!-- 공문서 직인 날인란 -->
+                        <!-- 공문서 직인 날인란 ((인) 제거 완료) -->
                         <div class="official-stamp-box">
-                            JDB컨설팅 주식회사 대표이사 <span class="seal-mark">(인)</span>
+                            JDB컨설팅 주식회사 대표이사
                         </div>
                     </div>
 
@@ -623,6 +609,30 @@
             const el = document.getElementById(id);
             if (!el || !el.value) return 0;
             return parseInt(el.value.replace(/,/g, '')) || 0;
+        }
+
+        // 일련번호 생성 함수 (JDB-YYMMDD-01 형태)
+        function generateSerialNo() {
+            const now = new Date();
+            const yy = String(now.getFullYear()).slice(2);
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const dateKey = `${yy}${mm}${dd}`;
+
+            // 당일 발행 카운터 확인 및 1 증가
+            const lastDate = localStorage.getItem('jdb_serial_date');
+            let counter = parseInt(localStorage.getItem('jdb_serial_count')) || 0;
+
+            if (lastDate === dateKey) {
+                counter += 1;
+            } else {
+                counter = 1;
+                localStorage.setItem('jdb_serial_date', dateKey);
+            }
+            localStorage.setItem('jdb_serial_count', counter);
+
+            const seq = String(counter).padStart(2, '0');
+            return `JDB-${dateKey}-${seq}`;
         }
 
         function startAnalysis() {
@@ -735,7 +745,17 @@
             const refStr = refVal.toLocaleString() + " 원";
             const feeStr = feeVal.toLocaleString() + " 원";
 
-            document.getElementById('prop_client').innerText = `${clientName} (${clientManager} 귀하)`;
+            // 수신처: 직급 괄호 제거하고 '고객사명 귀하' 단독 표기
+            document.getElementById('prop_client').innerText = `${clientName} 귀하`;
+            
+            // 일련번호 신규 자동 부여 (JDB-YYMMDD-01 형태)
+            const newSerial = generateSerialNo();
+            document.getElementById('doc_serial_no').innerText = newSerial;
+
+            // 시행일자 현재 날짜 자동 포맷 (YYYY. MM. DD.)
+            const now = new Date();
+            document.getElementById('doc_issue_date').innerText = `${now.getFullYear()}. ${String(now.getMonth()+1).padStart(2,'0')}. ${String(now.getDate()).padStart(2,'0')}.`;
+
             document.getElementById('total_refund').innerText = refStr;
             document.getElementById('success_fee').innerText = feeStr;
             document.getElementById('reason_text').innerHTML = reasons.join("<br><br>");
@@ -748,7 +768,7 @@
             }
             document.getElementById('yearlyTableBody').innerHTML = yearlyHTML;
 
-            currentResultData = { client: clientName, manager: clientManager, refund: refStr, fee: feeStr, reasons: reasons };
+            currentResultData = { client: clientName, manager: clientManager, refund: refStr, fee: feeStr, reasons: reasons, serial: newSerial };
             
             const capturedFormData = {
                 client_name: document.getElementById('client_name').value,
@@ -811,6 +831,7 @@
                 refund: refStr,
                 followDate: document.getElementById('follow_date').value || "미정",
                 formData: capturedFormData,
+                serial: newSerial,
                 time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
             });
             if(historyData.length > 5) historyData.pop();
@@ -828,7 +849,7 @@
                 html += `<div class="history-item">
                     <div class="history-info" onclick="loadHistoryItem(${index})" title="클릭하여 데이터 불러오기">
                         <div><b>${item.client}</b> <span style="color:#10b981; font-weight:bold;">${item.refund}</span></div>
-                        <div style="font-size:0.75em; color:#64748b;">후속: ${item.followDate} (${item.time})</div>
+                        <div style="font-size:0.75em; color:#64748b;">번호: ${item.serial || '-'} | 후속: ${item.followDate} (${item.time})</div>
                     </div>
                     <div class="history-btns">
                         <button type="button" class="btn-hist-edit" onclick="loadHistoryItem(${index})">수정</button>
@@ -992,11 +1013,11 @@
 
         function openGoogleSheet() { window.open(GOOGLE_SHEET_VIEW_URL, '_blank'); }
         function copyResultText() {
-            const txt = `[JDB컨설팅 공문서 요약]\n- 수신: ${currentResultData.client} (${currentResultData.manager})\n- 예상 환급액: ${currentResultData.refund}\n- 성공보수: ${currentResultData.fee}\n\n[적용 사유]\n${currentResultData.reasons.join('\n')}`;
+            const txt = `[JDB컨설팅 공문서 요약]\n- 문서번호: ${currentResultData.serial}\n- 수신처: ${currentResultData.client} 귀하\n- 예상 환급액: ${currentResultData.refund}\n- 성공보수: ${currentResultData.fee}\n\n[적용 사유]\n${currentResultData.reasons.join('\n')}`;
             navigator.clipboard.writeText(txt).then(() => alert("공문서 요약 내용이 복사되었습니다!"));
         }
         function sendKakaoMessage() {
-            window.location.href = `sms:?body=${encodeURIComponent(`[JDB컨설팅 사전검토]\n수신: ${currentResultData.client}\n예상환급액: ${currentResultData.refund}\n성공보수: ${currentResultData.fee}\n상세 공문서를 송부해 드립니다.`)}`;
+            window.location.href = `sms:?body=${encodeURIComponent(`[JDB컨설팅 사전검토]\n수신: ${currentResultData.client} 귀하\n문서번호: ${currentResultData.serial}\n예상환급액: ${currentResultData.refund}\n성공보수: ${currentResultData.fee}\n상세 공문서를 송부해 드립니다.`)}`;
         }
     </script>
 </body>
