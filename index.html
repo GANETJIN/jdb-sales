@@ -109,20 +109,20 @@
         }
         .btn-crm-full:hover { background-color: #065f46; }
 
-        details.accordion-group { margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; overflow: hidden; transition: 0.2s; }
+        details.accordion-group { margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; overflow: hidden; transition: 0.2s; }
         details.accordion-group[open] { border-color: #3b82f6; box-shadow: 0 2px 8px rgba(59,130,246,0.1); }
-        summary.accordion-header { padding: 12px 15px; background: #f8fafc; font-weight: bold; font-size: 0.95em; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+        summary.accordion-header { padding: 11px 14px; background: #f8fafc; font-weight: bold; font-size: 0.92em; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
         details[open] summary.accordion-header { background: #eff6ff; color: #1d4ed8; }
-        .accordion-body { padding: 15px; background: #fff; }
+        .accordion-body { padding: 12px; background: #fff; }
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .form-group { margin-bottom: 10px; }
+        .form-group { margin-bottom: 8px; }
         .form-group.full { grid-column: span 2; }
-        label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 0.82em; color: #475569; }
-        input[type="text"], input[type="date"], select, textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; background-color: #fff; font-family: inherit; }
+        label { display: block; font-weight: bold; margin-bottom: 3px; font-size: 0.81em; color: #475569; }
+        input[type="text"], input[type="date"], select, textarea { width: 100%; padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13.5px; background-color: #fff; font-family: inherit; }
         .num-input { text-align: right; }
 
-        .run-btn { width: 100%; padding: 16px; background-color: var(--button-blue); color: white; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .run-btn { width: 100%; padding: 15px; background-color: var(--button-blue); color: white; border: none; border-radius: 6px; font-size: 1.08em; font-weight: bold; cursor: pointer; margin-top: 10px; }
         
         .loader-container { display: none; text-align: center; padding: 25px 10px; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--button-blue); border-radius: 50%; width: 36px; height: 36px; animation: spin 1s linear infinite; margin: 0 auto 12px auto; }
@@ -263,7 +263,7 @@
             <div class="logo-sub">CONSULTING</div>
         </div>
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V3.8</div>
+            <div class="login-title">JDB컨설팅 영업관리 V3.9</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <div class="login-options">
@@ -288,14 +288,14 @@
         </div>
 
         <div class="container">
-            <!-- 왼쪽: 환급 산출 검증 데이터 입력 아코디언 -->
+            <!-- 왼쪽: 환급 산출 검증 데이터 입력 아코디언 (1번만 open, 2~9번 닫힘) -->
             <div class="card">
                 <h2>
                     <span>📝 환급 산출 검증 데이터 입력</span>
                     <button type="button" class="btn-logic-doc" onclick="openLogicDoc()">📑 환급 로직</button>
                 </h2>
 
-                <!-- 1. 기본 고객 정보 (오픈) -->
+                <!-- 1. 기본 고객 정보 및 계약조건 (기본 오픈) -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">🏢 1. 기본 고객사 정보 및 계약 조건</summary>
                     <div class="accordion-body">
@@ -328,9 +328,9 @@
                     </div>
                 </details>
 
-                <!-- 2. 골프장 & 체육시설 특화 (오픈) -->
-                <details class="accordion-group" open>
-                    <summary class="accordion-header">⛳ 2. 골프장 및 체육시설업 특화</summary>
+                <!-- 2. 골프장 및 체육시설업 특화 (접힘) -->
+                <details class="accordion-group">
+                    <summary class="accordion-header">⛳ 2. 골프장 및 체육시설업 특화 (원형보전지, 개소세 등)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
                             <div class="form-group"><label>체육시설업 등록 형태</label>
@@ -350,9 +350,9 @@
                     </div>
                 </details>
 
-                <!-- 3. 호텔 & 리조트 특화 (오픈) -->
-                <details class="accordion-group" open>
-                    <summary class="accordion-header">🏨 3. 호텔·콘도·리조트 특화</summary>
+                <!-- 3. 호텔·콘도·리조트 특화 (접힘) -->
+                <details class="accordion-group">
+                    <summary class="accordion-header">🏨 3. 호텔·콘도·리조트 특화 (부속토지, 입회보증금 등)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
                             <div class="form-group"><label>관광숙박업 부속토지 공시지가 (원)</label><input type="text" id="hotel_land_separate" class="num-input" value="0" oninput="formatComma(this)"></div>
@@ -364,9 +364,9 @@
                     </div>
                 </details>
 
-                <!-- 4. 상가, 대형빌딩, 복합시설 (오픈) -->
-                <details class="accordion-group" open>
-                    <summary class="accordion-header">🏬 4. 상가·대형빌딩·복합시설</summary>
+                <!-- 4. 상가·대형빌딩·복합상업시설 (접힘) -->
+                <details class="accordion-group">
+                    <summary class="accordion-header">🏬 4. 상가·대형빌딩·복합상업시설 (공용면적, 공실 등)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
                             <div class="form-group"><label>상가/건축물 층수 (층)</label><input type="text" id="floor" class="num-input" value="2"></div>
@@ -382,21 +382,31 @@
                     </div>
                 </details>
 
-                <!-- 5. 신축·개발 및 PF 특화 (오픈) -->
-                <details class="accordion-group" open>
-                    <summary class="accordion-header">🏗️ 5. 신축·개발·PF·구축물</summary>
+                <!-- 5. 물류센터·공장 및 구축물 특화 (접힘) -->
+                <details class="accordion-group">
+                    <summary class="accordion-header">🏭 5. 물류센터·공장 및 구축물 특화 (자동화, 이전 등)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
-                            <div class="form-group"><label>PF 금융자문/주선수수료 (원)</label><input type="text" id="pf_fee_refund" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>분양보증료/분양대행수수료 (원)</label><input type="text" id="sale_guarantee_fee" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group full"><label>수전/주차타워 구축물 취득가액 (원)</label><input type="text" id="structure_cost" class="num-input" value="50,000,000" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>물류창고업 / 공장등록 여부</label><select id="factory_registered"><option value="Y" selected>등록 완료</option><option value="N">미등록</option></select></div>
+                            <div class="form-group"><label>물류 자동화설비/구축물 취득가액 (원)</label><input type="text" id="structure_cost" class="num-input" value="50,000,000" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
 
-                <!-- 6. 대규모 토지 & 개발부담금 (오픈) -->
-                <details class="accordion-group" open>
-                    <summary class="accordion-header">🏞️ 6. 대규모 토지 및 개발부담금</summary>
+                <!-- 6. 신축·개발·PF 및 금융비용 특화 (접힘) -->
+                <details class="accordion-group">
+                    <summary class="accordion-header">🏗️ 6. 신축·개발·PF 및 금융비용 특화 (PF수수료 등)</summary>
+                    <div class="accordion-body">
+                        <div class="form-grid">
+                            <div class="form-group"><label>PF 금융자문/주선수수료 (원)</label><input type="text" id="pf_fee_refund" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group full"><label>분양보증료/분양대행수수료 (원)</label><input type="text" id="sale_guarantee_fee" class="num-input" value="0" oninput="formatComma(this)"></div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 7. 대규모 토지 및 개발부담금 특화 (접힘) -->
+                <details class="accordion-group">
+                    <summary class="accordion-header">🏞️ 7. 대규모 토지 및 개발부담금 특화 (기부채납 등)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
                             <div class="form-group"><label>개발부담금 누락 인정비용 (원)</label><input type="text" id="dev_charge_refund" class="num-input" value="0" oninput="formatComma(this)"></div>
@@ -411,20 +421,28 @@
                     </div>
                 </details>
 
-                <!-- 7. 국세 연계 및 조세특례 (오픈) -->
-                <details class="accordion-group" open>
-                    <summary class="accordion-header">⚖️ 7. 국세 연계 및 조세특례 세액공제</summary>
+                <!-- 8. 국세 연계, 고용·R&D 및 조세특례 (접힘) -->
+                <details class="accordion-group">
+                    <summary class="accordion-header">⚖️ 8. 국세 연계, 고용·R&D 및 조세특례 세액공제</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
                             <div class="form-group"><label>하수도원인자부담금 총액 (원)</label><input type="text" id="sewer_charge" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>종부세 연계환급 예상액 (원)</label><input type="text" id="comprehensive_real_estate_tax" class="num-input" value="15,000,000" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>재산세 세부담 상한(150%) 초과액 (원)</label><input type="text" id="property_tax_ceiling" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>특례구역(기업도시) 소재</label><select id="special_zone"><option value="N" selected>아니오</option><option value="Y">예</option></select></div>
-                            <div class="form-group"><label>부당 감면 추징세액 납부원금 (원)</label><input type="text" id="penalty_tax_amount" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>통합고용 상시근로자 증가(명)</label><input type="text" id="employment_increase" class="num-input" value="2"></div>
                             <div class="form-group"><label>미신청 R&D 인력개발비 (원)</label><input type="text" id="rnd_cost" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>친환경/에너지 시설 투자 (원)</label><input type="text" id="green_investment" class="num-input" value="30,000,000" oninput="formatComma(this)"></div>
-                            <div class="form-group full"><label>조특법 감면 법인세 본세액 (원)</label><input type="text" id="exempt_corp_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- 9. 지방이전, 특구 및 기타 특수 세무 (접힘) -->
+                <details class="accordion-group">
+                    <summary class="accordion-header">🌐 9. 지방이전, 특구 및 기타 특수 세무</summary>
+                    <div class="accordion-body">
+                        <div class="form-grid">
+                            <div class="form-group"><label>특례구역(기업도시 등) 소재 여부</label><select id="special_zone"><option value="N" selected>아니오</option><option value="Y">예</option></select></div>
+                            <div class="form-group"><label>부당 감면 추징세액 납부원금 (원)</label><input type="text" id="penalty_tax_amount" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
@@ -494,7 +512,7 @@
                         </div>
 
                         <div class="section-box">
-                            <h5 style="margin:0 0 5px 0; font-size:10.5pt;">4. 위임 및 환급 청구 접수 첨부 서류 안내</h5>
+                            <h5 style="margin:0 0 5px 0; font-size:10pt;">4. 위임 및 환급 청구 접수 첨부 서류 안내</h5>
                             <div>• 법인등기부등본 및 사업자등록증 사본 각 1부</div>
                             <div>• 최근 5개년 세목별 과세증명서 및 영수증 원본 각 1부</div>
                             <div>• 건축물대장 총괄/일반 및 층별 도면 사본</div>
@@ -670,13 +688,7 @@
             const empIncrease = parseNum('employment_increase');
             const rndCost = parseNum('rnd_cost');
             const greenInvest = parseNum('green_investment');
-            const exemptCorp = parseNum('exempt_corp_tax');
 
-            const floor = parseInt(document.getElementById('floor').value) || 1;
-            const surcharge = document.getElementById('surcharge').value;
-            const totalArea = parseNum('total_area');
-            const exemptArea = parseNum('exempt_area');
-            const tempBuilding = document.getElementById('temp_building').value;
             const facilityType = document.getElementById('facility_type').value;
             const acqHeavy = document.getElementById('acq_heavy').value;
             const resortExempt = document.getElementById('resort_tax_exemption').value;
@@ -686,28 +698,23 @@
             let totalRefund = 0;
             let reasons = [];
 
-            if (greenLand > 0) { totalRefund += greenLand * 0.3 * years; reasons.push("✔️ <b>[원형보전임야 분리과세]</b> 환경영향평가 보전녹지 종합합산 과세오류 정산 (지방세법 시행령 제102조)"); }
+            if (greenLand > 0) { totalRefund += greenLand * 0.3 * years; reasons.push("✔️ <b>[골프장 원형보전임야 분리과세]</b> 환경영향평가 보전녹지 종합합산 과세오류 정산 (지방세법 시행령 제102조)"); }
             if (facilityType === "대중제") { totalRefund += regTax * 0.2 * years; reasons.push("✔️ <b>[대중제 골프장 감면 특례]</b> 시·군 조례 감면 누락분 소급 적용 (체육시설법 제10조)"); }
-            if (facilityType === "회원제") { totalRefund += 3600000 * years; reasons.push("✔️ <b>[회원제 개소세/교육세 정산]</b> 면제 내장객 과다납부 환급 (개별소비세법 제1조)"); }
+            if (facilityType === "회원제") { totalRefund += 3600000 * years; reasons.push("✔️ <b>[회원제 골프장 개소세/교육세 정산]</b> 면제 내장객 과다납부 환급 (개별소비세법 제1조)"); }
             if (acqHeavy === "Y" && acqTax > 0) { totalRefund += acqTax * 0.4; reasons.push("✔️ <b>[사치성 취득세 중과 오류]</b> 자연림·조경수 과다중과 정산 (조심2020지1129)"); }
-            if (waterHazard > 0) { totalRefund += waterHazard * 0.2 * years; reasons.push("✔️ <b>[해저드 유지 과세구분]</b> 방화·배수 목적 유지 별도합산 전환 환급 (공간정보법 제67조)"); }
-            if (cartRoad > 0) { totalRefund += cartRoad * years; reasons.push("✔️ <b>[외곽 카트도로/사도 비과세]</b> 공중 통행 사도 재산세 비과세 환급 (지방세법 제109조)"); }
+            if (waterHazard > 0) { totalRefund += waterHazard * 0.2 * years; reasons.push("✔️ <b>[골프장 해저드 유지 과세구분]</b> 방화·배수 목적 유지 별도합산 전환 환급 (공간정보법 제67조)"); }
+            if (cartRoad > 0) { totalRefund += cartRoad * years; reasons.push("✔️ <b>[카트도로 및 사도 비과세]</b> 공중 통행 사도 재산세 비과세 환급 (지방세법 제109조)"); }
 
             if (hotelLand > 0) { totalRefund += hotelLand * 0.15 * years; reasons.push("✔️ <b>[호텔·콘도 부속토지 별도합산]</b> 관광숙박업 기준면적 내 별도합산 환급 (조심2019지1044)"); }
             if (resortExempt === "Y") { totalRefund += (acqTax * 0.5) + (propTax * 0.5 * years); reasons.push("✔️ <b>[관광단지 조세감면]</b> 관광진흥법 숙박시설 신축 감면 소급 (지특법 제54조)"); }
             if (memberDeposit > 0) { totalRefund += memberDeposit * 0.02; reasons.push("✔️ <b>[콘도 입회보증금 부채 제외]</b> 반환채무 보증금 간주취득세 과표 제외 환급 (대법원 2014두46401)"); }
 
-            if (floor < 11 && surcharge === "3") { totalRefund += (regTax - (regTax / 3)) * years; reasons.push("✔️ <b>[11층 미만 상가 3배 중과 취소]</b> 지역자원시설세 위법 중과 취소 환급 (조심 2021지2787)"); }
-            if (totalArea > 0 && exemptArea > 0) { totalRefund += (propTax + regTax) * (exemptArea / totalArea) * years; reasons.push("✔️ <b>[복합건축물 비과세 안분 누락]</b> 공용·방재실 면적 비율 재산세 정산 (지방세법 제108조)"); }
-            if (tempBuilding === "Y") { totalRefund += propTax * 0.15 * years; reasons.push("✔️ <b>[가설건축물 부속토지]</b> 별도합산 전환에 따른 재산세 정산 환급 (대법원 2011두13454)"); }
-            if (trafficVacant > 0) { totalRefund += trafficVacant * years; reasons.push("✔️ <b>[공실 교통유발부담금 감면]</b> 30일 이상 미사용 공실 기간 부담금 환급 (도시교통촉진법 제38조)"); }
-            if (artworkCost > 0) { totalRefund += artworkCost * 0.046; reasons.push("✔️ <b>[분리 설치 미술작품 취득세 제외]</b> 건물과 독립된 조형물 과표 제외 (문예진흥법 제9조)"); }
+            if (trafficVacant > 0) { totalRefund += trafficVacant * years; reasons.push("✔️ <b>[대형빌딩 공실 교통유발부담금 감면]</b> 30일 이상 미사용 공실 기간 부담금 환급 (도시교통촉진법 제38조)"); }
+            if (artworkCost > 0) { totalRefund += artworkCost * 0.046; reasons.push("✔️ <b>[미술장식품 취득세 제외]</b> 건물과 독립된 옥외 조형물 과표 제외 (문예진흥법 제9조)"); }
             if (goodLandlord > 0) { totalRefund += goodLandlord * 0.7; reasons.push("✔️ <b>[착한임대인 세액공제]</b> 소상공인 임대료 인하액 70% 법인세 경정청구 (조특법 제96조의3)"); }
 
             if (pfFee > 0) { totalRefund += pfFee * 0.046; reasons.push("✔️ <b>[PF 금융수수료 취득세 제외]</b> 자금조달 목적 수수료 과표 제외 환급 (대법원 2017두41761)"); }
             if (saleFee > 0) { totalRefund += saleFee * 0.046; reasons.push("✔️ <b>[분양보증료 취득세 제외]</b> 분양 관련 비용 취득세 과표 제외 (대법원 2010두23793)"); }
-            if (structureCost > 0) { totalRefund += structureCost * 0.15 * 0.046; reasons.push("✔️ <b>[구축물 감가상각 누락]</b> 수전설비·주차타워 내용연수 경과분 과표 정산 (지방세운영과-310)"); }
-
             if (devCharge > 0) { totalRefund += devCharge * 0.25; reasons.push("✔️ <b>[개발부담금 개발비용 누락]</b> 기부채납 토지가액 및 토목공사비 공제 환급 (대법원 2017두47240)"); }
             if (landCategory > 0) { totalRefund += landCategory; reasons.push("✔️ <b>[지목변경 간주취득세 과다]</b> 법인장부 실공사비 초과 과세액 환급 (조심2020지0650)"); }
             if (industrialLand === "Y") { totalRefund += (acqTax * 0.5) + (propTax * 0.35 * years); reasons.push("✔️ <b>[산업·물류단지 감면 특례]</b> 단지 조성 토지 취득세 및 재산세 감면 소급 (지특법 제78조)"); }
@@ -725,7 +732,6 @@
             if (empIncrease > 0) { totalRefund += empIncrease * 11000000 * 3; reasons.push("✔️ <b>[통합고용세액공제 소급]</b> 상시근로자 증가 인원 법인세 경정청구 (조특법 제145조)"); }
             if (rndCost > 0) { totalRefund += rndCost * 0.25; reasons.push("✔️ <b>[R&D 연구인력개발비 공제]</b> 미신청 전담연구원 인건비 25% 법인세 환급 (조특법 제10조)"); }
             if (greenInvest > 0) { totalRefund += greenInvest * 0.05; reasons.push("✔️ <b>[친환경·에너지 통합투자공제]</b> 절약설비 투자 세액공제 5% 환급 (조특법 제24조)"); }
-            if (exemptCorp > 0) { totalRefund += exemptCorp * 0.2; reasons.push("✔️ <b>[농특세 비과세 누락]</b> 조특법 감면분 농어촌특별세 비과세 환급 (농특세법 제4조)"); }
 
             if (reasons.length === 0) reasons.push("⚠️ 즉각적인 매칭 환급액 없음. 과세원장 원본 정밀 스크리닝 필요.");
 
@@ -786,9 +792,9 @@
                 artwork_cost: document.getElementById('artwork_cost').value,
                 good_landlord_tax: document.getElementById('good_landlord_tax').value,
 
+                structure_cost: document.getElementById('structure_cost').value,
                 pf_fee_refund: document.getElementById('pf_fee_refund').value,
                 sale_guarantee_fee: document.getElementById('sale_guarantee_fee').value,
-                structure_cost: document.getElementById('structure_cost').value,
 
                 dev_charge_refund: document.getElementById('dev_charge_refund').value,
                 land_category_acq: document.getElementById('land_category_acq').value,
@@ -806,8 +812,7 @@
                 penalty_tax_amount: document.getElementById('penalty_tax_amount').value,
                 employment_increase: document.getElementById('employment_increase').value,
                 rnd_cost: document.getElementById('rnd_cost').value,
-                green_investment: document.getElementById('green_investment').value,
-                exempt_corp_tax: document.getElementById('exempt_corp_tax').value
+                green_investment: document.getElementById('green_investment').value
             };
 
             historyData = historyData.filter(item => item.client !== clientName);
@@ -867,7 +872,7 @@
             document.getElementById('acq_tax').value = data.acq_tax || "";
             document.getElementById('sales_memo').value = data.sales_memo || "";
 
-            document.getElementById('facility_type').value = data.facility_type || "default";
+            document.getElementById('facility_type').value = data.facility_type || "대중제";
             document.getElementById('acq_heavy').value = data.acq_heavy || "N";
             document.getElementById('green_land_tax').value = data.green_land_tax || "0";
             document.getElementById('water_hazard_tax').value = data.water_hazard_tax || "0";
@@ -887,9 +892,9 @@
             document.getElementById('artwork_cost').value = data.artwork_cost || "0";
             document.getElementById('good_landlord_tax').value = data.good_landlord_tax || "0";
 
+            document.getElementById('structure_cost').value = data.structure_cost || "0";
             document.getElementById('pf_fee_refund').value = data.pf_fee_refund || "0";
             document.getElementById('sale_guarantee_fee').value = data.sale_guarantee_fee || "0";
-            document.getElementById('structure_cost').value = data.structure_cost || "0";
 
             document.getElementById('dev_charge_refund').value = data.dev_charge_refund || "0";
             document.getElementById('land_category_acq').value = data.land_category_acq || "0";
@@ -908,7 +913,6 @@
             document.getElementById('employment_increase').value = data.employment_increase || "0";
             document.getElementById('rnd_cost').value = data.rnd_cost || "0";
             document.getElementById('green_investment').value = data.green_investment || "0";
-            document.getElementById('exempt_corp_tax').value = data.exempt_corp_tax || "0";
 
             alert(`[ ${data.client_name} ]의 저장된 입력 데이터가 왼쪽 폼에 복원되었습니다.\n수정 후 [세금 환급 검증 및 제안서 생성] 버튼을 다시 눌러주세요.`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -949,9 +953,9 @@
                 artwork_cost: document.getElementById('artwork_cost').value,
                 good_landlord_tax: document.getElementById('good_landlord_tax').value,
 
+                structure_cost: document.getElementById('structure_cost').value,
                 pf_fee_refund: document.getElementById('pf_fee_refund').value,
                 sale_guarantee_fee: document.getElementById('sale_guarantee_fee').value,
-                structure_cost: document.getElementById('structure_cost').value,
 
                 dev_charge_refund: document.getElementById('dev_charge_refund').value,
                 land_category_acq: document.getElementById('land_category_acq').value,
@@ -970,7 +974,6 @@
                 employment_increase: document.getElementById('employment_increase').value,
                 rnd_cost: document.getElementById('rnd_cost').value,
                 green_investment: document.getElementById('green_investment').value,
-                exempt_corp_tax: document.getElementById('exempt_corp_tax').value,
 
                 property_tax: document.getElementById('property_tax').value,
                 acq_tax: document.getElementById('acq_tax').value
