@@ -33,17 +33,24 @@
         .logo-main::after { content: '↗'; font-size: 40px; position: absolute; top: -10px; right: -25px; }
         .logo-sub { color: white; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
 
-        .login-card { background: white; padding: 35px 25px; border-radius: 12px; text-align: center; width: 85%; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .login-title { font-size: 1.25em; color: #15284b; font-weight: 900; margin: 0 0 25px 0; letter-spacing: -0.5px;}
+        .login-card { background: white; padding: 30px 25px; border-radius: 12px; text-align: center; width: 85%; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .login-title { font-size: 1.25em; color: #15284b; font-weight: 900; margin: 0 0 20px 0; letter-spacing: -0.5px;}
         .input-label { display: block; text-align: left; font-size: 0.85em; font-weight: bold; color: #333; margin-bottom: 8px; }
-        .login-input { width: 100%; padding: 15px; margin-bottom: 25px; border: 2px solid #d4af37; border-radius: 6px; font-size: 15px; outline: none; box-sizing: border-box; }
+        .login-input { width: 100%; padding: 14px; margin-bottom: 15px; border: 2px solid #d4af37; border-radius: 6px; font-size: 15px; outline: none; box-sizing: border-box; }
         .login-input:focus { border-color: #15284b; }
+        
+        .login-options { display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; color: #475569; margin-bottom: 20px; text-align: left; }
+        .login-options label { display: flex; align-items: center; gap: 5px; cursor: pointer; font-weight: normal; }
+
         .login-btn { width: 100%; padding: 16px; background-color: #15284b; color: #d4af37; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .login-btn:hover { background-color: #0f1c35; }
 
         .header { background-color: var(--primary-color); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { margin: 0; font-size: 1.2em; word-break: keep-all; color: var(--accent-color); }
+        .header-right { display: flex; align-items: center; gap: 10px; }
         .user-badge { background-color: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        .logout-btn { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8em; font-weight: bold; cursor: pointer; }
+        .logout-btn:hover { background: #dc2626; }
         
         .container { max-width: 1200px; margin: 20px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 20px; }
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -136,7 +143,7 @@
 <body>
 
     <!-- 로그인 화면 -->
-    <div id="login-overlay">
+    <div id="login-overlay" style="display: none;">
         <div class="logo-container">
             <div class="logo-main">JDB</div>
             <div class="logo-sub">CONSULTING</div>
@@ -146,6 +153,12 @@
             <div class="login-title">JDB컨설팅 영업관리 V3.3</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
+            
+            <div class="login-options">
+                <label><input type="checkbox" id="rememberEmail"> 이메일 기억하기</label>
+                <label><input type="checkbox" id="autoLogin"> 자동 로그인</label>
+            </div>
+
             <button class="login-btn" onclick="startApp()">영업관리 로그인</button>
         </div>
     </div>
@@ -154,7 +167,10 @@
     <div id="main-app" style="display: none;">
         <div class="header">
             <h1>JDB컨설팅 영업관리</h1>
-            <span class="user-badge" id="welcomeMsg">로그인 대기중</span>
+            <div class="header-right">
+                <span class="user-badge" id="welcomeMsg">로그인 대기중</span>
+                <button class="logout-btn" onclick="logoutApp()">로그아웃</button>
+            </div>
         </div>
 
         <div class="container">
@@ -361,26 +377,74 @@
     </div>
 
     <script>
-        // 새로 발급된 구글 Apps Script 웹 앱 URL 반영 완료
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbziHlEnkdc7ZYAtbuy48deLwSIkW56497iOfLWccEIuwugU3Yav734cOq4Xn6TV8nx8/exec';
 
         let loggedInEmail = "";
         let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "", stage: "", memo: "", followDate: "", yearly: [] };
         let historyData = [];
 
+        // 페이지 로드 시 자동 로그인 및 이메일 기억하기 체크 여부 확인
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedEmail = localStorage.getItem('jdb_saved_email');
+            const autoLoginFlag = localStorage.getItem('jdb_auto_login');
+
+            if (savedEmail) {
+                document.getElementById('userEmailInput').value = savedEmail;
+                document.getElementById('rememberEmail').checked = true;
+            }
+
+            if (autoLoginFlag === 'true' && savedEmail) {
+                document.getElementById('autoLogin').checked = true;
+                loggedInEmail = savedEmail;
+                enterMainApp(savedEmail);
+            } else {
+                document.getElementById('login-overlay').style.display = 'flex';
+            }
+        });
+
         function startApp() {
             const userEmail = document.getElementById('userEmailInput').value.trim();
+            const rememberEmail = document.getElementById('rememberEmail').checked;
+            const autoLogin = document.getElementById('autoLogin').checked;
+
             if(!userEmail.includes('@')) {
                 alert("정확한 이메일 형식을 입력해 주세요.");
                 document.getElementById('userEmailInput').focus();
                 return;
             }
+
             loggedInEmail = userEmail;
-            const userName = userEmail.split('@')[0];
-            
+
+            // 이메일 기억하기 처리
+            if (rememberEmail) {
+                localStorage.setItem('jdb_saved_email', userEmail);
+            } else {
+                localStorage.removeItem('jdb_saved_email');
+            }
+
+            // 자동 로그인 처리
+            if (autoLogin) {
+                localStorage.setItem('jdb_auto_login', 'true');
+            } else {
+                localStorage.removeItem('jdb_auto_login');
+            }
+
+            enterMainApp(userEmail);
+        }
+
+        function enterMainApp(email) {
+            const userName = email.split('@')[0];
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('welcomeMsg').innerHTML = `👤 ${userName} 님 환영합니다`;
+        }
+
+        function logoutApp() {
+            localStorage.removeItem('jdb_auto_login');
+            loggedInEmail = "";
+            document.getElementById('main-app').style.display = 'none';
+            document.getElementById('login-overlay').style.display = 'flex';
+            document.getElementById('autoLogin').checked = false;
         }
 
         function handleEnter(event) {
@@ -591,7 +655,6 @@
             addToHistory(clientName, refStr, followDate, formData);
         }
 
-        // 로컬 히스토리 관리 (화면 표시용)
         function addToHistory(client, refund, followDate, formData) {
             const historyItem = {
                 client: client,
@@ -671,7 +734,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 구글시트 저장 버튼 동작 함수 (전체 입력 옵션 반영)
         function saveToGoogleSheet() {
             if (!GOOGLE_SCRIPT_URL) {
                 alert("구글 시트 연동 URL이 설정되지 않았습니다.");
