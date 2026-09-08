@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <!-- 👇 스마트폰 바탕화면 및 브라우저 탭 아이콘 지정 태그 -->
+    <meta name="apple-mobile-web-app-title" content="영업관리">
+    <meta name="application-name" content="영업관리">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="manifest.json">
@@ -360,6 +362,9 @@
     </div>
 
     <script>
+        // 구글 Apps Script 웹 앱 URL 반영 완료
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrE95UrNCG8BlQOwVJPDqnI6g5cPd4UzYE_DhwIumcqIuyNcsvHetsBO-THR54RS5HvA/exec';
+
         let loggedInEmail = "";
         let currentResultData = { refund: "", fee: "", reasons: [], client: "", manager: "", stage: "", memo: "", followDate: "", yearly: [] };
         let historyData = [];
@@ -377,6 +382,9 @@
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('welcomeMsg').innerHTML = `👤 ${userName} 님 환영합니다`;
+            
+            // 로그인 완료 시 구글 시트에서 최신 히스토리 불러오기
+            loadHistoryFromServer();
         }
 
         function handleEnter(event) {
@@ -587,14 +595,52 @@
             addToHistory(clientName, refStr, followDate, formData);
         }
 
+        // 서버(구글 시트)로 히스토리 저장 전송
         function addToHistory(client, refund, followDate, formData) {
+            const historyItem = {
+                client: client,
+                refund: refund,
+                followDate: followDate,
+                formData: formData,
+                managerEmail: loggedInEmail,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+
             historyData = historyData.filter(item => item.client !== client);
-            historyData.unshift({ 
-                client: client, refund: refund, followDate: followDate, formData: formData,
-                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
-            });
+            historyData.unshift(historyItem);
             if(historyData.length > 5) historyData.pop();
             renderHistoryList();
+
+            // 구글 시트에 데이터 비동기 저장 요청
+            if (GOOGLE_SCRIPT_URL) {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'save', client_name: client, refund: refund, follow_date: followDate, manager_email: loggedInEmail })
+                }).catch(err => console.log('Sync error:', err));
+            }
+        }
+
+        // 구글 시트에서 최신 히스토리 불러오기
+        function loadHistoryFromServer() {
+            if (!GOOGLE_SCRIPT_URL) return;
+
+            fetch(GOOGLE_SCRIPT_URL + '?action=load')
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        historyData = data.map(item => ({
+                            client: item.client,
+                            refund: item.refund,
+                            followDate: item.followDate,
+                            time: item.time,
+                            formData: null // 서버 로드 시 상세 폼 데이터는 텍스트 위주 공유
+                        }));
+                        renderHistoryList();
+                    }
+                })
+                .catch(err => console.log('Load error:', err));
         }
 
         function renderHistoryList() {
@@ -606,12 +652,11 @@
 
             historyData.forEach((item, index) => {
                 listHTML += `<div class="history-item">
-                    <div class="history-info" onclick="loadHistoryItem(${index})" title="클릭하여 데이터 불러오기">
+                    <div class="history-info" onclick="loadHistoryItem(${index})" title="클릭하여 데이터 확인">
                         <div><b>${item.client}</b> <span style="color:#10b981; font-weight:bold;">${item.refund}</span></div>
                         <div style="font-size:0.75em; color:#64748b;">후속: ${item.followDate} (${item.time})</div>
                     </div>
                     <div class="history-btns">
-                        <button class="btn-hist-edit" onclick="loadHistoryItem(${index})">수정</button>
                         <button class="btn-hist-del" onclick="deleteHistoryItem(event, ${index})">X</button>
                     </div>
                 </div>`;
@@ -629,7 +674,10 @@
 
         function loadHistoryItem(index) {
             const data = historyData[index].formData;
-            if (!data) return;
+            if (!data) {
+                alert(`[ ${historyData[index].client} ] 항목은 다른 팀원이 등록한 공유 내역입니다.`);
+                return;
+            }
 
             document.getElementById('client_name').value = data.client_name || "";
             document.getElementById('client_manager').value = data.client_manager || "";
@@ -657,7 +705,7 @@
             document.getElementById('sales_memo').value = data.sales_memo || "";
             document.getElementById('years').value = data.years || "5";
 
-            alert(`[ ${data.client_name} ]의 저장된 입력 데이터가 왼쪽 폼에 로드되었습니다.\n필요한 항목을 수정한 뒤 [공식 제안서 생성 및 분석]을 다시 실행해 주세요.`);
+            alert(`[ ${data.client_name} ]의 저장된 입력 데이터가 왼쪽 폼에 로드되었습니다.`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -665,7 +713,7 @@
             const textToCopy = `[JDB컨설팅 공식 제안서 요약]\n- 수신: ${currentResultData.client} (${currentResultData.manager})\n- 발신: JDB컨설팅 (${loggedInEmail})\n- 예상 환급 총액: ${currentResultData.refund}\n- 성공보수(30%): ${currentResultData.fee}\n\n[주요 매칭 사유]\n${currentResultData.reasons.join('\n')}`;
             
             navigator.clipboard.writeText(textToCopy).then(() => {
-                alert("제안서 요약 내용이 복사되었습니다! 카카오톡이나 메모장에 붙여넣기 하세요.");
+                alert("제안서 요약 내용이 복사되었습니다!");
             }).catch(err => {
                 alert("복사에 실패했습니다.");
             });
