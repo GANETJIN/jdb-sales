@@ -246,7 +246,7 @@
             <div class="logo-sub">CONSULTING</div>
         </div>
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V4.2</div>
+            <div class="login-title">JDB컨설팅 영업관리 V4.3</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <div class="login-options">
@@ -278,43 +278,43 @@
                     </div>
                 </h2>
 
-                <!-- 1. 기본 고객사 정보 및 계약 조건 (기본 open) -->
+                <!-- 1. 기본 고객사 정보 및 계약 조건 (예시 기본 open) -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">🏢 1. 기본 고객사 정보 및 계약 조건</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
-                            <div class="form-group full"><label>고객사명 (수신처)</label><input type="text" id="client_name" value=""></div>
-                            <div class="form-group"><label>현장 담당자 / 직급</label><input type="text" id="client_manager" value=""></div>
+                            <div class="form-group full"><label>고객사명 (수신처)</label><input type="text" id="client_name" value="여주 T 컨트리클럽"></div>
+                            <div class="form-group"><label>현장 담당자 / 직급</label><input type="text" id="client_manager" value="김재무 전무"></div>
                             <div class="form-group"><label>영업 진행 단계</label>
                                 <select id="sales_stage">
-                                    <option value="" selected disabled>(선택해 주세요)</option>
+                                    <option value="" disabled>(선택해 주세요)</option>
                                     <option value="1차 콜 완료">1차 콜 완료</option>
-                                    <option value="방문 미팅 성사">방문 미팅 성사</option>
+                                    <option value="방문 미팅 성사" selected>방문 미팅 성사</option>
                                     <option value="위임장 접수 대기">위임장 접수 대기</option>
                                     <option value="계약 완료">계약 완료</option>
                                 </select>
                             </div>
                             <div class="form-group"><label>소급 연수 (법정 5년)</label>
                                 <select id="years">
-                                    <option value="" selected disabled>(선택해 주세요)</option>
-                                    <option value="5">최대 5년 소급</option>
+                                    <option value="" disabled>(선택해 주세요)</option>
+                                    <option value="5" selected>최대 5년 소급</option>
                                     <option value="4">4년</option>
                                     <option value="3">3년</option>
                                 </select>
                             </div>
                             <div class="form-group"><label>성공보수 약정 방식</label>
                                 <select id="fee_type">
-                                    <option value="" selected disabled>(선택해 주세요)</option>
+                                    <option value="" disabled>(선택해 주세요)</option>
                                     <option value="일시지급">일시 지급 (30%)</option>
-                                    <option value="2회분할">2회 분할 (각 15%)</option>
+                                    <option value="2회분할" selected>2회 분할 (각 15%)</option>
                                     <option value="3회분할">3회 분할 (각 10%)</option>
                                     <option value="5회분할">5회 분할 (각 6%)</option>
                                 </select>
                             </div>
                             <div class="form-group"><label>후속 미팅/연락일</label><input type="date" id="follow_date"></div>
-                            <div class="form-group"><label>기본 재산세 납부액 (원)</label><input type="text" id="property_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>기본 재산세 납부액 (원)</label><input type="text" id="property_tax" class="num-input" value="55,000,000" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>기본 취득세 납부액 (원)</label><input type="text" id="acq_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group full"><label>현장 미팅 메모</label><textarea id="sales_memo" rows="2" placeholder="특이사항 입력"></textarea></div>
+                            <div class="form-group full"><label>현장 미팅 메모</label><textarea id="sales_memo" rows="2" placeholder="특이사항 입력">원형보전지 과세오류 및 대중제 감면 대상</textarea></div>
                         </div>
                     </div>
                 </details>
@@ -326,35 +326,35 @@
                         <div class="form-grid">
                             <div class="form-group"><label>중소기업 특별세액감면 대상 과세표준 (원)</label><input type="text" id="sme_tax_base" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>미신청 연구인력개발비(R&D) (원)</label><input type="text" id="rnd_cost" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>통합고용 상시근로자 증가(명)</label><input type="text" id="employment_increase" class="num-input" value="0"></div>
+                            <div class="form-group"><label>통합고용 상시근로자 증가(명)</label><input type="text" id="employment_increase" class="num-input" value="2"></div>
                             <div class="form-group"><label>친환경/에너지 시설 투자액 (원)</label><input type="text" id="green_investment" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
 
-                <!-- 3. 골프장 특화 로직 (접힘) -->
-                <details class="accordion-group">
+                <!-- 3. 골프장 특화 로직 (예시 기본 open) -->
+                <details class="accordion-group" open>
                     <summary class="accordion-header">⛳ 3. 골프장 특화 (원형보전지, 대중제, 개소세 등 No. 16~25)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
                             <div class="form-group"><label>체육시설업 등록 형태</label>
                                 <select id="facility_type">
-                                    <option value="" selected disabled>(선택해 주세요)</option>
-                                    <option value="대중제">대중제 (퍼블릭) 골프장</option>
+                                    <option value="" disabled>(선택해 주세요)</option>
+                                    <option value="대중제" selected>대중제 (퍼블릭) 골프장</option>
                                     <option value="회원제">회원제 골프장 / 리조트</option>
                                     <option value="일반상업">일반 상업용 시설</option>
                                 </select>
                             </div>
                             <div class="form-group"><label>사치성 취득세 중과 여부</label>
                                 <select id="acq_heavy">
-                                    <option value="" selected disabled>(선택해 주세요)</option>
-                                    <option value="N">일반세율</option>
+                                    <option value="" disabled>(선택해 주세요)</option>
+                                    <option value="N" selected>일반세율</option>
                                     <option value="Y">사치성 중과(12%)</option>
                                 </select>
                             </div>
-                            <div class="form-group"><label>원형보전지/임야 분리과세 대상 (원)</label><input type="text" id="green_land_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>골프장 해저드/유지 대상 (원)</label><input type="text" id="water_hazard_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group full"><label>외곽 카트도로 및 진입로 사도 기납부액 (원)</label><input type="text" id="cart_road_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>원형보전지/임야 분리과세 대상 (원)</label><input type="text" id="green_land_tax" class="num-input" value="70,000,000" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>골프장 해저드/유지 대상 (원)</label><input type="text" id="water_hazard_tax" class="num-input" value="15,000,000" oninput="formatComma(this)"></div>
+                            <div class="form-group full"><label>외곽 카트도로 및 진입로 사도 기납부액 (원)</label><input type="text" id="cart_road_tax" class="num-input" value="8,000,000" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
@@ -382,15 +382,15 @@
                     <summary class="accordion-header">🏬 5. 상가 / 대형빌딩 / 복합몰 특화 (공용면적, 공실 등 No. 33~45)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
-                            <div class="form-group"><label>상가/건축물 층수 (층)</label><input type="text" id="floor" class="num-input" value="0"></div>
+                            <div class="form-group"><label>상가/건축물 층수 (층)</label><input type="text" id="floor" class="num-input" value="2"></div>
                             <div class="form-group"><label>지역자원시설세 과세</label>
                                 <select id="surcharge">
-                                    <option value="" selected disabled>(선택해 주세요)</option>
-                                    <option value="1">1배 (일반)</option>
+                                    <option value="" disabled>(선택해 주세요)</option>
+                                    <option value="1" selected>1배 (일반)</option>
                                     <option value="3">3배 (중과세)</option>
                                 </select>
                             </div>
-                            <div class="form-group"><label>지역자원 기납부액 (원)</label><input type="text" id="regional_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>지역자원 기납부액 (원)</label><input type="text" id="regional_tax" class="num-input" value="12,000,000" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>가설건축물 존치 유무</label>
                                 <select id="temp_building">
                                     <option value="" selected disabled>(선택해 주세요)</option>
@@ -398,8 +398,8 @@
                                     <option value="Y">존치기한 유효</option>
                                 </select>
                             </div>
-                            <div class="form-group"><label>전체 연면적 (㎡)</label><input type="text" id="total_area" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>비과세 대상 면적 (㎡)</label><input type="text" id="exempt_area" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>전체 연면적 (㎡)</label><input type="text" id="total_area" class="num-input" value="8,500" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>비과세 대상 면적 (㎡)</label><input type="text" id="exempt_area" class="num-input" value="850" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>30일 이상 공실 교통유발부담금 (원)</label><input type="text" id="traffic_vacant_refund" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>분리 설치 미술장식품 가액 (원)</label><input type="text" id="artwork_cost" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group full"><label>착한임대인 소상공인 임대료 인하액 (원)</label><input type="text" id="good_landlord_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
@@ -419,7 +419,7 @@
                                     <option value="N">미등록</option>
                                 </select>
                             </div>
-                            <div class="form-group"><label>자동화설비 및 구축물 취득가액 (원)</label><input type="text" id="structure_cost" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>자동화설비 및 구축물 취득가액 (원)</label><input type="text" id="structure_cost" class="num-input" value="50,000,000" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
@@ -451,9 +451,9 @@
                             </div>
                             <div class="form-group"><label>산지/농지부담금 축소 환급액 (원)</label><input type="text" id="forest_farm_charge" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>인허가지연 토지 부인 이자 (원)</label><input type="text" id="non_business_interest" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>공시지가 과대평가 토지세액 (원)</label><input type="text" id="land_value_error" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>공시지가 과대평가 토지세액 (원)</label><input type="text" id="land_value_error" class="num-input" value="20,000,000" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>도시계획 미집행 사권제한 토지세 (원)</label><input type="text" id="urban_planning_land" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>기부채납/사도 무상제공 부지세 (원)</label><input type="text" id="donated_land_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>기부채납/사도 무상제공 부지세 (원)</label><input type="text" id="donated_land_tax" class="num-input" value="5,000,000" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
@@ -471,7 +471,7 @@
                                 </select>
                             </div>
                             <div class="form-group"><label>부당 감면 추징세액 납부원금 (원)</label><input type="text" id="penalty_tax_amount" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>종부세 연계환급 예상액 (원)</label><input type="text" id="comprehensive_real_estate_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>종부세 연계환급 예상액 (원)</label><input type="text" id="comprehensive_real_estate_tax" class="num-input" value="15,000,000" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>재산세 세부담 상한(150%) 초과액 (원)</label><input type="text" id="property_tax_ceiling" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
                     </div>
@@ -674,11 +674,11 @@
 
         function resetInputs() {
             if (confirm("입력하신 모든 데이터와 산출 내역을 초기화하시겠습니까?")) {
-                // 모든 텍스트, 날짜, 메모 필드 비우기
+                // 모든 텍스트, 날짜 입력란 비우기
                 document.querySelectorAll('.card:first-child input[type="text"], .card:first-child input[type="date"], .card:first-child textarea').forEach(el => {
                     el.value = '';
                 });
-                // 모든 숫자 입력 필드 '0'으로 초기화
+                // 모든 숫자 입력란 '0'으로 초기화
                 document.querySelectorAll('.card:first-child .num-input').forEach(el => {
                     el.value = '0';
                 });
@@ -802,26 +802,6 @@
             document.getElementById('reason_text').innerHTML = reasons.join("<br><br>");
             document.getElementById('defense_text').innerHTML = "지방세기본법 제50조 및 국세기본법 제45조의2에 규정된 법정 경정청구권과 조세심판원 합동회의 인용 결정 및 대법원 판례를 근거로 과세관청(지자체 세무과 및 관할 세무서)에 소명하십시오.";
 
-            let feeHTML = "";
-            if (feeType === "일시지급") {
-                feeHTML = `<tr><td>환급 수령 즉시 일시 납부</td><td>30%</td><td>${feeStr}</td><td>지자체/세무서 입금 확인 즉시</td></tr>`;
-            } else if (feeType === "2회분할") {
-                let half = Math.floor(feeVal / 2).toLocaleString() + " 원";
-                feeHTML = `<tr><td>1차 (청구 접수 시)</td><td>15%</td><td>${half}</td><td>위임장 및 세무서 접수증 수령 시</td></tr><tr><td>2차 (환급 완료 시)</td><td>15%</td><td>${half}</td><td>환급금 법인계좌 입금 즉시</td></tr>`;
-            } else if (feeType === "3회분할") {
-                let third = Math.floor(feeVal / 3).toLocaleString() + " 원";
-                feeHTML = `<tr><td>1차 계약금</td><td>10%</td><td>${third}</td><td>컨설팅 계약 체결 시</td></tr><tr><td>2차 중간금</td><td>10%</td><td>${third}</td><td>보정요구 소명서 제출 시</td></tr><tr><td>3차 잔금</td><td>10%</td><td>${third}</td><td>환급금 입금 완료 시</td></tr>`;
-            } else if (feeType === "5회분할") {
-                let fifth = Math.floor(feeVal / 5).toLocaleString() + " 원";
-                feeHTML = `
-                    <tr><td>1차 (청구 접수)</td><td>6%</td><td>${fifth}</td><td>위임장 및 접수증 수령 시</td></tr>
-                    <tr><td>2차 (중간보정)</td><td>6%</td><td>${fifth}</td><td>보정요구 소명서 제출 시</td></tr>
-                    <tr><td>3차 (심판/결정)</td><td>6%</td><td>${fifth}</td><td>심판원/관서 결정 통보 시</td></tr>
-                    <tr><td>4차 (환급직전)</td><td>6%</td><td>${fifth}</td><td>환급결정 통지 확인 시</td></tr>
-                    <tr><td>5차 (환급완료)</td><td>6%</td><td>${fifth}</td><td>법인계좌 입금 완료 즉시</td></tr>
-                `;
-            }
-
             let yearlyHTML = "";
             for(let i = 1; i <= years; i++) {
                 yearlyHTML += `<tr><td>최근 ${i}년 차 소급분</td><td>${Math.floor(refVal / years).toLocaleString()} 원</td><td>${Math.floor(feeVal / years).toLocaleString()} 원</td><td>정상 산정</td></tr>`;
@@ -829,6 +809,252 @@
             document.getElementById('yearlyTableBody').innerHTML = yearlyHTML;
 
             currentResultData = { client: clientName, manager: clientManager, refund: refStr, fee: feeStr, reasons: reasons, serial: newSerial };
+            
+            const capturedFormData = {
+                client_name: document.getElementById('client_name').value,
+                client_manager: document.getElementById('client_manager').value,
+                sales_stage: document.getElementById('sales_stage').value,
+                years: document.getElementById('years').value,
+                fee_type: document.getElementById('fee_type').value,
+                follow_date: document.getElementById('follow_date').value,
+                property_tax: document.getElementById('property_tax').value,
+                acq_tax: document.getElementById('acq_tax').value,
+                sales_memo: document.getElementById('sales_memo').value,
+
+                facility_type: document.getElementById('facility_type').value,
+                acq_heavy: document.getElementById('acq_heavy').value,
+                green_land_tax: document.getElementById('green_land_tax').value,
+                water_hazard_tax: document.getElementById('water_hazard_tax').value,
+                cart_road_tax: document.getElementById('cart_road_tax').value,
+
+                hotel_land_separate: document.getElementById('hotel_land_separate').value,
+                resort_tax_exemption: document.getElementById('resort_tax_exemption').value,
+                membership_deposit: document.getElementById('membership_deposit').value,
+
+                floor: document.getElementById('floor').value,
+                surcharge: document.getElementById('surcharge').value,
+                regional_tax: document.getElementById('regional_tax').value,
+                temp_building: document.getElementById('temp_building').value,
+                total_area: document.getElementById('total_area').value,
+                exempt_area: document.getElementById('exempt_area').value,
+                traffic_vacant_refund: document.getElementById('traffic_vacant_refund').value,
+                artwork_cost: document.getElementById('artwork_cost').value,
+                good_landlord_tax: document.getElementById('good_landlord_tax').value,
+
+                structure_cost: document.getElementById('structure_cost').value,
+                pf_fee_refund: document.getElementById('pf_fee_refund').value,
+                sale_guarantee_fee: document.getElementById('sale_guarantee_fee').value,
+
+                dev_charge_refund: document.getElementById('dev_charge_refund').value,
+                land_category_acq: document.getElementById('land_category_acq').value,
+                industrial_land_tax: document.getElementById('industrial_land_tax').value,
+                forest_farm_charge: document.getElementById('forest_farm_charge').value,
+                non_business_interest: document.getElementById('non_business_interest').value,
+                land_value_error: document.getElementById('land_value_error').value,
+                urban_planning_land: document.getElementById('urban_planning_land').value,
+                donated_land_tax: document.getElementById('donated_land_tax').value,
+
+                sewer_charge: document.getElementById('sewer_charge').value,
+                comprehensive_real_estate_tax: document.getElementById('comprehensive_real_estate_tax').value,
+                property_tax_ceiling: document.getElementById('property_tax_ceiling').value,
+                special_zone: document.getElementById('special_zone').value,
+                penalty_tax_amount: document.getElementById('penalty_tax_amount').value,
+                employment_increase: document.getElementById('employment_increase').value,
+                rnd_cost: document.getElementById('rnd_cost').value,
+                green_investment: document.getElementById('green_investment').value
+            };
+
+            historyData = historyData.filter(item => item.client !== clientName);
+            historyData.unshift({
+                client: clientName,
+                refund: refStr,
+                followDate: document.getElementById('follow_date').value || "미정",
+                formData: capturedFormData,
+                serial: newSerial,
+                time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+            });
+            if(historyData.length > 5) historyData.pop();
+            renderHistory();
+        }
+
+        function renderHistory() {
+            let html = "";
+            if (historyData.length === 0) {
+                document.getElementById('historyList').innerHTML = '<div style="color:#94a3b8; text-align:center; padding:10px;">저장된 계산 내역이 없습니다.</div>';
+                return;
+            }
+
+            historyData.forEach((item, index) => {
+                html += `<div class="history-item">
+                    <div class="history-info" onclick="loadHistoryItem(${index})" title="클릭하여 데이터 불러오기">
+                        <div><b>${item.client}</b> <span style="color:#10b981; font-weight:bold;">${item.refund}</span></div>
+                        <div style="font-size:0.75em; color:#64748b;">번호: ${item.serial || '-'} | 후속: ${item.followDate} (${item.time})</div>
+                    </div>
+                    <div class="history-btns">
+                        <button type="button" class="btn-hist-edit" onclick="loadHistoryItem(${index})">수정</button>
+                        <button type="button" class="btn-hist-del" onclick="deleteHistoryItem(event, ${index})">X</button>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('historyList').innerHTML = html;
+        }
+
+        function deleteHistoryItem(event, index) {
+            event.stopPropagation();
+            if (confirm("해당 히스토리 기록을 삭제하시겠습니까?")) {
+                historyData.splice(index, 1);
+                renderHistory();
+            }
+        }
+
+        function loadHistoryItem(index) {
+            const data = historyData[index].formData;
+            if (!data) return;
+
+            document.getElementById('client_name').value = data.client_name || "";
+            document.getElementById('client_manager').value = data.client_manager || "";
+            document.getElementById('sales_stage').value = data.sales_stage || "";
+            document.getElementById('years').value = data.years || "";
+            document.getElementById('fee_type').value = data.fee_type || "";
+            document.getElementById('follow_date').value = data.follow_date || "";
+            document.getElementById('property_tax').value = data.property_tax || "0";
+            document.getElementById('acq_tax').value = data.acq_tax || "0";
+            document.getElementById('sales_memo').value = data.sales_memo || "";
+
+            document.getElementById('facility_type').value = data.facility_type || "";
+            document.getElementById('acq_heavy').value = data.acq_heavy || "";
+            document.getElementById('green_land_tax').value = data.green_land_tax || "0";
+            document.getElementById('water_hazard_tax').value = data.water_hazard_tax || "0";
+            document.getElementById('cart_road_tax').value = data.cart_road_tax || "0";
+
+            document.getElementById('hotel_land_separate').value = data.hotel_land_separate || "0";
+            document.getElementById('resort_tax_exemption').value = data.resort_tax_exemption || "";
+            document.getElementById('membership_deposit').value = data.membership_deposit || "0";
+
+            document.getElementById('floor').value = data.floor || "0";
+            document.getElementById('surcharge').value = data.surcharge || "";
+            document.getElementById('regional_tax').value = data.regional_tax || "0";
+            document.getElementById('temp_building').value = data.temp_building || "";
+            document.getElementById('total_area').value = data.total_area || "0";
+            document.getElementById('exempt_area').value = data.exempt_area || "0";
+            document.getElementById('traffic_vacant_refund').value = data.traffic_vacant_refund || "0";
+            document.getElementById('artwork_cost').value = data.artwork_cost || "0";
+            document.getElementById('good_landlord_tax').value = data.good_landlord_tax || "0";
+
+            document.getElementById('structure_cost').value = data.structure_cost || "0";
+            document.getElementById('pf_fee_refund').value = data.pf_fee_refund || "0";
+            document.getElementById('sale_guarantee_fee').value = data.sale_guarantee_fee || "0";
+
+            document.getElementById('dev_charge_refund').value = data.dev_charge_refund || "0";
+            document.getElementById('land_category_acq').value = data.land_category_acq || "0";
+            document.getElementById('industrial_land_tax').value = data.industrial_land_tax || "";
+            document.getElementById('forest_farm_charge').value = data.forest_farm_charge || "0";
+            document.getElementById('non_business_interest').value = data.non_business_interest || "0";
+            document.getElementById('land_value_error').value = data.land_value_error || "0";
+            document.getElementById('urban_planning_land').value = data.urban_planning_land || "0";
+            document.getElementById('donated_land_tax').value = data.donated_land_tax || "0";
+
+            document.getElementById('sewer_charge').value = data.sewer_charge || "0";
+            document.getElementById('comprehensive_real_estate_tax').value = data.comprehensive_real_estate_tax || "0";
+            document.getElementById('property_tax_ceiling').value = data.property_tax_ceiling || "0";
+            document.getElementById('special_zone').value = data.special_zone || "";
+            document.getElementById('penalty_tax_amount').value = data.penalty_tax_amount || "0";
+            document.getElementById('employment_increase').value = data.employment_increase || "0";
+            document.getElementById('rnd_cost').value = data.rnd_cost || "0";
+            document.getElementById('green_investment').value = data.green_investment || "0";
+
+            alert(`[ ${data.client_name} ]의 저장된 입력 데이터가 왼쪽 폼에 복원되었습니다.\n수정 후 [세금 환급 검증 및 제안서 생성] 버튼을 다시 눌러주세요.`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function saveToGoogleSheet() {
+            if (!GOOGLE_SCRIPT_URL) { alert("구글 시트 연동 URL이 없습니다."); return; }
+
+            const payload = {
+                manager_email: loggedInEmail || "admin@jdb.com",
+                client_name: document.getElementById('client_name').value,
+                client_manager: document.getElementById('client_manager').value,
+                sales_stage: document.getElementById('sales_stage').value,
+                follow_date: document.getElementById('follow_date').value || "미정",
+                fee_type: document.getElementById('fee_type').value,
+                years: document.getElementById('years').value,
+                sales_memo: document.getElementById('sales_memo').value,
+                total_refund: document.getElementById('total_refund').innerText,
+                success_fee: document.getElementById('success_fee').innerText,
+
+                facility_type: document.getElementById('facility_type').value,
+                green_land_tax: document.getElementById('green_land_tax').value,
+                acq_heavy: document.getElementById('acq_heavy').value,
+                water_hazard_tax: document.getElementById('water_hazard_tax').value,
+                cart_road_tax: document.getElementById('cart_road_tax').value,
+
+                hotel_land_separate: document.getElementById('hotel_land_separate').value,
+                resort_tax_exemption: document.getElementById('resort_tax_exemption').value,
+                membership_deposit: document.getElementById('membership_deposit').value,
+
+                floor: document.getElementById('floor').value,
+                surcharge: document.getElementById('surcharge').value,
+                regional_tax: document.getElementById('regional_tax').value,
+                total_area: document.getElementById('total_area').value,
+                exempt_area: document.getElementById('exempt_area').value,
+                temp_building: document.getElementById('temp_building').value,
+                traffic_vacant_refund: document.getElementById('traffic_vacant_refund').value,
+                artwork_cost: document.getElementById('artwork_cost').value,
+                good_landlord_tax: document.getElementById('good_landlord_tax').value,
+
+                structure_cost: document.getElementById('structure_cost').value,
+                pf_fee_refund: document.getElementById('pf_fee_refund').value,
+                sale_guarantee_fee: document.getElementById('sale_guarantee_fee').value,
+
+                dev_charge_refund: document.getElementById('dev_charge_refund').value,
+                land_category_acq: document.getElementById('land_category_acq').value,
+                industrial_land_tax: document.getElementById('industrial_land_tax').value,
+                forest_farm_charge: document.getElementById('forest_farm_charge').value,
+                non_business_interest: document.getElementById('non_business_interest').value,
+                land_value_error: document.getElementById('land_value_error').value,
+                urban_planning_land: document.getElementById('urban_planning_land').value,
+                donated_land_tax: document.getElementById('donated_land_tax').value,
+
+                sewer_charge: document.getElementById('sewer_charge').value,
+                comprehensive_real_estate_tax: document.getElementById('comprehensive_real_estate_tax').value,
+                property_tax_ceiling: document.getElementById('property_tax_ceiling').value,
+                special_zone: document.getElementById('special_zone').value,
+                penalty_tax_amount: document.getElementById('penalty_tax_amount').value,
+                employment_increase: document.getElementById('employment_increase').value,
+                rnd_cost: document.getElementById('rnd_cost').value,
+                green_investment: document.getElementById('green_investment').value,
+
+                property_tax: document.getElementById('property_tax').value,
+                acq_tax: document.getElementById('acq_tax').value
+            };
+
+            const btn = document.querySelector('.btn-sheet');
+            btn.innerText = "⏳ 저장 중...";
+            btn.disabled = true;
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                alert(`[ ${payload.client_name} ]의 환급 분석 데이터가 구글시트에 완벽히 저장되었습니다!`);
+                btn.innerText = "📊 저장 완료!";
+                setTimeout(() => { btn.innerText = "📊 구글시트 저장"; btn.disabled = false; }, 3000);
+            }).catch(err => {
+                alert("저장 오류: " + err);
+                btn.innerText = "📊 구글시트 저장";
+                btn.disabled = false;
+            });
+        }
+
+        function openGoogleSheet() { window.open(GOOGLE_SHEET_VIEW_URL, '_blank'); }
+        function copyResultText() {
+            const txt = `[JDB컨설팅 공문서 요약]\n- 문서번호: ${currentResultData.serial}\n- 수신처: ${currentResultData.client} 귀하\n- 예상 환급액: ${currentResultData.refund}\n- 성공보수: ${currentResultData.fee}\n\n[적용 사유]\n${currentResultData.reasons.join('\n')}`;
+            navigator.clipboard.writeText(txt).then(() => alert("공문서 요약 내용이 복사되었습니다!"));
+        }
+        function sendKakaoMessage() {
+            window.location.href = `sms:?body=${encodeURIComponent(`[JDB컨설팅 사전검토]\n수신: ${currentResultData.client} 귀하\n문서번호: ${currentResultData.serial}\n예상환급액: ${currentResultData.refund}\n성공보수: ${currentResultData.fee}\n상세 공문서를 송부해 드립니다.`)}`;
         }
     </script>
 </body>
