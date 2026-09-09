@@ -3,188 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <meta name="apple-mobile-web-app-title" content="영업관리">
     <meta name="application-name" content="영업관리">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="manifest.json">
-
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>JDB컨설팅 영업관리</title>
     <style>
         :root { --primary-color: #1e293b; --accent-color: #d4af37; --button-blue: #3b82f6; --success-color: #10b981; --danger-color: #ef4444; --bg-color: #f1f5f9; }
         * { box-sizing: border-box; }
         body { font-family: 'Malgun Gothic', sans-serif; background-color: var(--bg-color); margin: 0; color: #333; }
-        
-        #login-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #15284b; z-index: 9999; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-        }
-        .logo-container {
-            width: 140px; height: 140px; border-radius: 50%; background-color: #15284b; 
-            border: 4px solid #c0c0c0; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 25px;
-        }
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #15284b; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .logo-container { width: 140px; height: 140px; border-radius: 50%; background-color: #15284b; border: 4px solid #c0c0c0; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 25px; }
         .logo-main { color: #d4af37; font-size: 46px; font-weight: 900; letter-spacing: -3px; position: relative; line-height: 1; margin-bottom: 5px; }
         .logo-main::after { content: '↗'; font-size: 32px; position: absolute; top: -10px; right: -20px; }
         .logo-sub { color: white; font-size: 10px; font-weight: bold; letter-spacing: 1px; }
-
         .login-card { background: white; padding: 30px 25px; border-radius: 12px; text-align: center; width: 85%; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .login-title { font-size: 1.2em; color: #15284b; font-weight: 900; margin: 0 0 20px 0; }
         .input-label { display: block; text-align: left; font-size: 0.85em; font-weight: bold; color: #333; margin-bottom: 8px; }
         .login-input { width: 100%; padding: 13px; margin-bottom: 15px; border: 2px solid #d4af37; border-radius: 6px; font-size: 15px; outline: none; }
-        
         .login-options { display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; color: #475569; margin-bottom: 20px; }
         .login-options label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
-
         .login-btn { width: 100%; padding: 15px; background-color: #15284b; color: #d4af37; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .login-btn:hover { background-color: #0f1c35; }
-
         .header { background-color: var(--primary-color); color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { margin: 0; font-size: 1.2em; color: var(--accent-color); }
         .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        
-        .header-app-btn {
-            background-color: rgba(212, 175, 55, 0.18);
-            color: #facc15;
-            border: 1px solid #facc15;
-            padding: 6px 11px;
-            border-radius: 5px;
-            font-size: 0.8em;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.2s;
-            text-decoration: none;
-        }
+        .header-app-btn { background-color: rgba(212, 175, 55, 0.18); color: #facc15; border: 1px solid #facc15; padding: 6px 11px; border-radius: 5px; font-size: 0.8em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
         .header-app-btn:hover { background-color: #facc15; color: #1e293b; }
-
         .user-badge { background-color: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.82em; font-weight: bold; }
         .logout-btn { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8em; font-weight: bold; cursor: pointer; }
         .logout-btn:hover { background: #dc2626; }
-
         .container { max-width: 1280px; margin: 15px auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; padding: 0 15px; }
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .card h2 { margin-top: 0; font-size: 1.12em; color: var(--primary-color); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
         .card h2 .btn-toolbar { display: flex; gap: 6px; width: 100%; justify-content: flex-end; }
-
-        .btn-logic-doc {
-            background-color: #15284b;
-            color: #d4af37;
-            border: 1.5px solid #d4af37;
-            padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 0.78em;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
+        .btn-logic-doc { background-color: #15284b; color: #d4af37; border: 1.5px solid #d4af37; padding: 6px 12px; border-radius: 5px; font-size: 0.78em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
         .btn-logic-doc:hover { background-color: #d4af37; color: #15284b; }
-
-        .btn-reset {
-            background-color: #ef4444;
-            color: #ffffff;
-            border: 1.5px solid #dc2626;
-            padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 0.78em;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
+        .btn-reset { background-color: #ef4444; color: #ffffff; border: 1.5px solid #dc2626; padding: 6px 12px; border-radius: 5px; font-size: 0.78em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
         .btn-reset:hover { background-color: #dc2626; }
-
-        .btn-crm-full {
-            width: 100%;
-            padding: 10px 14px;
-            background-color: #047857;
-            color: #ffffff;
-            border: 1px solid #059669;
-            border-radius: 6px;
-            font-size: 0.88em;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 12px;
-            transition: background-color 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
+        .btn-crm-full { width: 100%; padding: 10px 14px; background-color: #047857; color: #ffffff; border: 1px solid #059669; border-radius: 6px; font-size: 0.88em; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; margin-bottom: 12px; transition: background-color 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
         .btn-crm-full:hover { background-color: #065f46; }
-
         details.accordion-group { margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; overflow: hidden; transition: 0.2s; }
         details.accordion-group[open] { border-color: #3b82f6; box-shadow: 0 2px 8px rgba(59,130,246,0.1); }
         summary.accordion-header { padding: 11px 14px; background: #f8fafc; font-weight: bold; font-size: 0.92em; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
         details[open] summary.accordion-header { background: #eff6ff; color: #1d4ed8; }
         .accordion-body { padding: 12px; background: #fff; }
-
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .form-group { margin-bottom: 8px; }
         .form-group.full { grid-column: span 2; }
         label { display: block; font-weight: bold; margin-bottom: 3px; font-size: 0.81em; color: #475569; }
         input[type="text"], input[type="date"], select, textarea { width: 100%; padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13.5px; background-color: #fff; font-family: inherit; }
         .num-input { text-align: right; }
-
         .run-btn { width: 100%; padding: 15px; background-color: var(--button-blue); color: white; border: none; border-radius: 6px; font-size: 1.08em; font-weight: bold; cursor: pointer; margin-top: 10px; }
         
         .loader-container { display: none; text-align: center; padding: 25px 10px; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--button-blue); border-radius: 50%; width: 36px; height: 36px; animation: spin 1s linear infinite; margin: 0 auto 12px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .log-text { font-size: 0.88em; color: #64748b; line-height: 1.4; }
-
+        
         .result-section { display: none; }
         .proposal-doc { background: #ffffff; border: 1px solid #cbd5e1; padding: 25px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9em; }
         .summary-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px; border-radius: 6px; text-align: center; margin-bottom: 14px; }
         .amount-value { font-size: 1.8em; color: var(--success-color); font-weight: 900; margin: 5px 0; }
         .fee-value { font-size: 1.1em; color: var(--danger-color); font-weight: bold; }
-
         .data-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85em; background: #fff; }
         .data-table th, .data-table td { border: 1px solid #cbd5e1; padding: 7px; text-align: center; }
         .data-table th { background-color: #f1f5f9; color: #1e293b; font-weight: bold; }
-
         .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 12px; font-size: 0.86em; line-height: 1.5; margin-bottom: 14px; max-height: 280px; overflow-y: auto; }
         .section-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px; font-size: 0.85em; }
+        .official-stamp-box { margin-top: 30px; text-align: right; font-size: 1.1em; font-weight: bold; padding-right: 15px; color: #1e293b; letter-spacing: 0.5px; }
 
-        .official-stamp-box {
-            margin-top: 30px;
-            text-align: right;
-            font-size: 1.1em;
-            font-weight: bold;
-            padding-right: 15px;
-            color: #1e293b;
-            letter-spacing: 0.5px;
-        }
-
-        .search-panel { 
-            background: #e0f2fe; 
-            border: 1px solid #bae6fd; 
-            border-radius: 6px; 
-            padding: 10px; 
-            margin: 15px 0 10px 0; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 6px; 
-        }
+        .search-panel { background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 6px; padding: 10px; margin: 15px 0 10px 0; display: flex; flex-direction: column; gap: 6px; }
         .search-row { display: flex; gap: 6px; }
         .search-input { flex: 1; padding: 7px 10px; border: 1px solid #7dd3fc; border-radius: 4px; font-size: 0.85em; background-color: #fff; }
-        .btn-law, .btn-prec, .btn-kilf { background: #0284c7; color: white; border: none; padding: 7px 12px; border-radius: 4px; font-weight: bold; font-size: 0.82em; cursor: pointer; white-space: nowrap; }
+        .btn-law, .btn-prec { background: #0284c7; color: white; border: none; padding: 7px 12px; border-radius: 4px; font-weight: bold; font-size: 0.82em; cursor: pointer; white-space: nowrap; }
         .btn-prec { background: #0d9488; }
-        .btn-kilf { background: #2b9d8f; }
         .btn-law:hover { background: #0369a1; }
         .btn-prec:hover { background: #0f766e; }
-        .btn-kilf:hover { background: #1e7065; }
+        .btn-kilf { background: #38b2ac; color: white; border: none; padding: 7px 15px; border-radius: 4px; font-weight: bold; font-size: 0.85em; cursor: pointer; white-space: nowrap; }
+        .btn-kilf:hover { background: #2c7a7b; }
 
         .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 12px; }
         .action-btn { padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.85em; cursor: pointer; color: white; text-align: center; text-decoration: none; }
@@ -236,7 +134,7 @@
     <div id="login-overlay" style="display: none;">
         <div class="logo-container"><div class="logo-main">JDB</div><div class="logo-sub">CONSULTING</div></div>
         <div class="login-card">
-            <div class="login-title">JDB컨설팅 영업관리 V5.7</div>
+            <div class="login-title">JDB컨설팅 영업관리 V6.0</div>
             <label class="input-label">영업관리자 이메일 (본인 계정)</label>
             <input type="email" id="userEmailInput" class="login-input" placeholder="예: seongjin@gmail.com" onkeypress="handleEnter(event)">
             <div class="login-options">
@@ -334,7 +232,7 @@
                     </div>
                 </details>
 
-                <!-- 3. 골프장 특화 로직 (No. 16~25) -->
+                <!-- 3. 골프장 특화 로직 (No. 16~25) - 기본 open -->
                 <details class="accordion-group" open>
                     <summary class="accordion-header">⛳ 3. 골프장 특화 (원형보전지, 대중제, 개소세 등 No. 16~25)</summary>
                     <div class="accordion-body">
@@ -525,7 +423,7 @@
                     </div>
                 </details>
 
-                <!-- 법령/판례 검색 패널 -->
+                <!-- 💡 법령/판례 검색 패널 (KILF 통합검색 포함) -->
                 <div class="search-panel">
                     <div class="search-row">
                         <input type="text" id="lawQuery" class="search-input" placeholder="법령 검색 (예: 지방세기본법 제50조)" onkeypress="handleLawEnter(event)">
@@ -535,10 +433,10 @@
                         <input type="text" id="precQuery" class="search-input" placeholder="판례 검색 (예: 조심 2021지2787)" onkeypress="handlePrecEnter(event)">
                         <button class="btn-prec" onclick="searchPrecCenter()">📜 판례 검색</button>
                     </div>
-                    <!-- 신규 추가된 KILF 지방세 법령정보시스템 통합 검색 -->
+                    <!-- KILF 통합검색 추가 -->
                     <div class="search-row" style="margin-top: 5px;">
-                        <input type="text" id="kilfQuery" class="search-input" style="border-color:#2b9d8f;" placeholder="통합 검색 (KILF 지방세 법령정보시스템)" onkeypress="handleKilfEnter(event)">
-                        <button class="btn-kilf" onclick="searchKilfCenter()">🔍 통합 검색</button>
+                        <input type="text" id="kilfQuery" class="search-input" style="border: 2px solid #38b2ac;" placeholder="통합검색  검색어를 입력하세요." onkeypress="handleKilfEnter(event)">
+                        <button class="btn-kilf" onclick="searchKilfCenter()">Q 검색</button>
                     </div>
                 </div>
 
@@ -683,6 +581,8 @@
         }
 
         function handleEnter(event) { if (event.key === 'Enter') startApp(); }
+        
+        // 💡 KILF 및 기존 검색 로직
         function searchLawCenter() { window.open(`https://www.law.go.kr/lsSc.do?menuId=1&query=${encodeURIComponent(document.getElementById('lawQuery').value || '지방세기본법')}`, '_blank'); }
         function searchPrecCenter() { window.open(`https://www.law.go.kr/precSc.do?menuId=7&query=${encodeURIComponent(document.getElementById('precQuery').value || '지역자원시설세')}`, '_blank'); }
         function searchKilfCenter() { window.open(`https://www.olta.re.kr/search/PU_0003_search.jsp?query=${encodeURIComponent(document.getElementById('kilfQuery').value || '지방세')}`, '_blank'); }
@@ -760,7 +660,6 @@
             const clientName = document.getElementById('client_name').value || "고객사";
             const clientManager = document.getElementById('client_manager').value || "";
             const years = parseInt(document.getElementById('years').value) || 5;
-            const feeType = document.getElementById('fee_type').value || "2회분할";
 
             let totalRefund = 0;
             let reasons = [];
@@ -774,117 +673,81 @@
                 }
             }
 
-            addItemVal('item_2_val', 0.1, "중소기업 특별세액감면");
-            addItemVal('item_3_val', 0.25, "연구인력개발비 R&D 세액공제");
-            addItemVal('item_5_val', 0.05, "친환경/에너지 통합투자세액공제");
-            addItemVal('item_6_val', 0.1, "창업중소기업 세액감면");
-            addItemVal('item_7_val', 0.2, "문화예술행사 접대비 한도특례");
-            addItemVal('item_8_val', 0.1, "대손금 손금산입 누락");
-            addItemVal('item_9_val', 0.1, "감가상각비 미달액 추계신고");
-            addItemVal('item_10_val', 0.1, "외국납부세액 공제오류");
-            addItemVal('item_11_val', 0.1, "재고자산 평가방법 신고오류");
-            addItemVal('item_12_val', 0.1, "퇴직연금 손금불산입 오류");
-            addItemVal('item_13_val', 0.1, "수입배당금 익금불산입 누락");
-            addItemVal('item_14_val', 0.1, "가지급금 인정이자 과다계상");
-            addItemVal('item_15_val', 0.1, "기부금 이월공제 미적용");
+            // Iterate over generic numbered item inputs from 2 to 100
+            for(let i = 2; i <= 100; i++) {
+                let el = document.getElementById(`item_${i}_val`);
+                if(el) {
+                    let val = parseNum(`item_${i}_val`);
+                    if(val > 0) {
+                        let calc = val * 0.15 * years; // Generic estimation rate
+                        totalRefund += calc;
+                        reasons.push(`✔️ <b>[환급 검증 항목 #${i}]</b> 입력기준 정산 환급 (예상액: ${Math.floor(calc).toLocaleString()} 원)`);
+                    }
+                }
+            }
 
+            // Explicit logic overwrites for main core fields
             const greenLand = parseNum('green_land_tax');
-            if(greenLand > 0) { totalRefund += greenLand * 0.3 * years; reasons.push(`✔️ <b>[골프장 원형보전임야 분리과세]</b> 환급 예상액: ${Math.floor(greenLand * 0.3 * years).toLocaleString()} 원`); }
+            if(greenLand > 0) { totalRefund += greenLand * 0.3 * years; reasons.push(`✔️ <b>[골프장 원형보전임야 분리과세]</b> 환경영향평가 보전녹지 종합합산 과세오류 정산 (지방세법 시행령 제102조)`); }
             
             const regTax = parseNum('regional_tax');
             const facilityType = document.getElementById('facility_type').value;
-            if(facilityType === '대중제' && regTax > 0) { totalRefund += regTax * 0.2 * years; reasons.push(`✔️ <b>[대중제 골프장 시군세 감면]</b> 환급 예상액: ${Math.floor(regTax * 0.2 * years).toLocaleString()} 원`); }
-
-            addItemVal('item_18_val', 0.015, "회원제 골프장 개소세/교육세 환급");
-            addItemVal('item_19_val', 0.4, "사치성 재산 취득세 중과 오류");
-            addItemVal('item_20_val', 0.2, "클럽하우스 부속토지 별도합산");
-            addItemVal('item_21_val', 0.023, "골프장 조경·식재 공사비 취득세 제외");
-            addItemVal('item_22_val', 0.2, "골프장 지하수 부담금 과오납");
-            addItemVal('item_23_val', 0.02, "골프장 회원권 중복 과세 정산");
+            if(facilityType === '대중제' && regTax > 0) { totalRefund += regTax * 0.2 * years; reasons.push(`✔️ <b>[대중제 골프장 감면 특례]</b> 시·군 조례 감면 누락분 소급 적용 (체육시설법 제10조)`); }
 
             const waterHazard = parseNum('water_hazard_tax');
-            if(waterHazard > 0) { totalRefund += waterHazard * 0.2 * years; reasons.push(`✔️ <b>[골프장 해저드/유지 토지 분리과세]</b> 환급 예상액: ${Math.floor(waterHazard * 0.2 * years).toLocaleString()} 원`); }
+            if(waterHazard > 0) { totalRefund += waterHazard * 0.2 * years; reasons.push(`✔️ <b>[골프장 해저드/유지 토지 분리과세]</b> 방화·배수 목적 유지 별도합산 전환 환급 (공간정보법 제67조)`); }
 
             const cartRoad = parseNum('cart_road_tax');
-            if(cartRoad > 0) { totalRefund += cartRoad * years; reasons.push(`✔️ <b>[카트도로 및 사도 비과세 환급]</b> 환급 예상액: ${Math.floor(cartRoad * years).toLocaleString()} 원`); }
+            if(cartRoad > 0) { totalRefund += cartRoad * years; reasons.push(`✔️ <b>[카트도로 및 사도 비과세 환급]</b> 공중 통행 사도 재산세 비과세 환급 (지방세법 제109조)`); }
 
             const hotelLand = parseNum('hotel_land_separate');
-            if(hotelLand > 0) { totalRefund += hotelLand * 0.15 * years; reasons.push(`✔️ <b>[호텔·콘도 부속토지 별도합산 환급]</b> 환급 예상액: ${Math.floor(hotelLand * 0.15 * years).toLocaleString()} 원`); }
-            
-            addItemVal('item_27_val', 0.5, "관광단지 조세감면 소급");
+            if(hotelLand > 0) { totalRefund += hotelLand * 0.15 * years; reasons.push(`✔️ <b>[호텔·콘도 부속토지 별도합산 환급]</b> 관광숙박업 기준면적 내 별도합산 환급 (조심2019지1044)`); }
             
             const memberDeposit = parseNum('membership_deposit');
-            if(memberDeposit > 0) { totalRefund += memberDeposit * 0.02; reasons.push(`✔️ <b>[콘도 입회보증금 과표 제외 환급]</b> 환급 예상액: ${Math.floor(memberDeposit * 0.02).toLocaleString()} 원`); }
-
-            addItemVal('item_29_val', 0.2, "호텔 부대시설 세율 오적용 환급");
-            addItemVal('item_30_val', 0.2, "유흥음식점 개소세 과오납 환급");
-            addItemVal('item_31_val', 0.5, "임대주택 재산세 감면 누락");
-            addItemVal('item_32_val', 0.5, "임대주택 취득세 감면 누락");
-
-            const surcharge = document.getElementById('surcharge').value;
-            if(surcharge === '3' && regTax > 0) { totalRefund += (regTax * 0.66) * years; reasons.push("✔️ <b>[11층 미만 상가 지역자원시설세 3배 중과 취소]</b>"); }
-
-            addItemVal('item_34_val', 0.1, "공통매입세액 안분계산 오류 정산");
-            addItemVal('item_35_val', 0.05, "의제매입세액 공제 한도 오류 정산");
-            addItemVal('item_36_val', 0.05, "재고매입세액 공제 누락");
-            addItemVal('item_37_val', 0.013, "신용카드 발행 세액공제 누락");
-            addItemVal('item_38_val', 0.1, "집합건축물 대지권 비율 오류 환급");
+            if(memberDeposit > 0) { totalRefund += memberDeposit * 0.02; reasons.push(`✔️ <b>[콘도 입회보증금 부채 제외]</b> 반환채무 보증금 과표 제외 환급 (대법원 2014두46401)`); }
 
             const trafficVacant = parseNum('traffic_vacant_refund');
-            if(trafficVacant > 0) { totalRefund += trafficVacant * years; reasons.push(`✔️ <b>[공실 교통유발부담금 감면 환급]</b> 환급 예상액: ${Math.floor(trafficVacant * years).toLocaleString()} 원`); }
+            if(trafficVacant > 0) { totalRefund += trafficVacant * years; reasons.push(`✔️ <b>[공실 교통유발부담금 감면 환급]</b> 30일 이상 미사용 공실 기간 부담금 환급 (도시교통촉진법 제38조)`); }
 
             const artworkCost = parseNum('artwork_cost');
-            if(artworkCost > 0) { totalRefund += artworkCost * 0.046; reasons.push(`✔️ <b>[미술장식품 취득세 제외 환급]</b> 환급 예상액: ${Math.floor(artworkCost * 0.046).toLocaleString()} 원`); }
+            if(artworkCost > 0) { totalRefund += artworkCost * 0.046; reasons.push(`✔️ <b>[미술장식품 취득세 제외]</b> 건물과 독립된 옥외 조형물 과표 제외 (문예진흥법 제9조)`); }
 
             const goodLandlord = parseNum('good_landlord_tax');
-            if(goodLandlord > 0) { totalRefund += goodLandlord * 0.7; reasons.push(`✔️ <b>[착한임대인 세액공제 경정청구]</b> 환급 예상액: ${Math.floor(goodLandlord * 0.7).toLocaleString()} 원`); }
-
-            addItemVal('item_44_val', 0.35, "지식산업센터 취득세 감면 누락");
-            addItemVal('item_45_val', 0.1, "복합몰 감가상각 방법 변경 누락");
-
-            addItemVal('item_46_val', 0.35, "물류창고 재산세 감면 누락");
-            addItemVal('item_47_val', 0.05, "물류 자동화설비 투자세액공제");
-            addItemVal('item_48_val', 0.2, "물류센터 하역장/야적장 과세구분 오류");
-            addItemVal('item_49_val', 1.0, "지방 이전 공장 취득세 100% 면제 누락");
-            addItemVal('item_50_val', 0.5, "지방 이전 공장 재산세 50% 감면 누락");
-            addItemVal('item_51_val', 0.1, "공장 신축 공사 매입세액 조기환급");
-            addItemVal('item_52_val', 0.1, "전력산업기반부담금 면제대상 누락");
-            addItemVal('item_53_val', 0.2, "폐기물처분부담금 감면 누락");
-            addItemVal('item_54_val', 0.2, "위험물 인허가 수수료 과오납");
-            addItemVal('item_55_val', 0.5, "공장 기숙사/식당 재산세 감면 누락");
+            if(goodLandlord > 0) { totalRefund += goodLandlord * 0.7; reasons.push(`✔️ <b>[착한임대인 세액공제]</b> 소상공인 임대료 인하액 70% 법인세 경정청구 (조특법 제96조의3)`); }
 
             const structureCost = parseNum('structure_cost');
-            if(structureCost > 0) { totalRefund += structureCost * 0.15 * 0.046; reasons.push(`✔️ <b>[구축물 감가상각 누락 취득세 환급]</b> 환급 예상액: ${Math.floor(structureCost * 0.15 * 0.046).toLocaleString()} 원`); }
+            if(structureCost > 0) { totalRefund += structureCost * 0.15 * 0.046; reasons.push(`✔️ <b>[구축물 감가상각 누락 취득세 환급]</b> 수전설비·주차타워 내용연수 경과분 과표 정산 (지방세운영과-310)`); }
 
             const pfFee = parseNum('pf_fee_refund');
-            if(pfFee > 0) { totalRefund += pfFee * 0.046; reasons.push(`✔️ <b>[PF 금융자문수수료 취득세 제외 환급]</b> 환급 예상액: ${Math.floor(pfFee * 0.046).toLocaleString()} 원`); }
+            if(pfFee > 0) { totalRefund += pfFee * 0.046; reasons.push(`✔️ <b>[PF 금융수수료 취득세 제외]</b> 자금조달 목적 수수료 과표 제외 환급 (대법원 2017두41761)`); }
 
             const saleFee = parseNum('sale_guarantee_fee');
-            if(saleFee > 0) { totalRefund += saleFee * 0.046; reasons.push(`✔️ <b>[분양보증료·대행수수료 취득세 제외]</b> 환급 예상액: ${Math.floor(saleFee * 0.046).toLocaleString()} 원`); }
+            if(saleFee > 0) { totalRefund += saleFee * 0.046; reasons.push(`✔️ <b>[분양보증료 취득세 제외]</b> 분양 관련 비용 취득세 과표 제외 (대법원 2010두23793)`); }
 
             const devCharge = parseNum('dev_charge_refund');
-            if(devCharge > 0) { totalRefund += devCharge * 0.25; reasons.push(`✔️ <b>[개발부담금 기부채납 비용 누락 환급]</b> 환급 예상액: ${Math.floor(devCharge * 0.25).toLocaleString()} 원`); }
+            if(devCharge > 0) { totalRefund += devCharge * 0.25; reasons.push(`✔️ <b>[개발부담금 기부채납 비용 누락 환급]</b> 기부채납 토지가액 및 토목공사비 공제 환급 (대법원 2017두47240)`); }
 
             const landCategory = parseNum('land_category_acq');
-            if(landCategory > 0) { totalRefund += landCategory; reasons.push(`✔️ <b>[지목변경 간주취득세 과다산정 환급]</b> 환급 예상액: ${Math.floor(landCategory).toLocaleString()} 원`); }
+            if(landCategory > 0) { totalRefund += landCategory; reasons.push(`✔️ <b>[지목변경 간주취득세 과다산정 환급]</b> 법인장부 실공사비 초과 과세액 환급 (조심2020지0650)`); }
 
             const landValueError = parseNum('land_value_error');
-            if(landValueError > 0) { totalRefund += landValueError * 0.15 * years; reasons.push(`✔️ <b>[개별공시지가 과대평가 재산세 환급]</b> 환급 예상액: ${Math.floor(landValueError * 0.15 * years).toLocaleString()} 원`); }
+            if(landValueError > 0) { totalRefund += landValueError * 0.15 * years; reasons.push(`✔️ <b>[개별공시지가 과대평가 재산세 환급]</b> 토지특성 조사 오류 하자에 따른 재산세 환급 (대법원 2012두25828)`); }
 
             const donatedLand = parseNum('donated_land_tax');
-            if(donatedLand > 0) { totalRefund += donatedLand * years; reasons.push(`✔️ <b>[기부채납/사도 비과세 재산세 환급]</b> 환급 예상액: ${Math.floor(donatedLand * years).toLocaleString()} 원`); }
+            if(donatedLand > 0) { totalRefund += donatedLand * years; reasons.push(`✔️ <b>[기부채납/사도 비과세 재산세 환급]</b> 공중 무상 제공 도로부지 재산세 비과세 환급 (지방세법 제109조)`); }
 
             const compRealEstate = parseNum('comprehensive_real_estate_tax');
-            if(compRealEstate > 0) { totalRefund += compRealEstate * years; reasons.push(`✔️ <b>[종합부동산세 연계 환급]</b> 환급 예상액: ${Math.floor(compRealEstate * years).toLocaleString()} 원`); }
+            if(compRealEstate > 0) { totalRefund += compRealEstate * years; reasons.push(`✔️ <b>[종합부동산세 연계 환급]</b> 재산세 과세구분 경정에 따른 종부세 소급 환급 (종부세법 제11조)`); }
 
             const propCeiling = parseNum('property_tax_ceiling');
-            if(propCeiling > 0) { totalRefund += propCeiling; reasons.push(`✔️ <b>[재산세 세부담 상한 초과 환급]</b> 환급 예상액: ${Math.floor(propCeiling).toLocaleString()} 원`); }
+            if(propCeiling > 0) { totalRefund += propCeiling; reasons.push(`✔️ <b>[재산세 세부담 상한 초과 환급]</b> 직전연도 대비 150% 초과 부과액 환급 (지방세법 제122조)`); }
 
+            // Default demo simulation block
             if (totalRefund === 0) {
                 let defaultBase = parseNum('property_tax') + parseNum('acq_tax');
                 if(defaultBase > 0) {
                     totalRefund = defaultBase * 0.08 * years;
-                    reasons.push("✔️ <b>[종합 세무 검토 예상 환급]</b> 기본 재산세 원장 정밀 스크리닝 기반 추정 환급액 산정");
+                    reasons.push("✔️ <b>[종합 세무 검토 예상 환급]</b> 기본 재산세 및 취득세 원장 정밀 스크리닝 기반 추정 환급액 산정");
                 } else {
                     totalRefund = 125000000;
                     reasons.push("✔️ <b>[여주 T 컨트리클럽 원형보전지 및 대중제 감면 시뮬레이션]</b> 기본 시연 예상 환급액 산정");
@@ -915,6 +778,7 @@
             }
             document.getElementById('yearlyTableBody').innerHTML = yearlyHTML;
 
+            // Save globally for buttons
             currentResultData = { client: clientName, manager: clientManager, refund: refStr, fee: feeStr, reasons: reasons, serial: newSerial };
             
             const capturedFormData = {
@@ -929,6 +793,7 @@
                 sales_memo: document.getElementById('sales_memo').value
             };
 
+            // History Update
             historyData = historyData.filter(item => item.client !== clientName);
             historyData.unshift({
                 client: clientName,
@@ -990,6 +855,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // Action Buttons
         function copyResultText() {
             if (!currentResultData.client || !currentResultData.refund) {
                 alert("먼저 [세금 환급 검증 및 제안서 생성]을 실행해 주세요.");
