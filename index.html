@@ -3,86 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
     <meta name="apple-mobile-web-app-title" content="영업관리">
     <meta name="application-name" content="영업관리">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="manifest.json">
+
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>JDB컨설팅 영업관리</title>
     <style>
         :root { --primary-color: #1e293b; --accent-color: #d4af37; --button-blue: #3b82f6; --success-color: #10b981; --danger-color: #ef4444; --bg-color: #f1f5f9; }
         * { box-sizing: border-box; }
         body { font-family: 'Malgun Gothic', sans-serif; background-color: var(--bg-color); margin: 0; color: #333; }
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #15284b; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .logo-container { width: 140px; height: 140px; border-radius: 50%; background-color: #15284b; border: 4px solid #c0c0c0; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 25px; }
+        
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #15284b; z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+        .logo-container {
+            width: 140px; height: 140px; border-radius: 50%; background-color: #15284b; 
+            border: 4px solid #c0c0c0; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 25px;
+        }
         .logo-main { color: #d4af37; font-size: 46px; font-weight: 900; letter-spacing: -3px; position: relative; line-height: 1; margin-bottom: 5px; }
         .logo-main::after { content: '↗'; font-size: 32px; position: absolute; top: -10px; right: -20px; }
         .logo-sub { color: white; font-size: 10px; font-weight: bold; letter-spacing: 1px; }
+
         .login-card { background: white; padding: 30px 25px; border-radius: 12px; text-align: center; width: 85%; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .login-title { font-size: 1.2em; color: #15284b; font-weight: 900; margin: 0 0 20px 0; }
         .input-label { display: block; text-align: left; font-size: 0.85em; font-weight: bold; color: #333; margin-bottom: 8px; }
         .login-input { width: 100%; padding: 13px; margin-bottom: 15px; border: 2px solid #d4af37; border-radius: 6px; font-size: 15px; outline: none; }
+        
         .login-options { display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; color: #475569; margin-bottom: 20px; }
         .login-options label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+
         .login-btn { width: 100%; padding: 15px; background-color: #15284b; color: #d4af37; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .login-btn:hover { background-color: #0f1c35; }
+
         .header { background-color: var(--primary-color); color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { margin: 0; font-size: 1.2em; color: var(--accent-color); }
         .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .header-app-btn { background-color: rgba(212, 175, 55, 0.18); color: #facc15; border: 1px solid #facc15; padding: 6px 11px; border-radius: 5px; font-size: 0.8em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+        
+        .header-app-btn {
+            background-color: rgba(212, 175, 55, 0.18);
+            color: #facc15;
+            border: 1px solid #facc15;
+            padding: 6px 11px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
         .header-app-btn:hover { background-color: #facc15; color: #1e293b; }
+
         .user-badge { background-color: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.82em; font-weight: bold; }
         .logout-btn { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8em; font-weight: bold; cursor: pointer; }
         .logout-btn:hover { background: #dc2626; }
+
         .container { max-width: 1280px; margin: 15px auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; padding: 0 15px; }
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .card h2 { margin-top: 0; font-size: 1.12em; color: var(--primary-color); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
         .card h2 .btn-toolbar { display: flex; gap: 6px; width: 100%; justify-content: flex-end; }
-        .btn-logic-doc { background-color: #15284b; color: #d4af37; border: 1.5px solid #d4af37; padding: 6px 12px; border-radius: 5px; font-size: 0.78em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+
+        .btn-logic-doc {
+            background-color: #15284b;
+            color: #d4af37;
+            border: 1.5px solid #d4af37;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.78em;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
         .btn-logic-doc:hover { background-color: #d4af37; color: #15284b; }
-        .btn-reset { background-color: #ef4444; color: #ffffff; border: 1.5px solid #dc2626; padding: 6px 12px; border-radius: 5px; font-size: 0.78em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+
+        .btn-reset {
+            background-color: #ef4444;
+            color: #ffffff;
+            border: 1.5px solid #dc2626;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.78em;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
         .btn-reset:hover { background-color: #dc2626; }
-        .btn-crm-full { width: 100%; padding: 10px 14px; background-color: #047857; color: #ffffff; border: 1px solid #059669; border-radius: 6px; font-size: 0.88em; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; margin-bottom: 12px; transition: background-color 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+        .btn-crm-full {
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #047857;
+            color: #ffffff;
+            border: 1px solid #059669;
+            border-radius: 6px;
+            font-size: 0.88em;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+            transition: background-color 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
         .btn-crm-full:hover { background-color: #065f46; }
+
         details.accordion-group { margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; overflow: hidden; transition: 0.2s; }
         details.accordion-group[open] { border-color: #3b82f6; box-shadow: 0 2px 8px rgba(59,130,246,0.1); }
         summary.accordion-header { padding: 11px 14px; background: #f8fafc; font-weight: bold; font-size: 0.92em; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
         details[open] summary.accordion-header { background: #eff6ff; color: #1d4ed8; }
         .accordion-body { padding: 12px; background: #fff; }
+
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .form-group { margin-bottom: 8px; }
         .form-group.full { grid-column: span 2; }
-        label { display: block; font-weight: bold; margin-bottom: 3px; font-size: 0.81em; color: #475569; }
+        label { display: block; font-weight: bold; margin-bottom: 3px; font-size: 0.78em; color: #475569; letter-spacing: -0.5px;}
         input[type="text"], input[type="date"], select, textarea { width: 100%; padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13.5px; background-color: #fff; font-family: inherit; }
         .num-input { text-align: right; }
+
         .run-btn { width: 100%; padding: 15px; background-color: var(--button-blue); color: white; border: none; border-radius: 6px; font-size: 1.08em; font-weight: bold; cursor: pointer; margin-top: 10px; }
         
         .loader-container { display: none; text-align: center; padding: 25px 10px; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--button-blue); border-radius: 50%; width: 36px; height: 36px; animation: spin 1s linear infinite; margin: 0 auto 12px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
+
         .result-section { display: none; }
         .proposal-doc { background: #ffffff; border: 1px solid #cbd5e1; padding: 25px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9em; }
         .summary-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px; border-radius: 6px; text-align: center; margin-bottom: 14px; }
         .amount-value { font-size: 1.8em; color: var(--success-color); font-weight: 900; margin: 5px 0; }
         .fee-value { font-size: 1.1em; color: var(--danger-color); font-weight: bold; }
+
         .data-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85em; background: #fff; }
         .data-table th, .data-table td { border: 1px solid #cbd5e1; padding: 7px; text-align: center; }
         .data-table th { background-color: #f1f5f9; color: #1e293b; font-weight: bold; }
+
         .match-log { background-color: #f8fafc; border-left: 4px solid var(--accent-color); padding: 12px; font-size: 0.86em; line-height: 1.5; margin-bottom: 14px; max-height: 280px; overflow-y: auto; }
         .section-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px; font-size: 0.85em; }
-        .official-stamp-box { margin-top: 30px; text-align: right; font-size: 1.1em; font-weight: bold; padding-right: 15px; color: #1e293b; letter-spacing: 0.5px; }
 
-        .search-panel { background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 6px; padding: 10px; margin: 15px 0 10px 0; display: flex; flex-direction: column; gap: 6px; }
+        .official-stamp-box {
+            margin-top: 30px;
+            text-align: right;
+            font-size: 1.1em;
+            font-weight: bold;
+            padding-right: 15px;
+            color: #1e293b;
+            letter-spacing: 0.5px;
+        }
+
+        /* 변경된 디자인: 테두리가 있는 하늘색 배경 박스 */
+        .search-panel { 
+            background: #edf8ff; 
+            border: 1px solid #bae6fd; 
+            border-radius: 6px; 
+            padding: 10px; 
+            margin: 15px 0 10px 0; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+        }
         .search-row { display: flex; gap: 6px; }
-        .search-input { flex: 1; padding: 7px 10px; border: 1px solid #7dd3fc; border-radius: 4px; font-size: 0.85em; background-color: #fff; }
-        .btn-law, .btn-prec { background: #0284c7; color: white; border: none; padding: 7px 12px; border-radius: 4px; font-weight: bold; font-size: 0.82em; cursor: pointer; white-space: nowrap; }
+        .search-input { flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.9em; background-color: #fff; color: #64748b;}
+        /* 검색창 테두리 색상 개별 적용 */
+        #kilfQuery { border: 1px solid #2b9d8f; }
+
+        .btn-law, .btn-prec, .btn-kilf { color: white; border: none; padding: 8px 14px; border-radius: 4px; font-weight: bold; font-size: 0.85em; cursor: pointer; white-space: nowrap; }
+        .btn-law { background: #0284c7; }
         .btn-prec { background: #0d9488; }
+        .btn-kilf { background: #2b9d8f; }
+        
         .btn-law:hover { background: #0369a1; }
         .btn-prec:hover { background: #0f766e; }
-        .btn-kilf { background: #38b2ac; color: white; border: none; padding: 7px 15px; border-radius: 4px; font-weight: bold; font-size: 0.85em; cursor: pointer; white-space: nowrap; }
-        .btn-kilf:hover { background: #2c7a7b; }
+        .btn-kilf:hover { background: #1e7065; }
+
+        .btn-code-doc {
+            width: 100%;
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 5px;
+            transition: 0.2s;
+        }
+        .btn-code-doc:hover { background-color: #e2e8f0; }
 
         .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 12px; }
         .action-btn { padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.85em; cursor: pointer; color: white; text-align: center; text-decoration: none; }
@@ -168,7 +291,7 @@
 
                 <!-- 1. 기본 고객사 정보 및 계약 조건 -->
                 <details class="accordion-group" open>
-                    <summary class="accordion-header">🏢 1. 기본 고객사 정보 및 계약 조건</summary>
+                    <summary class="accordion-header">🏢 1. 기본 고객사 정보 및 계약 조건 (필수)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
                             <div class="form-group full"><label>고객사명 (수신처)</label><input type="text" id="client_name" value="여주 T 컨트리클럽"></div>
@@ -211,30 +334,30 @@
 
                 <!-- 2. 공통 및 법인 일반 국세/지방세 특례 (No. 1~15) -->
                 <details class="accordion-group">
-                    <summary class="accordion-header">🏢 2. 공통 및 법인 일반 국세/지방세 특례 (No. 1~15)</summary>
+                    <summary class="accordion-header">🏢 2. 법인 공통 특례 (No. 2~15)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
-                            <div class="form-group"><label>02. 중소기업 특별세액감면 산출세액 (원)</label><input type="text" id="item_2_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>03. 미신청 연구인력개발비(R&D) (원)</label><input type="text" id="item_3_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>04. 통합고용 증가 상시근로자 (명)</label><input type="text" id="item_4_val" class="num-input" value="2"></div>
-                            <div class="form-group"><label>05. 친환경/에너지 통합투자 자산액 (원)</label><input type="text" id="item_5_val" class="num-input" value="30,000,000" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>06. 창업중소기업 세액감면 소득액 (원)</label><input type="text" id="item_6_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>07. 문화예술 행사 접대비 지출액 (원)</label><input type="text" id="item_7_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>08. 미산입 대손채권액 (원)</label><input type="text" id="item_8_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>09. 감가상각비 미달액 (원)</label><input type="text" id="item_9_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>10. 외국납부세액 (원)</label><input type="text" id="item_10_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>11. 재고자산 평가오류 소득금액 (원)</label><input type="text" id="item_11_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>12. 퇴직연금 불입 초과액 (원)</label><input type="text" id="item_12_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>13. 수입배당금 익금불산입 대상액 (원)</label><input type="text" id="item_13_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>14. 가지급금 인정이자 과다계상액 (원)</label><input type="text" id="item_14_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>15. 기부금 이월공제 미적용액 (원)</label><input type="text" id="item_15_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>02. 토지 공시지가 과대평가 재산세 (원)</label><input type="text" id="item_2_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>03. 세부담 상한(150%) 초과 납부액 (원)</label><input type="text" id="item_3_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>04. 과밀억제 본점이전 취득세 (원)</label><input type="text" id="item_4_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>05. 구조조정(합병/분할) 취득세 (원)</label><input type="text" id="item_5_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>06. 과밀억제 밖 증자 등록면허세 (원)</label><input type="text" id="item_6_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>07. 신탁재산 명의변경 취득세 (원)</label><input type="text" id="item_7_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>08. 중소기업 특별세액감면 소득금액 (원)</label><input type="text" id="item_8_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>09. 연구인력개발비(R&D) 공제액 (원)</label><input type="text" id="item_9_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>10. 고용증대 상시근로자 증가 (명)</label><input type="text" id="item_10_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>11. 친환경/에너지 투자자산 (원)</label><input type="text" id="item_11_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>12. 창업중소기업 세액감면 (원)</label><input type="text" id="item_12_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>13. 접대비 중 문화예술비 지출 (원)</label><input type="text" id="item_13_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>14. 대손충당금 손금산입 누락액 (원)</label><input type="text" id="item_14_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>15. 감가상각비 미달 신고액 (원)</label><input type="text" id="item_15_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
 
                 <!-- 3. 골프장 특화 로직 (No. 16~25) - 기본 open -->
                 <details class="accordion-group" open>
-                    <summary class="accordion-header">⛳ 3. 골프장 특화 (원형보전지, 대중제, 개소세 등 No. 16~25)</summary>
+                    <summary class="accordion-header">⛳ 3. 골프장 특화 (No. 16~25)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
                             <div class="form-group"><label>체육시설업 등록 형태</label>
@@ -252,37 +375,30 @@
                                     <option value="Y">사치성 중과(12%)</option>
                                 </select>
                             </div>
-                            <div class="form-group"><label>16. 원형보전지/임야 분리과세 대상 (원)</label><input type="text" id="green_land_tax" class="num-input" value="70,000,000" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>16. 원형보전지/임야 공시지가 (원)</label><input type="text" id="green_land_tax" class="num-input" value="70,000,000" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>17. 기납부 지역자원시설세 등 (원)</label><input type="text" id="regional_tax" class="num-input" value="12,000,000" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>18. 회원제 비과세 대상 내장객 수 (명)</label><input type="text" id="item_18_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>19. 사치성 과세 취득세액 (원)</label><input type="text" id="item_19_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>18. 사치성 과세 중 자연림/조경수 (원)</label><input type="text" id="item_18_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>19. 비과세 대상 내장객 수 (명)</label><input type="text" id="item_19_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>20. 클럽하우스 초과부지 공시지가 (원)</label><input type="text" id="item_20_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>21. 골프장 조경·식재 공사비 (원)</label><input type="text" id="item_21_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>22. 지하수 과다납부 부담금 (원)</label><input type="text" id="item_22_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>23. 회원권 관련 중복 납부세액 (원)</label><input type="text" id="item_23_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>24. 골프장 해저드/유지 대상 (원)</label><input type="text" id="water_hazard_tax" class="num-input" value="15,000,000" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>25. 카트도로 및 진입로 사도 (원)</label><input type="text" id="cart_road_tax" class="num-input" value="8,000,000" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>21. 인공연못/해저드 공시지가 (원)</label><input type="text" id="water_hazard_tax" class="num-input" value="15,000,000" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>22. 카트도로/사도 공시지가 (원)</label><input type="text" id="cart_road_tax" class="num-input" value="8,000,000" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>23. 조경·식재 공사비 원가 (원)</label><input type="text" id="item_23_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>24. 지하수 과다납부 부담금 (원)</label><input type="text" id="item_24_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>25. 회원권 중복납부 세액 (원)</label><input type="text" id="item_25_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
 
                 <!-- 4. 호텔 / 리조트 특화 로직 (No. 26~32) -->
                 <details class="accordion-group">
-                    <summary class="accordion-header">🏨 4. 호텔 / 리조트 특화 (부속토지, 입회보증금 등 No. 26~32)</summary>
+                    <summary class="accordion-header">🏨 4. 호텔 / 리조트 특화 (No. 26~32)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
-                            <div class="form-group"><label>26. 관광숙박업 부속토지 공시지가 (원)</label><input type="text" id="hotel_land_separate" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>관광단지 조세감면 유무</label>
-                                <select id="resort_tax_exemption">
-                                    <option value="" selected disabled>(선택해 주세요)</option>
-                                    <option value="N">해당 없음</option>
-                                    <option value="Y">관광단지 감면(50%)</option>
-                                </select>
-                            </div>
-                            <div class="form-group"><label>27. 감면 대상 취득/재산세액 (원)</label><input type="text" id="item_27_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>28. 반환의무 입회보증금 총액 (원)</label><input type="text" id="membership_deposit" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>29. 호텔 부대시설 과다납부 세액 (원)</label><input type="text" id="item_29_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>30. 유흥음식점 개소세 납부액 (원)</label><input type="text" id="item_30_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>26. 관광숙박 부속토지 공시지가 (원)</label><input type="text" id="item_26_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>27. 관광단지 조세감면 대상세액 (원)</label><input type="text" id="item_27_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>28. 입회보증금 반환부채 총액 (원)</label><input type="text" id="item_28_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>29. 수영장/스파 부대시설 과오납 (원)</label><input type="text" id="item_29_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>30. 유흥주점 개소세 과오납액 (원)</label><input type="text" id="item_30_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>31. 임대주택 재산세 납부액 (원)</label><input type="text" id="item_31_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>32. 임대주택 취득세 납부액 (원)</label><input type="text" id="item_32_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
@@ -291,139 +407,118 @@
 
                 <!-- 5. 상가 / 대형빌딩 / 복합몰 특화 로직 (No. 33~45) -->
                 <details class="accordion-group">
-                    <summary class="accordion-header">🏬 5. 상가 / 대형빌딩 / 복합몰 특화 (공용면적, 공실 등 No. 33~45)</summary>
+                    <summary class="accordion-header">🏬 5. 상가 / 대형빌딩 / 복합몰 특화 (No. 33~45)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
-                            <div class="form-group"><label>상가/건축물 층수 (층)</label><input type="text" id="floor" class="num-input" value="2"></div>
-                            <div class="form-group"><label>지역자원시설세 과세</label>
-                                <select id="surcharge">
-                                    <option value="" disabled>(선택해 주세요)</option>
-                                    <option value="1" selected>1배 (일반)</option>
-                                    <option value="3">3배 (중과세)</option>
-                                </select>
-                            </div>
-                            <div class="form-group"><label>전체 연면적 (㎡)</label><input type="text" id="total_area" class="num-input" value="8,500" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>비과세 대상 면적 (㎡)</label><input type="text" id="exempt_area" class="num-input" value="850" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>33. 기납부 지역자원시설세 (원)</label><input type="text" id="regional_tax" class="num-input" value="12,000,000" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>34. 공통매입세액 안분 대상액 (원)</label><input type="text" id="item_34_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>35. 면세 농산물 매입가액 (원)</label><input type="text" id="item_35_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>36. 신용카드 매출액 (원)</label><input type="text" id="item_36_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>37. 대지권 오류 납부 재산세 (원)</label><input type="text" id="item_37_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>38. 저당권 등 등록면허세 과오납 (원)</label><input type="text" id="item_38_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>40. 가설건축물 부지 재산세 (원)</label><input type="text" id="item_40_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>41. 공실 교통유발부담금 (원)</label><input type="text" id="traffic_vacant_refund" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>42. 미술장식품 구입가액 (원)</label><input type="text" id="artwork_cost" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>43. 착한임대인 임대료 인하액 (원)</label><input type="text" id="good_landlord_tax" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>44. 지식산업센터 취득세액 (원)</label><input type="text" id="item_44_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>45. 복합몰 미달 상각액 (원)</label><input type="text" id="item_45_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>33. 11층 미만 상가 지역자원시설세 (원)</label><input type="text" id="item_33_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>34. 공용/비과세 안분 대상 재산세 (원)</label><input type="text" id="item_34_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>35. 공통매입세액 과소 안분액 (원)</label><input type="text" id="item_35_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>36. 상가 가설건축물 부지 재산세 (원)</label><input type="text" id="item_36_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>37. 30일 이상 공실 교통유발부담금 (원)</label><input type="text" id="item_37_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>38. 면세 농산물 매입가액 (원)</label><input type="text" id="item_38_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>39. 신용카드 등 매출액 (원)</label><input type="text" id="item_39_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>40. 대지권 비율 오류 재산세 (원)</label><input type="text" id="item_40_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>41. 근저당권 말소 등 등록면허세 (원)</label><input type="text" id="item_41_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>42. 독립 미술장식품 구입가액 (원)</label><input type="text" id="item_42_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>43. 지식산업센터 취득세 납부액 (원)</label><input type="text" id="item_43_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>44. 복합몰 감가상각 미달 상각액 (원)</label><input type="text" id="item_44_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group full"><label>45. 착한임대인 임대료 인하액 (원)</label><input type="text" id="item_45_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
 
                 <!-- 6. 물류센터 / 공장 특화 로직 (No. 46~57) -->
                 <details class="accordion-group">
-                    <summary class="accordion-header">🏭 6. 물류센터 / 공장 특화 (자동화설비, 지방이전 등 No. 46~57)</summary>
+                    <summary class="accordion-header">🏭 6. 물류센터 / 공장 특화 (No. 46~57)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
-                            <div class="form-group"><label>물류창고업 / 공장등록 여부</label>
-                                <select id="factory_registered">
-                                    <option value="" selected disabled>(선택해 주세요)</option>
-                                    <option value="Y">등록 완료</option>
-                                    <option value="N">미등록</option>
-                                </select>
-                            </div>
                             <div class="form-group"><label>46. 물류창고 재산세 납부액 (원)</label><input type="text" id="item_46_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>47. 물류 자동화설비 취득가액 (원)</label><input type="text" id="item_47_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>48. 야적장(CY) 부지 공시지가 (원)</label><input type="text" id="item_48_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>49. 이전 공장 취득세 납부액 (원)</label><input type="text" id="item_49_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>50. 이전 공장 재산세 납부액 (원)</label><input type="text" id="item_50_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>51. 공장 신축 공사 매입세액 (원)</label><input type="text" id="item_51_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>52. 과다납부 전력기금 (원)</label><input type="text" id="item_52_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>53. 납부한 폐기물처분부담금 (원)</label><input type="text" id="item_53_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>54. 과다납부 인허가 수수료 (원)</label><input type="text" id="item_54_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>55. 기숙사/식당 재산세 납부액 (원)</label><input type="text" id="item_55_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>56. 구축물 취득가액 (원)</label><input type="text" id="structure_cost" class="num-input" value="50,000,000" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>49. 지방이전 공장 취득세 납부액 (원)</label><input type="text" id="item_49_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>50. 지방이전 공장 재산세 납부액 (원)</label><input type="text" id="item_50_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>51. 수전설비/주차타워 취득가액 (원)</label><input type="text" id="item_51_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>52. 공장 신축 조기환급분 매입세액 (원)</label><input type="text" id="item_52_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>53. 자가발전 면제누락 전력기금 (원)</label><input type="text" id="item_53_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>54. 폐기물처분부담금 납부액 (원)</label><input type="text" id="item_54_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>55. 소방대상물 인허가 수수료 (원)</label><input type="text" id="item_55_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>56. 구내식당/기숙사 재산세 납부액 (원)</label><input type="text" id="item_56_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>57. 폐자원 매입세액 공제한도 누락 (원)</label><input type="text" id="item_57_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
 
-                <!-- 7. 신축 / 개발 / PF 특화 로직 (No. 58~77) -->
+                <!-- 7. 신축 / 개발 특화 로직 (No. 58~77) -->
                 <details class="accordion-group">
-                    <summary class="accordion-header">🏗️ 7. 신축 / 개발 / PF 특화 (PF수수료, 분양보증 등 No. 58~77)</summary>
+                    <summary class="accordion-header">🏗️ 7. 신축 / 개발 특화 (No. 58~77)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
-                            <div class="form-group"><label>58. PF 금융자문수수료 (원)</label><input type="text" id="pf_fee_refund" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>59. 분양보증료·대행수수료 (원)</label><input type="text" id="sale_guarantee_fee" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>60. 공통매입세액 과소안분액 (원)</label><input type="text" id="item_60_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>61. 납부한 광역교통부담금 (원)</label><input type="text" id="item_61_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>62. 하수도원인자부담금 총액 (원)</label><input type="text" id="sewer_charge" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>63. 납부한 학교용지부담금 (원)</label><input type="text" id="item_63_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>64. 개발업 등록 등록면허세 (원)</label><input type="text" id="item_64_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>58. PF 금융자문수수료 (원)</label><input type="text" id="item_58_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>59. 분양보증료·대행수수료 (원)</label><input type="text" id="item_59_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>60. 공용면적 제외 광역교통부담금 (원)</label><input type="text" id="item_60_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>61. 하수도원인자부담금 총액 (원)</label><input type="text" id="item_61_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>62. 납부한 학교용지부담금 (원)</label><input type="text" id="item_62_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>63. 개발업 등록 등록면허세 (원)</label><input type="text" id="item_63_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>64. 복합상가 공통매입세액 안분 (원)</label><input type="text" id="item_64_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>65. 외투기업 취득세액 (원)</label><input type="text" id="item_65_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>66. 벤처시설 취득세액 (원)</label><input type="text" id="item_66_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>66. 벤처집적시설 취득세액 (원)</label><input type="text" id="item_66_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>67. 농업법인 취득세액 (원)</label><input type="text" id="item_67_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>68. 구조조정 부동산 취득세액 (원)</label><input type="text" id="item_68_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>68. 구조조정 양수도 취득세 (원)</label><input type="text" id="item_68_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>69. 물류단지 취득세액 (원)</label><input type="text" id="item_69_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>70. 비영리법인 취득세액 (원)</label><input type="text" id="item_70_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>70. 비영리법인(고유목적) 취득세 (원)</label><input type="text" id="item_70_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>71. 창업중소기업 취득세액 (원)</label><input type="text" id="item_71_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>72. 상속/증여 취득세 납부액 (원)</label><input type="text" id="item_72_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>72. 상속/증여 1가구1주택 취득세 (원)</label><input type="text" id="item_72_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>73. 멸실 건축물 장부가액 (원)</label><input type="text" id="item_73_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>74. 해제된 연부취득세액 (원)</label><input type="text" id="item_74_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>75. 공유물분할 취득세 납부액 (원)</label><input type="text" id="item_75_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>76. 신탁이전 취득세 납부액 (원)</label><input type="text" id="item_76_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>77. 면세 원재료 부가세 (원)</label><input type="text" id="item_77_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>76. 신탁위탁자 지위이전 취득세 (원)</label><input type="text" id="item_76_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>77. 수출 원재료 매입 부가세 (원)</label><input type="text" id="item_77_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
 
                 <!-- 8. 토지 및 개발부담금 특화 로직 (No. 78~93) -->
                 <details class="accordion-group">
-                    <summary class="accordion-header">🏞️ 8. 토지 및 개발부담금 특화 (기부채납, 지목변경 등 No. 78~93)</summary>
+                    <summary class="accordion-header">🏞️ 8. 토지 및 개발부담금 특화 (No. 78~93)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
-                            <div class="form-group"><label>78. 개발부담금 납부액 (원)</label><input type="text" id="dev_charge_refund" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>79. 단지조성 토지 취득/재산세 (원)</label><input type="text" id="item_79_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>80. 기납부 산림/농지부담금 (원)</label><input type="text" id="forest_farm_charge" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>81. 농지보전부담금 납부액 (원)</label><input type="text" id="item_81_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>82. 지급이자 손금불산입액 (원)</label><input type="text" id="non_business_interest" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>83. 오류 공시지가 토지 재산세 (원)</label><input type="text" id="land_value_error" class="num-input" value="20,000,000" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>84. 사권제한 토지 재산세 (원)</label><input type="text" id="urban_planning_land" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>85. 무상제공 도로부지 재산세 (원)</label><input type="text" id="donated_land_tax" class="num-input" value="5,000,000" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>78. 기부채납/토목비 제외 개발부담금 (원)</label><input type="text" id="item_78_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>79. 지목변경 간주취득 과다세액 (원)</label><input type="text" id="item_79_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>80. 산업/물류단지 조성 토지 재산세 (원)</label><input type="text" id="item_80_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>81. 축소/제척 산림·농지보전부담금 (원)</label><input type="text" id="item_81_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>82. 도시계획 사권제한 토지 재산세 (원)</label><input type="text" id="item_82_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>83. 무상제공 사도 기부채납 재산세 (원)</label><input type="text" id="item_83_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>84. 인허가지연 부인 이자 손금산입액 (원)</label><input type="text" id="item_84_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>85. 재산세 경정 연동 종부세 납부액 (원)</label><input type="text" id="item_85_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                             <div class="form-group"><label>86. 공사중 토지 재산세 납부액 (원)</label><input type="text" id="item_86_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>87. 자경농지 취득세 납부액 (원)</label><input type="text" id="item_87_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>88. 사용제한 토지 재산세 (원)</label><input type="text" id="item_88_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>89. 토지등 양도소득세 납부액 (원)</label><input type="text" id="item_89_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>90. 납부한 국유지 대부료 (원)</label><input type="text" id="item_90_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>91. 종합부동산세 납부액 (원)</label><input type="text" id="comprehensive_real_estate_tax" class="num-input" value="15,000,000" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>92. 세부담상한 초과 납부액 (원)</label><input type="text" id="property_tax_ceiling" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>지목변경 간주취득 과다세액 (원)</label><input type="text" id="land_category_acq" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>87. 자경농민 농지 취득세 납부액 (원)</label><input type="text" id="item_87_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>88. 사용금지/제한 나대지 재산세 (원)</label><input type="text" id="item_88_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>89. 비사업용 토지 중과 양도소득세 (원)</label><input type="text" id="item_89_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>90. 국유지 점용허가 대부료 납부액 (원)</label><input type="text" id="item_90_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>91. 농지보전부담금 축소면적분 환급 (원)</label><input type="text" id="item_91_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>92. 등급 오류에 따른 취득세 소급 (원)</label><input type="text" id="item_92_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>93. 공유지연명부 지분 오류 재산세 (원)</label><input type="text" id="item_93_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
 
-                <!-- 9. 지방이전, 특구 및 기타 특수 세무 (No. 94~100) -->
+                <!-- 9. 특수 세무 (No. 94~100) -->
                 <details class="accordion-group">
                     <summary class="accordion-header">🌐 9. 지방이전, 특구 및 기타 특수 세무 (No. 94~100)</summary>
                     <div class="accordion-body">
                         <div class="form-grid">
-                            <div class="form-group"><label>특례구역(기업도시 등) 소재 여부</label>
-                                <select id="special_zone">
-                                    <option value="" selected disabled>(선택해 주세요)</option>
-                                    <option value="N">아니오</option>
-                                    <option value="Y">예</option>
-                                </select>
-                            </div>
-                            <div class="form-group"><label>부당 감면 추징세액 납부원금 (원)</label><input type="text" id="penalty_tax_amount" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>96. 과밀중과 등록면허세 (원)</label><input type="text" id="item_96_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>97. 법인지방소득세 납부액 (원)</label><input type="text" id="item_97_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>98. 주민세 종업원분 납부액 (원)</label><input type="text" id="item_98_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group"><label>99. 지점 송금세 납부액 (원)</label><input type="text" id="item_99_val" class="num-input" value="0" oninput="formatComma(this)"></div>
-                            <div class="form-group full"><label>100. 위헌/판결 대상 과세처분 세액 (원)</label><input type="text" id="item_100_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>94. 지방 특례구역 기업 감면 세액 (원)</label><input type="text" id="item_94_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>95. 외국법인 국내지점 송금세 (원)</label><input type="text" id="item_95_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>96. 부당행위계산부인 취소 법인세 (원)</label><input type="text" id="item_96_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>97. 공실/휴업 환경개선부담금 (원)</label><input type="text" id="item_97_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>98. 부당 감면 추징세액 원금 및 이자 (원)</label><input type="text" id="item_98_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group"><label>99. 면세점 이하 주민세 종업원분 (원)</label><input type="text" id="item_99_val" class="num-input" value="0" oninput="formatComma(this)"></div>
+                            <div class="form-group full"><label>100. 위헌 및 판결 대상 과세처분 세액 (원)</label><input type="text" id="item_100_val" class="num-input" value="0" oninput="formatComma(this)"></div>
                         </div>
                     </div>
                 </details>
 
-                <!-- 💡 법령/판례 검색 패널 (KILF 통합검색 포함) -->
+                <!-- 💡 복구된 하늘색 배경의 법령/판례 검색 패널 -->
                 <div class="search-panel">
                     <div class="search-row">
                         <input type="text" id="lawQuery" class="search-input" placeholder="법령 검색 (예: 지방세기본법 제50조)" onkeypress="handleLawEnter(event)">
@@ -433,11 +528,15 @@
                         <input type="text" id="precQuery" class="search-input" placeholder="판례 검색 (예: 조심 2021지2787)" onkeypress="handlePrecEnter(event)">
                         <button class="btn-prec" onclick="searchPrecCenter()">📜 판례 검색</button>
                     </div>
-                    <!-- KILF 통합검색 추가 -->
-                    <div class="search-row" style="margin-top: 5px;">
-                        <input type="text" id="kilfQuery" class="search-input" style="border: 2px solid #38b2ac;" placeholder="통합검색  검색어를 입력하세요." onkeypress="handleKilfEnter(event)">
-                        <button class="btn-kilf" onclick="searchKilfCenter()">Q 검색</button>
+                    <div class="search-row">
+                        <input type="text" id="kilfQuery" class="search-input" placeholder="통합 검색 (KILF 지방세 법령정보시스템)" onkeypress="handleKilfEnter(event)">
+                        <button class="btn-kilf" onclick="searchKilfCenter()">🔍 통합 검색</button>
                     </div>
+                    
+                    <!-- 💡 요청하신 코드일람표 버튼 추가 -->
+                    <button class="btn-code-doc" onclick="window.open('https://github.com/ganetjin/land-tax-code/raw/main/land_tax_code.pdf', '_blank')">
+                        📖 재산세(토지) 코드일람표
+                    </button>
                 </div>
 
                 <button class="run-btn" onclick="startAnalysis()">세금 환급 검증 및 제안서 생성</button>
@@ -447,14 +546,14 @@
             <div class="card">
                 <h2>📊 지방세·국세 환급(경정청구) 컨설팅 제안서</h2>
 
-                <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">세무 및 조세 법리 정밀 분석 중...</strong><div class="log-text" id="logText">100대 환급 로직 및 조세심판원 판례를 매칭하고 있습니다.</div></div>
+                <div class="loader-container" id="loader"><div class="spinner"></div><strong style="color:var(--primary-color);">세무 및 과세원장 정보 정밀 분석 중...</strong><div class="log-text" id="logText">100대 환급 로직 및 지적/건축물 코드를 매칭하고 있습니다.</div></div>
                 
                 <div class="result-section" id="resultArea">
                     <div class="proposal-doc">
                         <table class="official-header-table">
                             <tr>
                                 <td class="doc-meta-title">문 서 번 호</td>
-                                <td id="doc_serial_no" style="font-weight:bold; font-family:monospace;">JDB-260908-03</td>
+                                <td id="doc_serial_no" style="font-weight:bold; font-family:monospace;">JDB-260908-05</td>
                                 <td class="doc-meta-title">시 행 일 자</td>
                                 <td id="doc_issue_date">2026. 09. 08.</td>
                             </tr>
@@ -581,8 +680,6 @@
         }
 
         function handleEnter(event) { if (event.key === 'Enter') startApp(); }
-        
-        // 💡 KILF 및 기존 검색 로직
         function searchLawCenter() { window.open(`https://www.law.go.kr/lsSc.do?menuId=1&query=${encodeURIComponent(document.getElementById('lawQuery').value || '지방세기본법')}`, '_blank'); }
         function searchPrecCenter() { window.open(`https://www.law.go.kr/precSc.do?menuId=7&query=${encodeURIComponent(document.getElementById('precQuery').value || '지역자원시설세')}`, '_blank'); }
         function searchKilfCenter() { window.open(`https://www.olta.re.kr/search/PU_0003_search.jsp?query=${encodeURIComponent(document.getElementById('kilfQuery').value || '지방세')}`, '_blank'); }
@@ -669,88 +766,152 @@
                 if(v > 0) {
                     let calc = v * rate * years;
                     totalRefund += calc;
-                    reasons.push(`✔️ <b>[${desc}]</b> 입력금액 기준 정산 환급 (예상액: ${Math.floor(calc).toLocaleString()} 원)`);
+                    reasons.push(`✔️ <b>[${desc}]</b> 정산 환급 추산액: ${Math.floor(calc).toLocaleString()} 원`);
+                }
+            }
+            function addSingleVal(id, desc) {
+                let v = parseNum(id);
+                if(v > 0) {
+                    totalRefund += v;
+                    reasons.push(`✔️ <b>[${desc}]</b> 정산 환급액: ${Math.floor(v).toLocaleString()} 원`);
                 }
             }
 
-            // Iterate over generic numbered item inputs from 2 to 100
-            for(let i = 2; i <= 100; i++) {
-                let el = document.getElementById(`item_${i}_val`);
-                if(el) {
-                    let val = parseNum(`item_${i}_val`);
-                    if(val > 0) {
-                        let calc = val * 0.15 * years; // Generic estimation rate
-                        totalRefund += calc;
-                        reasons.push(`✔️ <b>[환급 검증 항목 #${i}]</b> 입력기준 정산 환급 (예상액: ${Math.floor(calc).toLocaleString()} 원)`);
-                    }
-                }
-            }
+            // 1~15 (General)
+            addItemVal('item_2_val', 0.1, "개별공시지가 과대평가 재산세 환급");
+            addItemVal('item_3_val', 1, "재산세 세부담 상한(150%) 초과 환급");
+            addSingleVal('item_4_val', "과밀억제 법인 본점 이전 취득세 중과 위법 환급");
+            addSingleVal('item_5_val', "구조조정(합병/분할) 취득세 감면 특례 적용");
+            addSingleVal('item_6_val', "자본금 증자 등록면허세 3배 중과 오류 정산");
+            addSingleVal('item_7_val', "신탁재산 수탁자 명의변경 과오납 환급");
+            addItemVal('item_8_val', 0.1, "중소기업 특별세액감면 수도권 외 감면율 오류");
+            addSingleVal('item_9_val', "연구인력개발비 R&D 전담요원 소급 공제");
+            addSingleVal('item_10_val', "고용증대 상시근로자 증가 세액공제");
+            addItemVal('item_11_val', 0.05, "친환경/에너지 통합투자세액공제");
+            addItemVal('item_12_val', 0.1, "창업중소기업 세액감면 이월 정산");
+            addItemVal('item_13_val', 0.2, "문화예술 접대비 지출 추가공제");
+            addItemVal('item_14_val', 0.1, "대손금 요건 충족채권 손금산입 누락");
+            addItemVal('item_15_val', 0.1, "감가상각비 한도 미달액 추계과소 신고 정산");
 
-            // Explicit logic overwrites for main core fields
+            // 16~25 (Golf)
             const greenLand = parseNum('green_land_tax');
             if(greenLand > 0) { totalRefund += greenLand * 0.3 * years; reasons.push(`✔️ <b>[골프장 원형보전임야 분리과세]</b> 환경영향평가 보전녹지 종합합산 과세오류 정산 (지방세법 시행령 제102조)`); }
-            
             const regTax = parseNum('regional_tax');
             const facilityType = document.getElementById('facility_type').value;
-            if(facilityType === '대중제' && regTax > 0) { totalRefund += regTax * 0.2 * years; reasons.push(`✔️ <b>[대중제 골프장 감면 특례]</b> 시·군 조례 감면 누락분 소급 적용 (체육시설법 제10조)`); }
-
+            if(facilityType === '대중제' && regTax > 0) { totalRefund += regTax * 0.2 * years; reasons.push(`✔️ <b>[대중제 골프장 시군세 감면]</b> 시·군 조례 감면 누락분 소급 적용 (체육시설법 제10조)`); }
+            
+            addItemVal('item_18_val', 0.4, "사치성 재산 자연림/조경수 중과오류 취소비율");
+            addItemVal('item_19_val', 0.015, "회원제 골프장 개소세 면제대상 내장객 정산");
+            addItemVal('item_20_val', 0.2, "클럽하우스 초과 부속토지 별도합산 전환");
+            
             const waterHazard = parseNum('water_hazard_tax');
             if(waterHazard > 0) { totalRefund += waterHazard * 0.2 * years; reasons.push(`✔️ <b>[골프장 해저드/유지 토지 분리과세]</b> 방화·배수 목적 유지 별도합산 전환 환급 (공간정보법 제67조)`); }
-
             const cartRoad = parseNum('cart_road_tax');
             if(cartRoad > 0) { totalRefund += cartRoad * years; reasons.push(`✔️ <b>[카트도로 및 사도 비과세 환급]</b> 공중 통행 사도 재산세 비과세 환급 (지방세법 제109조)`); }
-
-            const hotelLand = parseNum('hotel_land_separate');
-            if(hotelLand > 0) { totalRefund += hotelLand * 0.15 * years; reasons.push(`✔️ <b>[호텔·콘도 부속토지 별도합산 환급]</b> 관광숙박업 기준면적 내 별도합산 환급 (조심2019지1044)`); }
             
+            addItemVal('item_23_val', 0.023, "골프장 조경·식재 공사 원가 과표 제외");
+            addSingleVal('item_24_val', "골프장 지하수 유량계 고장 수질개선부담금 환급");
+            addSingleVal('item_25_val', "골프장 회원권 중복납부 세액 정산");
+
+            // 26~32 (Hotel)
+            addItemVal('item_26_val', 0.15, "관광숙박 부속토지 별도합산 누락 정산");
+            addItemVal('item_27_val', 0.5, "관광단지 조세감면(50%) 누락 소급");
             const memberDeposit = parseNum('membership_deposit');
             if(memberDeposit > 0) { totalRefund += memberDeposit * 0.02; reasons.push(`✔️ <b>[콘도 입회보증금 부채 제외]</b> 반환채무 보증금 과표 제외 환급 (대법원 2014두46401)`); }
+            addSingleVal('item_29_val', "호텔 수영장/스파 일반상가 세율 오적용 환급");
+            addSingleVal('item_30_val', "유흥음식점 개소세 과다납부 정산");
+            addItemVal('item_31_val', 0.5, "의무임대주택 재산세 감면 누락");
+            addItemVal('item_32_val', 0.5, "의무임대주택 취득세 감면 누락");
 
+            // 33~45 (Commercial)
+            addSingleVal('item_33_val', "11층 미만 상가 지역자원시설세 3배 중과 취소");
+            addItemVal('item_34_val', 0.1, "복합건축물 공용·비과세 면적 안분 누락");
+            addSingleVal('item_35_val', "공통매입세액 과소안분액 부가세 환급");
+            addItemVal('item_36_val', 0.2, "가설건축물 부지 별도합산 전환");
             const trafficVacant = parseNum('traffic_vacant_refund');
             if(trafficVacant > 0) { totalRefund += trafficVacant * years; reasons.push(`✔️ <b>[공실 교통유발부담금 감면 환급]</b> 30일 이상 미사용 공실 기간 부담금 환급 (도시교통촉진법 제38조)`); }
-
-            const artworkCost = parseNum('artwork_cost');
-            if(artworkCost > 0) { totalRefund += artworkCost * 0.046; reasons.push(`✔️ <b>[미술장식품 취득세 제외]</b> 건물과 독립된 옥외 조형물 과표 제외 (문예진흥법 제9조)`); }
-
-            const goodLandlord = parseNum('good_landlord_tax');
+            addItemVal('item_38_val', 0.05, "의제매입세액 공제 한도 계산 오류 정산");
+            addItemVal('item_39_val', 0.013, "신용카드 발행 세액공제 누락분");
+            addItemVal('item_40_val', 0.1, "대지권 지분 오류 재산세 정산");
+            addSingleVal('item_41_val', "근저당권 말소 등 등록면허세 과오납 환급");
+            addItemVal('item_42_val', 0.046, "독립 미술장식품 취득세 과표 제외");
+            addItemVal('item_43_val', 0.35, "지식산업센터 등 취득세 특례감면 누락");
+            addItemVal('item_44_val', 0.1, "복합몰 감가상각 방법 변경 누락 법인세");
+            const goodLandlord = parseNum('item_45_val');
             if(goodLandlord > 0) { totalRefund += goodLandlord * 0.7; reasons.push(`✔️ <b>[착한임대인 세액공제]</b> 소상공인 임대료 인하액 70% 법인세 경정청구 (조특법 제96조의3)`); }
 
-            const structureCost = parseNum('structure_cost');
-            if(structureCost > 0) { totalRefund += structureCost * 0.15 * 0.046; reasons.push(`✔️ <b>[구축물 감가상각 누락 취득세 환급]</b> 수전설비·주차타워 내용연수 경과분 과표 정산 (지방세운영과-310)`); }
+            // 46~57 (Logistics/Factory)
+            addItemVal('item_46_val', 0.5, "등록 물류창고 부지 재산세 50% 감면 누락");
+            addItemVal('item_47_val', 0.05, "창고 자동화설비 통합투자세액공제 누락");
+            addItemVal('item_48_val', 0.2, "물류센터 야적장 부지 별도합산 누락");
+            addSingleVal('item_49_val', "지방 이전 공장 취득세 100% 면제 누락");
+            addItemVal('item_50_val', 0.5, "지방 이전 공장 재산세 감면 누락");
+            addSingleVal('item_51_val', "수전설비/주차타워 감가상각 누락분 취득세 정산");
+            addSingleVal('item_52_val', "공장 신축 공사 조기환급 매입세액 누락");
+            addSingleVal('item_53_val', "자가발전 면제 요건 누락 전력기금 환급");
+            addItemVal('item_54_val', 0.2, "폐기물처분부담금 재활용 우수 감면 누락");
+            addSingleVal('item_55_val', "대형 소방 인허가 수수료 과다 징수 정산");
+            addItemVal('item_56_val', 0.5, "기숙사/구내식당 재산세 감면 누락");
+            addSingleVal('item_57_val', "폐자원 매입세액 공제한도 누락 환급");
 
-            const pfFee = parseNum('pf_fee_refund');
-            if(pfFee > 0) { totalRefund += pfFee * 0.046; reasons.push(`✔️ <b>[PF 금융수수료 취득세 제외]</b> 자금조달 목적 수수료 과표 제외 환급 (대법원 2017두41761)`); }
+            // 58~77 (New Build/PF)
+            addItemVal('item_58_val', 0.046, "PF 금융수수료 취득세 과표 제외");
+            addItemVal('item_59_val', 0.046, "분양보증료·대행수수료 취득세 과표 제외");
+            addSingleVal('item_60_val', "광역교통부담금 산정 시 공용면적 제외 오류");
+            addSingleVal('item_61_val', "하수도 원인자부담금 내 부가가치세(10%) 환급");
+            addSingleVal('item_62_val', "학교용지부담금 산정 분양가 부대비용 오류");
+            addSingleVal('item_63_val', "부동산 개발업 등록면허세 초과 징수분 환급");
+            addSingleVal('item_64_val', "복합상가 공통매입세액 안분 오류 환급");
+            addItemVal('item_65_val', 0.5, "외투기업 조세감면 취득세 미적용 정산");
+            addItemVal('item_66_val', 0.5, "벤처집적시설 취득세 감면 누락");
+            addItemVal('item_67_val', 0.5, "농업법인 특례 취득세 감면 누락");
+            addItemVal('item_68_val', 0.5, "기업구조조정 양수도 취득세 감면 누락");
+            addItemVal('item_69_val', 0.5, "물류단지 감면 취득세 누락");
+            addSingleVal('item_70_val', "비영리법인 고유목적사업 취득세 감면 누락");
+            addItemVal('item_71_val', 0.75, "창업중소기업 취득세 특례 감면 누락");
+            addSingleVal('item_72_val', "상속/증여 1주택 취득세 특례세율 누락");
+            addItemVal('item_73_val', 0.04, "멸실 건축물 잔존가치 취득세 중복 과세 정산");
+            addSingleVal('item_74_val', "연부취득 계약 해제 미환급 취득세 정산");
+            addItemVal('item_75_val', 0.017, "공유물 분할 특례세율 적용 누락 정산");
+            addSingleVal('item_76_val', "신탁 재산 지위 이전 취득세 과다 부과 환급");
+            addSingleVal('item_77_val', "수출 원재료 면세수입분 부가세 환급");
 
-            const saleFee = parseNum('sale_guarantee_fee');
-            if(saleFee > 0) { totalRefund += saleFee * 0.046; reasons.push(`✔️ <b>[분양보증료 취득세 제외]</b> 분양 관련 비용 취득세 과표 제외 (대법원 2010두23793)`); }
+            // 78~93 (Land)
+            addItemVal('item_78_val', 0.25, "개발부담금 내 기부채납/토목비 누락 정산");
+            addSingleVal('item_79_val', "지목변경 간주취득세 장부단가 차액 환급");
+            addItemVal('item_80_val', 0.5, "산업/물류단지 조성 토지 재산세 감면 누락");
+            addSingleVal('item_81_val', "산림/농지보전부담금 전용 축소 면적분 환급");
+            addItemVal('item_82_val', 0.5, "도시계획 미집행 사권제한 토지 재산세 감면");
+            addItemVal('item_83_val', 1, "사도/기부채납 부지 재산세 100% 비과세 환급");
+            addItemVal('item_84_val', 0.2, "행정지연 인허가 불가 토지 지급이자 손금산입");
+            addSingleVal('item_85_val', "재산세 과세구분 경정에 따른 종부세 연계 환급");
+            addItemVal('item_86_val', 0.2, "개발사업 시행 중 나대지 별도합산 전환 환급");
+            addItemVal('item_87_val', 0.5, "자경농민 농지 취득세 감면 누락");
+            addItemVal('item_88_val', 0.43, "사용금지 나대지 분리과세(0.07%) 적용 환급");
+            addSingleVal('item_89_val', "법인 비사업용 토지 중과 양도세 사업용 입증 정산");
+            addSingleVal('item_90_val', "국유지 점용허가 대부료 면적 초과 부과분 환급");
+            addSingleVal('item_91_val', "농지보전부담금 축소면적분 환급");
+            addSingleVal('item_92_val', "토지등급 연혁 오기재 과거 취득세율 소급");
+            addItemVal('item_93_val', 1, "공유지연명부 지분 오류 재산세 정산 환급");
 
-            const devCharge = parseNum('dev_charge_refund');
-            if(devCharge > 0) { totalRefund += devCharge * 0.25; reasons.push(`✔️ <b>[개발부담금 기부채납 비용 누락 환급]</b> 기부채납 토지가액 및 토목공사비 공제 환급 (대법원 2017두47240)`); }
+            // 94~100 (Special)
+            addItemVal('item_94_val', 0.5, "지방 특례구역 입주기업 세액 감면 누락");
+            addSingleVal('item_95_val', "외국법인 지점 송금세 제한세율 오류 정산");
+            addSingleVal('item_96_val', "특수관계인 부동산 고저가 부당행위계산부인 정산");
+            addSingleVal('item_97_val', "환경개선부담금 용도지수 및 공실 오류 부과 정산");
+            addSingleVal('item_98_val', "부당 감면 추징세액 이의신청 인용 환급");
+            addSingleVal('item_99_val', "면세점 이하 주민세 종업원분 오과세 전액 환급");
+            addSingleVal('item_100_val', "대법원 위헌판결 대상 과세처분 직권 취소 소급 환급");
 
-            const landCategory = parseNum('land_category_acq');
-            if(landCategory > 0) { totalRefund += landCategory; reasons.push(`✔️ <b>[지목변경 간주취득세 과다산정 환급]</b> 법인장부 실공사비 초과 과세액 환급 (조심2020지0650)`); }
-
-            const landValueError = parseNum('land_value_error');
-            if(landValueError > 0) { totalRefund += landValueError * 0.15 * years; reasons.push(`✔️ <b>[개별공시지가 과대평가 재산세 환급]</b> 토지특성 조사 오류 하자에 따른 재산세 환급 (대법원 2012두25828)`); }
-
-            const donatedLand = parseNum('donated_land_tax');
-            if(donatedLand > 0) { totalRefund += donatedLand * years; reasons.push(`✔️ <b>[기부채납/사도 비과세 재산세 환급]</b> 공중 무상 제공 도로부지 재산세 비과세 환급 (지방세법 제109조)`); }
-
-            const compRealEstate = parseNum('comprehensive_real_estate_tax');
-            if(compRealEstate > 0) { totalRefund += compRealEstate * years; reasons.push(`✔️ <b>[종합부동산세 연계 환급]</b> 재산세 과세구분 경정에 따른 종부세 소급 환급 (종부세법 제11조)`); }
-
-            const propCeiling = parseNum('property_tax_ceiling');
-            if(propCeiling > 0) { totalRefund += propCeiling; reasons.push(`✔️ <b>[재산세 세부담 상한 초과 환급]</b> 직전연도 대비 150% 초과 부과액 환급 (지방세법 제122조)`); }
-
-            // Default demo simulation block
+            // Default Logic if no specific items triggered but Prop Tax is present
             if (totalRefund === 0) {
                 let defaultBase = parseNum('property_tax') + parseNum('acq_tax');
                 if(defaultBase > 0) {
                     totalRefund = defaultBase * 0.08 * years;
-                    reasons.push("✔️ <b>[종합 세무 검토 예상 환급]</b> 기본 재산세 및 취득세 원장 정밀 스크리닝 기반 추정 환급액 산정");
+                    reasons.push("✔️ <b>[종합 세무 검토 예상 환급]</b> 기본 재산세/취득세 원장 및 토지대장 정밀 스크리닝 기반 추정 산정");
                 } else {
                     totalRefund = 125000000;
-                    reasons.push("✔️ <b>[여주 T 컨트리클럽 원형보전지 및 대중제 감면 시뮬레이션]</b> 기본 시연 예상 환급액 산정");
+                    reasons.push("✔️ <b>[여주 T 컨트리클럽 지적코드 매핑 시뮬레이션]</b> 원형보전지 0304코드 전환 및 대중제 감면 시연 예상액 산정");
                 }
             }
 
@@ -778,7 +939,6 @@
             }
             document.getElementById('yearlyTableBody').innerHTML = yearlyHTML;
 
-            // Save globally for buttons
             currentResultData = { client: clientName, manager: clientManager, refund: refStr, fee: feeStr, reasons: reasons, serial: newSerial };
             
             const capturedFormData = {
@@ -793,7 +953,6 @@
                 sales_memo: document.getElementById('sales_memo').value
             };
 
-            // History Update
             historyData = historyData.filter(item => item.client !== clientName);
             historyData.unshift({
                 client: clientName,
@@ -855,7 +1014,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Action Buttons
         function copyResultText() {
             if (!currentResultData.client || !currentResultData.refund) {
                 alert("먼저 [세금 환급 검증 및 제안서 생성]을 실행해 주세요.");
